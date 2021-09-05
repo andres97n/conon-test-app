@@ -1,0 +1,3 @@
+venv/
+secret/
+applications/users/migrations/*
