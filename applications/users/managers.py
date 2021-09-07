@@ -23,3 +23,5 @@ class UserManager(BaseUserManager, models.Manager):
 
     def create_superuser(self, username, email, password=None, **extra_fields):
         return self.new_user(username, email, password, '0', True, True, True, **extra_fields)
+
+

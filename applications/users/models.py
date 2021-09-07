@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
@@ -18,15 +17,10 @@ class BaseModel(models.Model):
 
 class Person(BaseModel):
     # GENDERS
-    FEMININE = '0'
-    MASCULINE = '1'
-    OTHER = '2'
-
-    GENDER_CHOICES = [
-        (FEMININE, 'Feminine'),
-        (MASCULINE, 'Masculine'),
-        (OTHER, 'Other'),
-    ]
+    class GenderChoices(models.IntegerChoices):
+        FEMININE = 0
+        MASCULINE = 1
+        OTHER = 2
 
     identification = models.CharField(
         max_length=30,
@@ -37,14 +31,13 @@ class Person(BaseModel):
         max_length=50,
         blank=False
     )
-    surname = models.CharField(
+    last_name = models.CharField(
         max_length=80,
         blank=False
     )
-    gender = models.CharField(
-        max_length=15,
+    gender = models.PositiveIntegerField(
         blank=True,
-        choices=GENDER_CHOICES
+        choices=GenderChoices.choices
     )
     age = models.CharField(
         max_length=2,
@@ -64,20 +57,108 @@ class Person(BaseModel):
         return f'{self.identification} - {self.full_name()}'
 
     def full_name(self):
-        return f'{self.name} {self.surname}'
+        return f'{self.name} {self.last_name}'
+
+    def mapper(self):
+        return dist(
+            id=self.id,
+            name=self.person.name,
+            last_name=self.person.last_name,
+            identification=self.person.identification,
+            gender=self.gender,
+            age=self.age,
+            phone=self.person.phone
+        )
+
+
+class Student(BaseModel):
+    representative_name = models.CharField(
+        max_length=50,
+        blank=True
+    )
+    expectations = models.TextField(
+        null=True,
+        blank=True
+    )
+    emergency_contact = models.CharField(
+        max_length=15,
+        null=True,
+        blank=True
+    )
+    observations = models.TextField(
+        null=True,
+        blank=True
+    )
+    person = models.ForeignKey(
+        Person,
+        on_delete=models.CASCADE,
+        null=False
+    )
+
+    class Meta:
+        db_table = 'student'
+        verbose_name = 'Student'
+        verbose_name_plural = 'Students'
+
+    def __str__(self):
+        return f'{self.person.name} {self.person.last_name}'
+
+    def get_representative(self):
+        return f'{self.representative_name} - {self.emergency_contact}'
+
+    def mapper(self):
+        return dist(
+            id=self.id,
+            name=self.person.name,
+            last_name=self.person.last_name,
+            identification=self.person.identification,
+            expectations=self.expectations,
+            phone=self.person.phone,
+            representative=self.get_representative()
+        )
+
+
+class Teacher(BaseModel):
+    objective = models.TextField(
+        default='S/N',
+        blank=True
+    )
+    title = models.CharField(
+        max_length=40,
+        null=False
+    )
+    person = models.ForeignKey(
+        Person,
+        on_delete=models.CASCADE,
+        null=False
+    )
+
+    class Meta:
+        db_table = 'teacher'
+        verbose_name = 'Teacher'
+        verbose_name_plural = 'Teachers'
+
+    def __str__(self):
+        return f'{self.person.name} {self.person.last_name}'
+
+    def mapper(self):
+        return dist(
+            id=self.id,
+            name=self.person.name,
+            last_name=self.person.last_name,
+            identification=self.person.identification,
+            phone=self.person.phone,
+            title=self.title,
+            objective=self.objective
+        )
 
 
 class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     # USERS
-    ADMINISTRATOR = '0'
-    TEACHER = '1'
-    STUDENT = '2'
-
-    USERS_CHOICES = [
-        (ADMINISTRATOR, 'Administrator'),
-        (TEACHER, 'Teacher'),
-        (STUDENT, 'Student'),
-    ]
+    class UserChoices(models.IntegerChoices):
+        ADMINISTRATOR = 0
+        TEACHER = 1
+        STUDENT = 2
 
     username = models.CharField(
         max_length=30,
@@ -88,9 +169,8 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         blank=True,
 
     )
-    type = models.CharField(
-        max_length=1,
-        choices=USERS_CHOICES,
+    type = models.PositiveIntegerField(
+        choices=UserChoices.choices,
         blank=True
     )
     is_staff = models.BooleanField(default=False)
@@ -120,3 +200,51 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     def get_email(self):
         return self.email
+
+
+class AuditUser(models.Model):
+    table = models.CharField(
+        max_length=30,
+        null=False
+    )
+    fields = models.JSONField(
+        null=False
+    )
+    record_id = models.IntegerField(
+        null=False
+    )
+    old_values = models.JSONField(
+        null=False
+    )
+    new_values = models.JSONField(
+        null=False
+    )
+    created_at = models.JSONField(
+        null=False
+    )
+    observations = models.TextField(
+        null=True,
+        blank=True
+    )
+    add_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=False
+    )
+
+    class Meta:
+        db_table = 'audit_user'
+        verbose_name = 'AuditUser'
+        verbose_name_plural = 'AuditUsers'
+
+    def mapper(self):
+        return dist(
+            id=self.id,
+            add_by=self.add_by,
+            table=self.table,
+            fields=self.fields,
+            old_values=self.old_values,
+            new_values=self.new_values,
+            created_at=self.created_at,
+            observations=self.observations
+        )
