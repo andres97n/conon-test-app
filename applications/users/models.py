@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 
-from .managers import UserManager
+from applications.users.managers import UserManager
 
 
 # Create your models here.
@@ -161,10 +161,12 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         STUDENT = 2
 
     username = models.CharField(
+        'Nombre de Usuario',
         max_length=30,
         unique=True
     )
     email = models.EmailField(
+        'Correo Electrónico',
         null=True,
         blank=True,
 

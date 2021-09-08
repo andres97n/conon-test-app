@@ -10,10 +10,14 @@ class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
         fields = (
-            'id', 'identification',
-            'name', 'last_name',
-            'gender', 'age',
-            'phone', 'auth_state'
+            'id',
+            'identification',
+            'name',
+            'last_name',
+            'gender',
+            'age',
+            'phone',
+            'auth_state'
         )
 
 
@@ -23,20 +27,24 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'id', 'username',
-            'persona', 'email',
-            'type', 'is_active',
+            'id',
+            'username',
+            'persona',
+            'email',
+            'type',
+            'is_superuser',
+            'is_staff',
+            'is_active',
         )
 
 
 class UserTokenSerializer(serializers.ModelSerializer):
-    persona = PersonSerializer()
+    person = PersonSerializer()
 
     class Meta:
         model = User
         fields = (
             'username',
             'email',
-            'person__name',
-            'person__last_name'
+            'person',
         )

@@ -37,12 +37,14 @@ LOCAL_APPS = [
     'applications.users',
 ]
 
-THIRD_PARTY_APPS = [
+THIRD_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
 ]
 
-INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
+INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_APPS
+
+TOKEN_EXPIRED_AFTER_SECONDS = 10
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -98,7 +100,7 @@ AUTH_USER_MODEL = 'users.User'
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 
