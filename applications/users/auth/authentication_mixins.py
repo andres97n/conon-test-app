@@ -1,12 +1,12 @@
-from rest_framework import status
+from rest_framework import status, authentication, exceptions
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework.authentication import get_authorization_header
 
-from applications.users.authentication import ExpiringTokenAuthentication
+from applications.users.auth.authentication import ExpiringTokenAuthentication
 
 
-class Authentication(object):
+class Authentication(authentication.BaseAuthentication):
     user = None
 
     def get_user(self, request):
@@ -24,6 +24,16 @@ class Authentication(object):
 
         return None
 
+    def authenticate(self, request):
+        self.get_user(request)
+        if self.user is None:
+            raise exceptions.AuthenticationFailed('No se han enviado las credendiales')
+        return self.user, None
+
+
+'''
+Método cuando se ejecuta una clase de tipo object
+
     def dispatch(self, request, *args, **kwargs):
         user = self.get_user(request)
         if user is not None:
@@ -39,3 +49,4 @@ class Authentication(object):
         response.accepted_media_type = 'application/json'
         response.renderer_context = {}
         return response
+'''

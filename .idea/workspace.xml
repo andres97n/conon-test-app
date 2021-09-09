@@ -5,13 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/applications/users/authentication_mixins.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/auth/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/authentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/authentication.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/authentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/auth/authentication.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/authentication_mixins.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/auth/authentication_mixins.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conon/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conon/settings/local.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/local.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conon/settings/prod.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/prod.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conon/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -59,6 +64,9 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/applications/users" />
+      <recent name="$PROJECT_DIR$/applications/users/api" />
+      <recent name="$PROJECT_DIR$/applications/users/auth" />
       <recent name="$PROJECT_DIR$/secret" />
     </key>
   </component>
@@ -108,6 +116,9 @@
       <workItem from="1631124105264" duration="2267000" />
       <workItem from="1631134137438" duration="9236000" />
       <workItem from="1631151465090" duration="11000" />
+      <workItem from="1631193647921" duration="9414000" />
+      <workItem from="1631211223513" duration="3034000" />
+      <workItem from="1631214305579" duration="2000" />
     </task>
     <servers />
   </component>

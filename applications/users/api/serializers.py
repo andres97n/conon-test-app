@@ -1,6 +1,6 @@
 from rest_framework import serializers, pagination
 
-from .models import Person, User
+from applications.users.models import Person, User
 
 
 # TODO: add more functionally

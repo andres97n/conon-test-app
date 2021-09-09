@@ -9,8 +9,8 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 
-from applications.users.serializers import UserTokenSerializer
-from applications.users.authentication_mixins import Authentication
+from applications.users.api.serializers import UserTokenSerializer
+from applications.users.auth.authentication_mixins import Authentication
 
 
 # TODO: Mejorar el el borrado de las sesiones
