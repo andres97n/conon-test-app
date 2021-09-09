@@ -16,10 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from applications.users.views import Login, Logout
+from applications.users.views import Login, Logout, UserToken
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', Login.as_view(), name='login'),
     path('logout/', Logout.as_view(), name='logout'),
+    path('refresh-token/', UserToken.as_view(), name='refresh_token'),
 ]

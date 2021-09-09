@@ -5,16 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/applications/users/authentication.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/users/functions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/authentication_mixins.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SUPER USER" beforeDir="false" afterPath="$PROJECT_DIR$/SUPER USER" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/authentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/authentication.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conon/asgi.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/asgi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conon/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conon/settings/local.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/local.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conon/settings/prod.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/prod.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conon/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,7 +103,11 @@
       <workItem from="1630952434312" duration="2731000" />
       <workItem from="1630959988882" duration="5273000" />
       <workItem from="1631020674530" duration="9693000" />
-      <workItem from="1631048045810" duration="10736000" />
+      <workItem from="1631048045810" duration="11022000" />
+      <workItem from="1631107581690" duration="9853000" />
+      <workItem from="1631124105264" duration="2267000" />
+      <workItem from="1631134137438" duration="9236000" />
+      <workItem from="1631151465090" duration="11000" />
     </task>
     <servers />
   </component>

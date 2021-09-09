@@ -10,7 +10,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 
 from applications.users.serializers import UserTokenSerializer
-from applications.users.functions import close_sessions
+from applications.users.authentication_mixins import Authentication
 
 
 # TODO: Mejorar el el borrado de las sesiones
@@ -18,6 +18,28 @@ from applications.users.functions import close_sessions
 
 
 # Create your views here.
+class UserToken(APIView, Authentication):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            user_token = Token.objects.get(user=self.user)
+            user = UserTokenSerializer(self.user)
+            return Response(
+                {
+                    'token': user_token.key,
+                    'user': user.data
+                },
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {
+                    'error': 'Las credenciales enviadas son incorrectas.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
 class Login(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):
