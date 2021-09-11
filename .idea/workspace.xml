@@ -5,16 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/applications/users/api/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/users/api/api.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/users/api/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/users/auth/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api_person/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api_person/api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api_person/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api_person/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api_user/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api_user/routers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api_user/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/authentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/auth/authentication.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/authentication_mixins.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/auth/authentication_mixins.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/auth/authentication_mixins.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/auth/authentication_mixins.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conon/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/base.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conon/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/urls.py" afterDir="false" />
@@ -64,10 +66,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/applications/users/api/api_user" />
+      <recent name="$PROJECT_DIR$/applications/users/api/user_api" />
       <recent name="$PROJECT_DIR$/applications/users" />
       <recent name="$PROJECT_DIR$/applications/users/api" />
       <recent name="$PROJECT_DIR$/applications/users/auth" />
-      <recent name="$PROJECT_DIR$/secret" />
     </key>
   </component>
   <component name="RunManager">
@@ -119,6 +122,9 @@
       <workItem from="1631193647921" duration="9414000" />
       <workItem from="1631211223513" duration="3034000" />
       <workItem from="1631214305579" duration="2000" />
+      <workItem from="1631286327761" duration="6871000" />
+      <workItem from="1631297001771" duration="3390000" />
+      <workItem from="1631305778039" duration="10780000" />
     </task>
     <servers />
   </component>

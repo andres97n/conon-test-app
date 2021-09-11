@@ -49,8 +49,11 @@ TOKEN_EXPIRED_AFTER_SECONDS = 1800
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'applications.users.auth.authentication_mixins.Authentication'
-    ]
+        'applications.users.auth.authentication_mixins.Authentication',
+    ],
+    #'DEFAULT_PERMISSION_CLASSES': [
+    #    'rest_framework.permissions.IsAuthenticated',
+    #]
 }
 
 MIDDLEWARE = [

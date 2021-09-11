@@ -9,11 +9,11 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 
-from applications.users.api.serializers import UserTokenSerializer
+from applications.users.api.api_user.serializers import UserTokenSerializer
 from applications.users.auth.authentication_mixins import Authentication
 
 
-# TODO: Mejorar el el borrado de las sesiones
+# TODO: Mejorar el borrado de las sesiones
 #   y hacer uso del método user_logged_in() de signals
 
 
@@ -22,8 +22,8 @@ class UserToken(APIView, Authentication):
 
     def get(self, request, *args, **kwargs):
         try:
-            user_token = Token.objects.get(user=self.user)
-            user = UserTokenSerializer(self.user)
+            user_token = Token.objects.get(user=request.user)
+            user = UserTokenSerializer(request.user)
             return Response(
                 {
                     'token': user_token.key,
@@ -73,7 +73,7 @@ class Login(ObtainAuthToken):
                             'user': user_serializer.data,
                             'message': 'Inicio de Sesión Exitoso'
                         },
-                        status=status.HTTP_201_CREATED
+                        status=status.HTTP_202_ACCEPTED
                     )
             else:
                 return Response(
@@ -96,7 +96,7 @@ class Logout(APIView):
     def post(self, request, *args, **kwargs):
 
         try:
-            token = request.POST.get('token')
+            token = request.data['token']
             token = Token.objects.filter(key=token).first()
             if token:
                 all_sessions = Session.objects.filter(expire_date__gte=timezone.now())

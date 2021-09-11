@@ -23,5 +23,6 @@ urlpatterns = [
     path('login/', Login.as_view(), name='login'),
     path('logout/', Logout.as_view(), name='logout'),
     path('refresh-token/', UserToken.as_view(), name='refresh_token'),
-    path('api/', include('applications.users.api.urls')),
+    path('api/', include('applications.users.api.api_user.urls')),
+    path('api/', include('applications.users.api.api_person.urls')),
 ]

@@ -25,9 +25,20 @@ class Authentication(authentication.BaseAuthentication):
         return None
 
     def authenticate(self, request):
-        self.get_user(request)
-        if self.user is None:
-            raise exceptions.AuthenticationFailed('No se han enviado las credendiales')
+        user_login = None
+        token_logout = None
+        try:
+            user_login = request.data['username']
+        except:
+            pass
+        try:
+            token_logout = request.data['token']
+        except:
+            pass
+        if user_login is None and token_logout is None:
+            self.get_user(request)
+            if self.user is None:
+                raise exceptions.AuthenticationFailed('No se han enviado las credendiales')
         return self.user, None
 
 
