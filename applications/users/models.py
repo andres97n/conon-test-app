@@ -213,7 +213,6 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
 
 class AuditUser(models.Model):
-
     # AUDIT TYPES
     class AuditTypesChoices(models.IntegerChoices):
         CREATE = 0
@@ -267,8 +266,9 @@ class AuditUser(models.Model):
         verbose_name = 'AuditUser'
         verbose_name_plural = 'AuditUsers'
 
+
     def mapper(self):
-        return dist(
+        return dict(
             id=self.id,
             add_by=self.add_by,
             table=self.table,

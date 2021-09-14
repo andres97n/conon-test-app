@@ -16,13 +16,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView
+)
+
 from applications.users.views import Login, Logout, UserToken
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', Login.as_view(), name='login'),
+    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    # path('login/', Login.as_view(), name='login'),
     path('logout/', Logout.as_view(), name='logout'),
-    path('refresh-token/', UserToken.as_view(), name='refresh_token'),
+    # path('refresh-token/', UserToken.as_view(), name='refresh_token'),
     path('api/', include('applications.users.api.api_user.urls')),
     path('api/', include('applications.users.api.api_person.urls')),
 ]

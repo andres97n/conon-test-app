@@ -1,25 +1,35 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAdminUser
 
 from applications.users.models import User
 from applications.users.api.api_user.serializers import UserSerializer
+from applications.users.auth.authentication_mixins import Authentication
 
 
-# Create or Get all active users records
+# Get all active users records
+# Create a normal User
 @api_view(['GET', 'POST'])
 @permission_classes([IsAdminUser])
 def user_api_view(request):
     if request.method == 'GET':
-        users = User.objects.filter(is_active=True)
+        users = User.objects.filter(is_active=True).values(
+            'id',
+            'username',
+            'person__name',
+            'person__last_name',
+            'email',
+            'type',
+            'is_superuser'
+        ).order_by('username')
         user_serializer = UserSerializer(users, many=True)
         return Response(
             user_serializer.data,
             status=status.HTTP_200_OK
         )
     elif request.method == 'POST':
-        user_serializer = UserCreateSerializer(data=request.data)
+        user_serializer = UserSerializer(data=request.data)
         if user_serializer.is_valid():
             user_serializer.save()
             return Response(
@@ -41,6 +51,7 @@ def user_api_view(request):
         )
 
 
+# Detail, Update and Delete of a normal User
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([IsAdminUser])
 def user_detail_api_view(request, pk=None):

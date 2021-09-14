@@ -5,19 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/applications/users/api/api_person/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/users/api/api_person/api.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/users/api/api_person/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/users/api/api_person/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/users/api/api_user/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/users/api/api_user/routers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/users/api/api_user/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/auth/authentication_mixins.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/auth/authentication_mixins.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conon/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/base.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conon/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/urls.py" afterDir="false" />
     </list>
@@ -125,6 +116,9 @@
       <workItem from="1631286327761" duration="6871000" />
       <workItem from="1631297001771" duration="3390000" />
       <workItem from="1631305778039" duration="10780000" />
+      <workItem from="1631462811627" duration="2301000" />
+      <workItem from="1631539330729" duration="10006000" />
+      <workItem from="1631569651624" duration="8554000" />
     </task>
     <servers />
   </component>
