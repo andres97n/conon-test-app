@@ -22,16 +22,21 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 
-from applications.users.views import Login, Logout, UserToken
+from applications.users.views import LoginView, LogoutView
+
+# UserToken
 
 urlpatterns = [
+    # path('login/', Login.as_view(), name='login'),
+    # path('logout/', Logout.as_view(), name='logout'),
+    # path('refresh-token/', UserToken.as_view(), name='refresh_token'),
+    # path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('admin/', admin.site.urls),
-    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    # path('login/', Login.as_view(), name='login'),
-    path('logout/', Logout.as_view(), name='logout'),
-    # path('refresh-token/', UserToken.as_view(), name='refresh_token'),
     path('api/', include('applications.users.api.api_user.urls')),
     path('api/', include('applications.users.api.api_person.urls')),
+    path('api/', include('applications.users.api.api_student.urls')),
 ]

@@ -24,4 +24,15 @@ class UserManager(BaseUserManager, models.Manager):
     def create_superuser(self, username, email, password=None, **extra_fields):
         return self._create_user(username, email, password, '0', True, True, True, **extra_fields)
 
+    def user_list(self):
+        return self.filter(is_active=True).values(
+            'id',
+            'username',
+            'person__name',
+            'person__last_name',
+            'email',
+            'type',
+            'is_superuser'
+        ).order_by('username')
+
 

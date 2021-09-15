@@ -1,42 +1,32 @@
 from rest_framework import serializers, pagination
 
-from applications.users.models import User
-from applications.users.api.api_person.serializers import PersonSerializer, PersonCreateSerializer
-
-
-# TODO: add more functionally
-#   for a persons in a platform
+from applications.users.models import User, Person
 
 
 # Serializer for Create and Update a normal User
 class UserSerializer(serializers.ModelSerializer):
-    # person = PersonCreateSerializer()
+    person = serializers.PrimaryKeyRelatedField(
+        queryset=Person.objects.all(),
+        many=False,
+        write_only=True
+    )
 
     class Meta:
         model = User
         fields = (
             'username',
+            'person',
             'email',
             'password',
             'type',
         )
 
-    # Return a full detail User data
-    def to_representation(self, instance):
-        return dict(
-            id=instance['id'],
-            username=instance['username'],
-            name=instance['person__name'],
-            last_name=instance['person__last_name'],
-            email=instance['email'],
-            type=instance['type'],
-            is_superuser=instance['is_superuser']
-        )
-
-    # Validation of type field
+    # Type field validation
     def validate_type(self, value):
         if value == 0:
-            raise serializers.ValidationError('Error, no se puede crear a un Usuario Administrador.')
+            raise serializers.ValidationError('Error, el Usuario que se intenta crear no pueder ser de este tipo.')
+        if value > 2:
+            raise serializers.ValidationError('Error, no existe este Tipo.')
         return value
 
     # Create a normal User
@@ -54,8 +44,31 @@ class UserSerializer(serializers.ModelSerializer):
         return updated_user
 
 
+class UserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'username',
+            'email',
+            'type',
+            'is_superuser'
+        )
+
+    # Return a full detail User data
+    def to_representation(self, instance):
+        return dict(
+            id=instance['id'],
+            username=instance['username'],
+            name=instance['person__name'],
+            last_name=instance['person__last_name'],
+            email=instance['email'],
+            type=instance['type'],
+            is_superuser=instance['is_superuser']
+        )
+
+
 class UserTokenSerializer(serializers.ModelSerializer):
-    person = PersonSerializer()
+    person = serializers.SerializerMethodField
 
     class Meta:
         model = User
@@ -63,4 +76,10 @@ class UserTokenSerializer(serializers.ModelSerializer):
             'username',
             'email',
             'person',
+        )
+
+    def get_person(self, obj):
+        person = User.objects.filter(username=obj['username']).values(
+            'person__name',
+            'person__last_name'
         )

@@ -3,20 +3,27 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 from applications.users.models import Person
-from applications.users.api.api_person.serializers import PersonSerializer, PersonCreateSerializer
+from applications.users.paginations import CononPagination
+from applications.users.api.api_person.serializers import PersonSerializer, PersonListSerializer
 
 
+# Get all active person records
+# Create a person
 @api_view(['GET', 'POST'])
 def person_api_view(request):
+
+    # Person List
     if request.method == 'GET':
+        paginator = CononPagination()
         persons = Person.objects.filter(auth_state='A')
-        person_serializer = PersonSerializer(persons, many=True)
-        return Response(
-            person_serializer.data,
-            status=status.HTTP_200_OK
-        )
+        context = paginator.paginate_queryset(persons, request)
+        person_serializer = PersonListSerializer(context, many=True)
+
+        return paginator.get_paginated_response(person_serializer.data)
+
+    # Create Person
     elif request.method == 'POST':
-        person_serializer = PersonCreateSerializer(data=request.data)
+        person_serializer = PersonSerializer(data=request.data)
         if person_serializer.is_valid():
 
             person_serializer.save()
@@ -45,28 +52,36 @@ def person_detail_api_view(request, pk=None):
 
     if person:
 
+        # Person Detail
         if request.method == 'GET':
-            print(person)
-            person_serializer = PersonSerializer(person)
+            person_serializer = PersonListSerializer(person)
+
             return Response(
                 person_serializer.data,
                 status=status.HTTP_200_OK
             )
+
+        # Update Person
         elif request.method == 'PUT':
-            person_serializer = PersonCreateSerializer(person, data=request.data)
+            person_serializer = PersonSerializer(person, data=request.data)
             if person_serializer.is_valid():
                 person_serializer.save()
+
                 return Response(
                     person_serializer.data,
                     status=status.HTTP_200_OK
                 )
+
             return Response(
                 person_serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+        # Delete Person
         elif request.method == 'DELETE':
             person.auth_state = 'I'
             person.save()
+
             return Response(
                 {
                     'message': 'Persona eliminada correctamente.'

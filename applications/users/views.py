@@ -6,11 +6,14 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import AllowAny
 
 from applications.users.api.api_user.serializers import UserTokenSerializer
 from applications.users.auth.authentication_mixins import Authentication
+from applications.users.auth.serializers import LoginSerializer, LogoutSerializer
 
 
 # TODO: Mejorar el borrado de las sesiones
@@ -39,7 +42,7 @@ class UserToken(APIView, Authentication):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-
+'''
 class Login(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):
@@ -89,8 +92,9 @@ class Login(ObtainAuthToken):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+'''
 
-
+'''
 class Logout(APIView):
 
     def post(self, request, *args, **kwargs):
@@ -129,3 +133,48 @@ class Logout(APIView):
                 },
                 status=status.HTTP_409_CONFLICT
             )
+'''
+
+
+class LoginView(GenericAPIView):
+    serializer_class = LoginSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {
+                'error': 'No se ha encontrado un usuario con estas credenciales.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+class LogoutView(GenericAPIView):
+    serializer_class = LogoutSerializer
+
+    def post(self, request, *args):
+        data_serializer = self.get_serializer(data=request.data)
+        if data_serializer.is_valid():
+            all_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+            if all_sessions.exists():
+                for session in all_sessions:
+                    session_data = session.get_decoded()
+                    if request.user.id == int(session_data.get('_auth_user_id')):
+                        session.delete()
+            data_serializer.save()
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(
+            {
+                'error': 'No se ha encontrado el token en la petición.'
+            },
+            status=status.HTTP_409_CONFLICT
+        )

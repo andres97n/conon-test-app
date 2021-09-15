@@ -5,12 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api_student/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api_student/api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api_student/managers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api_student/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api_student/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/auth/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/users/paginations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_person/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_person/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_person/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_person/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/managers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conon/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/base.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conon/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements/local.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements/local.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,6 +131,10 @@
       <workItem from="1631462811627" duration="2301000" />
       <workItem from="1631539330729" duration="10006000" />
       <workItem from="1631569651624" duration="8554000" />
+      <workItem from="1631625455504" duration="9375000" />
+      <workItem from="1631637455143" duration="2000" />
+      <workItem from="1631637717973" duration="195000" />
+      <workItem from="1631653653754" duration="18997000" />
     </task>
     <servers />
   </component>

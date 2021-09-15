@@ -2,7 +2,10 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from applications.users.managers import UserManager
+from applications.users.api.api_student.managers import StudentManager
 
 
 # Create your models here.
@@ -23,18 +26,18 @@ class Person(BaseModel):
         OTHER = 2
 
     identification = models.CharField(
-        max_length=30,
+        max_length=20,
         unique=True,
         null=False,
         blank=False
     )
     name = models.CharField(
-        max_length=50,
+        max_length=80,
         null=False,
         blank=False
     )
     last_name = models.CharField(
-        max_length=80,
+        max_length=100,
         null=False,
         blank=False
     )
@@ -78,7 +81,7 @@ class Person(BaseModel):
 
 class Student(BaseModel):
     representative_name = models.CharField(
-        max_length=50,
+        max_length=100,
         null=True,
         blank=True
     )
@@ -87,7 +90,7 @@ class Student(BaseModel):
         blank=True
     )
     emergency_contact = models.CharField(
-        max_length=15,
+        max_length=20,
         null=True,
         blank=True,
     )
@@ -100,6 +103,8 @@ class Student(BaseModel):
         on_delete=models.CASCADE,
         null=False
     )
+
+    objects = StudentManager()
 
     class Meta:
         db_table = 'student'
@@ -170,7 +175,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     username = models.CharField(
         'Nombre de Usuario',
-        max_length=30,
+        max_length=100,
         unique=True
     )
     email = models.EmailField(
@@ -210,6 +215,13 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
     def get_email(self):
         return self.email
+
+    def get_tokens(self):
+        refresh = RefreshToken.for_user(self)
+        return dict(
+            refresh=str(refresh),
+            access=str(refresh.access_token)
+        )
 
 
 class AuditUser(models.Model):
