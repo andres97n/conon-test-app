@@ -6,13 +6,17 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from applications.users.managers import UserManager
 from applications.users.api.api_student.managers import StudentManager
+from applications.users.api.api_teacher.managers import TeacherManager
 
+
+# TODO: Cambiar el tipo de campo a JSON de
+#   expectations y observations
 
 # Create your models here.
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
-    auth_state = models.CharField(max_length=1, default='A')
+    auth_state = models.CharField(max_length=3, default='A')
 
     class Meta:
         abstract = True
@@ -95,13 +99,14 @@ class Student(BaseModel):
         blank=True,
     )
     observations = models.TextField(
+        default='S/N',
         null=True,
         blank=True,
     )
-    person = models.ForeignKey(
+    person = models.OneToOneField(
         Person,
         on_delete=models.CASCADE,
-        null=False
+        null=False,
     )
 
     objects = StudentManager()
@@ -136,15 +141,17 @@ class Teacher(BaseModel):
         blank=True
     )
     title = models.CharField(
-        max_length=40,
+        max_length=80,
         null=False,
         blank=False,
     )
-    person = models.ForeignKey(
+    person = models.OneToOneField(
         Person,
         on_delete=models.CASCADE,
         null=False
     )
+
+    objects = TeacherManager()
 
     class Meta:
         db_table = 'teacher'
@@ -186,7 +193,8 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     )
     type = models.PositiveIntegerField(
         choices=UserChoices.choices,
-        blank=True
+        null=False,
+        blank=False
     )
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -277,7 +285,6 @@ class AuditUser(models.Model):
         db_table = 'audit_user'
         verbose_name = 'AuditUser'
         verbose_name_plural = 'AuditUsers'
-
 
     def mapper(self):
         return dict(

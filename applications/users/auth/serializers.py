@@ -19,6 +19,9 @@ class LoginSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         max_length=200,
         read_only=True
+    ),
+    type = serializers.IntegerField(
+        read_only=True
     )
     password = serializers.CharField(
         max_length=50,
@@ -32,6 +35,7 @@ class LoginSerializer(serializers.ModelSerializer):
         fields = [
             'username',
             'email',
+            'type',
             'password',
             'tokens'
         ]
@@ -67,7 +71,7 @@ class LoginSerializer(serializers.ModelSerializer):
         return dict(
             username=user.username,
             email=user.email,
-            type=user.type,
+            type=str(filtered_user_by_username.values('type').first()['type']),
             tokens=user.get_tokens
         )
 

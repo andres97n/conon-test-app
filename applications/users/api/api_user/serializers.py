@@ -83,3 +83,4 @@ class UserTokenSerializer(serializers.ModelSerializer):
             'person__name',
             'person__last_name'
         )
+        return person

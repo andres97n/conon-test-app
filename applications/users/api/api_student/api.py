@@ -1,4 +1,7 @@
+from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser
 
 from applications.users.models import Student
 from .serializers import StudentSerializer, StudentListSerializer
@@ -11,11 +14,12 @@ from applications.users.paginations import CononPagination
 # Get all active Student records
 # Create a Student
 @api_view(['GET', 'POST'])
+@permission_classes([IsAdminUser])
 def student_api_view(request):
     # Student List
     if request.method == 'GET':
         paginator = CononPagination()
-        students = Student.objects.filter(auth_state='A')
+        students = Student.objects.select_related('person').filter(auth_state='A').order_by('person__last_name')
         context = paginator.paginate_queryset(students, request)
         student_serializer = StudentListSerializer(context, many=True)
 
@@ -28,7 +32,7 @@ def student_api_view(request):
             student_serializer.save()
             return Response(
                 {
-                    'message': 'Estudiante creado correctamente!!'
+                    'message': 'Estudiante creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED
             )
@@ -39,20 +43,22 @@ def student_api_view(request):
     else:
         return Response(
             {
-                'error': 'Método no permitido'
+                'error': 'Método no permitido.'
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
 
 
+# Detail, Update and Delete of a Student
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAdminUser])
 def student_detail_api_view(request, pk=None):
 
     # Get Student
     student = Student.objects.filter(id=pk).first()
     if student:
 
-        # Student Detail
+        # Student detailed Student data
         if request.method == 'GET':
             student_serializer = StudentListSerializer(student)
 
@@ -91,7 +97,7 @@ def student_detail_api_view(request, pk=None):
 
         return Response(
             {
-                'error': 'Método no permitido'
+                'error': 'Método no permitido.'
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )

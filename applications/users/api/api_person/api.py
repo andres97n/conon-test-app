@@ -1,21 +1,26 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser
 
 from applications.users.models import Person
 from applications.users.paginations import CononPagination
 from applications.users.api.api_person.serializers import PersonSerializer, PersonListSerializer
 
 
+# TODO: Aplicar permisos para que el Docente
+#   utilizar la API
+
 # Get all active person records
 # Create a person
 @api_view(['GET', 'POST'])
+@permission_classes([IsAdminUser])
 def person_api_view(request):
 
     # Person List
     if request.method == 'GET':
         paginator = CononPagination()
-        persons = Person.objects.filter(auth_state='A')
+        persons = Person.objects.filter(auth_state='A').order_by('last_name')
         context = paginator.paginate_queryset(persons, request)
         person_serializer = PersonListSerializer(context, many=True)
 
@@ -29,7 +34,7 @@ def person_api_view(request):
             person_serializer.save()
             return Response(
                 {
-                    'message': 'Persona creada correctamente!!'
+                    'message': 'Persona creada correctamente.'
                 },
                 status=status.HTTP_201_CREATED
             )
@@ -40,12 +45,13 @@ def person_api_view(request):
     else:
         return Response(
             {
-                'error': 'Método no permitido'
+                'error': 'Método no permitido.'
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
 
 
+# Detail, Update and Delete of a Person
 @api_view(['GET', 'PUT', 'DELETE'])
 def person_detail_api_view(request, pk=None):
     person = Person.objects.filter(id=pk).first()
@@ -91,7 +97,7 @@ def person_detail_api_view(request, pk=None):
 
         return Response(
             {
-                'error': 'Método no permitido'
+                'error': 'Método no permitido.'
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
