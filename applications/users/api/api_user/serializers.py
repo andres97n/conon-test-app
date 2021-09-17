@@ -5,12 +5,6 @@ from applications.users.models import User, Person
 
 # Serializer for Create and Update a normal User
 class UserSerializer(serializers.ModelSerializer):
-    person = serializers.PrimaryKeyRelatedField(
-        queryset=Person.objects.all(),
-        many=False,
-        write_only=True
-    )
-
     class Meta:
         model = User
         fields = (
@@ -20,6 +14,12 @@ class UserSerializer(serializers.ModelSerializer):
             'password',
             'type',
         )
+
+    def validate_person(self, value):
+        person = Person.objects.is_deleted(value.id)
+        if person is None:
+            raise serializers.ValidationError('Error, esta Persona no existe.')
+        return value
 
     # Type field validation
     def validate_type(self, value):
@@ -43,27 +43,16 @@ class UserSerializer(serializers.ModelSerializer):
         updated_user.save()
         return updated_user
 
-
-class UserListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = (
-            'username',
-            'email',
-            'type',
-            'is_superuser'
-        )
-
-    # Return a full detail User data
     def to_representation(self, instance):
+        print(instance.id)
         return dict(
-            id=instance['id'],
-            username=instance['username'],
-            name=instance['person__name'],
-            last_name=instance['person__last_name'],
-            email=instance['email'],
-            type=instance['type'],
-            is_superuser=instance['is_superuser']
+            id=instance.id,
+            username=instance.username,
+            name=instance.person.name,
+            last_name=instance.person.last_name,
+            email=instance.email,
+            type=instance.type,
+            is_superuser=instance.is_superuser
         )
 
 

@@ -20,14 +20,14 @@ def close_sessions(user):
 def is_person_assigned(pk=None):
     teacher_validate, student_validate = None, None
     try:
-        teacher_validate = Teacher.objects.select_related('person').get(person_id=pk)
+        teacher_validate = Teacher.objects.select_related('person').filter(person__id=pk, auth_state='A')
     except:
         pass
     try:
-        student_validate = Student.objects.select_related('person').get(person_id=pk)
+        student_validate = Student.objects.select_related('person').filter(person_id=pk, auth_state='A')
     except:
         pass
-    if (teacher_validate is not None) or (student_validate is not None):
+    if teacher_validate or student_validate:
         return True
 
     return False

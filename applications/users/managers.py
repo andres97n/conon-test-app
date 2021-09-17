@@ -25,7 +25,7 @@ class UserManager(BaseUserManager, models.Manager):
         return self._create_user(username, email, password, '0', True, True, True, **extra_fields)
 
     def user_list(self):
-        return self.filter(is_active=True).values(
+        return self.select_related('person').filter(is_active=True).values(
             'id',
             'username',
             'person__name',
@@ -35,4 +35,18 @@ class UserManager(BaseUserManager, models.Manager):
             'is_superuser'
         ).order_by('username')
 
+    def get_user_data(self):
+        return self.select_related('person').filter(auth_state='A', is_active=True).order_by('username')
 
+    def get_user_detail_data(self, pk=None):
+        user = None
+        try:
+            user = self.select_related('person').filter(
+                id=pk,
+                is_active=True,
+                auth_state='A'
+            ).first()
+        except:
+            pass
+
+        return user

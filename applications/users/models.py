@@ -4,24 +4,17 @@ from django.contrib.auth.models import PermissionsMixin
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from applications.base.models import BaseModel
 from applications.users.managers import UserManager
 from applications.users.api.api_student.managers import StudentManager
 from applications.users.api.api_teacher.managers import TeacherManager
+from applications.users.api.api_person.managers import PersonManager
 
 
 # TODO: Cambiar el tipo de campo a JSON de
 #   expectations y observations
 
 # Create your models here.
-class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
-    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
-    auth_state = models.CharField(max_length=3, default='A')
-
-    class Meta:
-        abstract = True
-
-
 class Person(BaseModel):
     # GENDERS
     class GenderChoices(models.IntegerChoices):
@@ -59,6 +52,8 @@ class Person(BaseModel):
         null=False,
         blank=False,
     )
+
+    objects = PersonManager()
 
     class Meta:
         db_table = 'person'

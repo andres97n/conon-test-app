@@ -1,24 +1,26 @@
 from rest_framework import serializers
 
 from applications.users.models import Teacher, Person
-from applications.users.functions import is_person_assigned
+from applications.base.functions import is_person_assigned
 
 
 # Create or Update Teacher Serializer
 class TeacherSerializer(serializers.ModelSerializer):
-    person = serializers.PrimaryKeyRelatedField(
-        write_only=True,
-        many=False,
-        queryset=Person.objects.all()
-    )
 
     class Meta:
         model = Teacher
-        fields = [
-            'person',
-            'title',
-            'objective',
+        exclude = [
+            'created_at',
+            'updated_at',
+            'auth_state'
         ]
+
+    # Validation if the Person exists
+    def validate_person(self, value):
+        person = Person.objects.is_deleted(value.id)
+        if person is None:
+            raise serializers.ValidationError('Error, esta Persona no existe.')
+        return value
 
     # Create Teacher Method
     def create(self, validated_data):
@@ -37,6 +39,19 @@ class TeacherSerializer(serializers.ModelSerializer):
         update_teacher.save()
         return update_teacher
 
+    def to_representation(self, instance):
+        return dict(
+            id=instance.id,
+            person=dict(
+                id=instance.person.id,
+                identification=instance.person.identification,
+                name=instance.person.name,
+                last_name=instance.person.last_name,
+            ),
+            title=instance.title,
+            objective=instance.objective,
+        )
+
 
 # Teacher List or Teacher Detail Serializer
 class TeacherListSerializer(serializers.ModelSerializer):
@@ -53,13 +68,13 @@ class TeacherListSerializer(serializers.ModelSerializer):
 
     # Return Person Data
     def get_person(self, obj):
-        teacher = Teacher.objects.get_teacher_person(obj.id)
+        teacher = Teacher.objects.get_person_data(pk=obj.id)
         if teacher is not None:
             return dict(
-                identification=teacher['person__identification'],
-                name=teacher['person__name'],
-                last_name=teacher['person__last_name'],
-                age=teacher['person__age'],
-                phone=teacher['person__phone'],
+                identification=student.person.identification,
+                name=student.person.name,
+                last_name=student.person.last_name,
+                age=teacher.person.age,
+                phone=teacher.person.phone,
             )
         return teacher

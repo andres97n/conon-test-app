@@ -34,6 +34,17 @@ class PersonSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Error, esta persona no debe tener 80 años o más.')
         return value
 
+    def to_representation(self, instance):
+        return dict(
+            id=instance.id,
+            identification=instance.identification,
+            name=instance.name,
+            last_name=instance.last_name,
+            gender=instance.gender,
+            age=instance.age,
+            phone=instance.phone
+        )
+
 
 # Person List or Person Detail Serializer
 class PersonListSerializer(serializers.ModelSerializer):

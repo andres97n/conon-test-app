@@ -40,6 +40,7 @@ LOCAL_APPS = [
 
 THIRD_APPS = [
     'corsheaders',
+    'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
@@ -72,6 +73,13 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=9),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+SWAGGER_SETTINGS = {
+    'DOC_EXPANSION': 'none',
+    'USE_SESSION_AUTH': True,
+    'LOGIN_URL': 'http://127.0.0.1:8000/admin/',
+    'LOGOUT_URL': 'http://127.0.0.1:8000/swagger/'
 }
 
 MIDDLEWARE = [
