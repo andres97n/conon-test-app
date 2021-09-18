@@ -9,6 +9,7 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
         fields = (
             'identification',
+            'identification_type',
             'name',
             'last_name',
             'gender',
@@ -33,6 +34,15 @@ class PersonSerializer(serializers.ModelSerializer):
         if value >= 80:
             raise serializers.ValidationError('Error, esta persona no debe tener 80 años o más.')
         return value
+
+    def validate(self, attrs):
+
+        # Validate the length of the identification
+        if attrs['identification_type'] == 0:
+            if len(attrs['identification']) != 10:
+                raise serializers.ValidationError('Error, la Identificación debe contener 10 números.')
+
+        return attrs
 
     def to_representation(self, instance):
         return dict(

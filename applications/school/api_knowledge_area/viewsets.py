@@ -3,107 +3,101 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 
-from applications.base.paginations import CononPagination
-from .serializers import TeacherSerializer, TeacherListSerializer
+from applications.school.api_knowledge_area.serializers import KnowledgeAreaSerializer
 
 
-# TODO: Revisar los permisos para esta clase y
-#   la clase Student
-
-
-class TeacherViewSet(viewsets.ModelViewSet):
+class KnowledgeAreaViewSet(viewsets.ModelViewSet):
     permission_classes = ([IsAdminUser])
-    pagination_class = CononPagination
-    serializer_class = TeacherSerializer
+    serializer_class = KnowledgeAreaSerializer
 
-    # Return teacher data
+    # Get Knowledge Area Data
     def get_queryset(self, pk=None):
         if pk is None:
-            return self.get_serializer().Meta.model.objects.get_teacher_list()
-        return self.get_serializer().Meta.model.objects.get_person_data(pk)
+            return self.get_serializer().Meta.model.objects.get_area_list()
+        return self.get_serializer().Meta.model.objects.get_are_by_id(pk)
 
-    # Create Teacher
+    # Create Knowledge Area
     def create(self, request, *args, **kwargs):
 
         # Send information to serializer
-        teacher_serializer = self.serializer_class(data=request.data)
-        if teacher_serializer.is_valid():
-            teacher_serializer.save()
+        knowledge_area_serializer = self.serializer_class(data=request.data)
+        if knowledge_area_serializer.is_valid():
+            knowledge_area_serializer.save()
 
             return Response(
                 {
-                    'message': 'Docente creado correctamente.'
+                    'message': 'Período Lectivo creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED
             )
 
         return Response(
-            teacher_serializer.errors,
+            knowledge_area_serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Update Teacher
+    # Update Knowledge Area
     def update(self, request, pk=None, *args, **kwargs):
         if self.get_queryset(pk):
 
             # Send information to serializer referencing the instance
-            teacher_serializer = self.serializer_class(self.get_queryset(pk), data=request.data)
-            if teacher_serializer.is_valid():
-                teacher_serializer.save()
+            knowledge_area_serializer = self.serializer_class(self.get_queryset(pk), data=request.data)
+            if knowledge_area_serializer.is_valid():
+                knowledge_area_serializer.save()
 
                 return Response(
-                    teacher_serializer.data,
+                    knowledge_area_serializer.data,
                     status=status.HTTP_200_OK
                 )
 
             return Response(
-                teacher_serializer.errors,
+                knowledge_area_serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         return Response(
             {
-                'error': 'No existe este Docente.'
+                'error': 'No existe este Período Lectivo.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Detail Teacher data
+    # Detail Knowledge Area
     def retrieve(self, request, pk=None, *args, **kwargs):
         if self.get_queryset(pk):
-            teacher_serializer = TeacherListSerializer(self.get_queryset(pk))
+            knowledge_area_serializer = self.serializer_class(self.get_queryset(pk))
 
             return Response(
-                teacher_serializer.data,
+                knowledge_area_serializer.data,
                 status=status.HTTP_200_OK
             )
 
         return Response(
             {
-                'error': 'No existe este Docente.'
+                'error': 'No existe este Período Lectivo.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Delete Teacher
+    # Delete Knowledge Area
     def destroy(self, request, pk=None, *args, **kwargs):
 
         # Get instance
-        teacher = self.get_queryset(pk)
-        if teacher:
-            teacher.auth_state = 'I'
-            teacher.save()
+        knowledge_area = self.get_queryset(pk)
+        if knowledge_area:
+            knowledge_area.auth_state = 'I'
+            knowledge_area.save()
 
             return Response(
                 {
-                    'message': 'Docente eliminado correctamente.'
+                    'message': 'Período Lectivo eliminado correctamente.'
                 },
                 status=status.HTTP_200_OK
             )
 
         return Response(
             {
-                'error': 'No existe este Docente.'
+                'error': 'No existe este Período Lectivo.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )

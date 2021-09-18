@@ -1,6 +1,9 @@
 from rest_framework import serializers, pagination
 
 from applications.users.models import User, Person
+from applications.users.functions import user_validate
+
+# TODO: Realizar un serializer para el cambio de contraseña
 
 
 # Serializer for Create and Update a normal User
@@ -28,6 +31,11 @@ class UserSerializer(serializers.ModelSerializer):
         if value > 2:
             raise serializers.ValidationError('Error, no existe este Tipo.')
         return value
+
+    def validate(self, attrs):
+        if not user_validate(attrs['person'].id, attrs['type']):
+            raise serializers.ValidationError('Error, este Usuario no puede ser de este tipo.')
+        return attrs
 
     # Create a normal User
     def create(self, validated_data):

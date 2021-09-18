@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from applications.users.models import Student, Person
-from applications.base.functions import is_person_assigned
+from applications.users.functions import is_person_assigned
 
 
 # TODO: Validar los números de teléfono
@@ -33,6 +33,20 @@ class StudentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Error, esta Persona no existe.')
         return value
 
+    def to_representation(self, instance):
+        return dict(
+            id=instance.id,
+            person=dict(
+                identification=instance.person.identification,
+                name=instance.person.name,
+                last_name=instance.person.last_name,
+            ),
+            representative_name=instance.representative_name,
+            emergency_contact=instance.emergency_contact,
+            expectations=instance.expectations,
+            observations=instance.observations
+        )
+
     # Create Student Method
     def create(self, validated_data):
         if is_person_assigned(validated_data['person'].id):
@@ -49,21 +63,6 @@ class StudentSerializer(serializers.ModelSerializer):
         update_student = super().update(instance, validated_data)
         update_student.save()
         return update_student
-
-    def to_representation(self, instance):
-        return dict(
-            id=instance.id,
-            person=dict(
-                id=instance.person.id,
-                identification=instance.person.identification,
-                name=instance.person.name,
-                last_name=instance.person.last_name,
-            ),
-            representative_name=instance.representative_name,
-            emergency_contact=instance.emergency_contact,
-            expectations=instance.expectations,
-            observations=instance.observations
-        )
 
 
 # Person List or Person Detail Serializer
@@ -83,7 +82,6 @@ class StudentListSerializer(serializers.ModelSerializer):
 
     # Return Person data of the Student
     def get_person(self, obj):
-        print(obj)
         student = Student.objects.get_person_data(pk=obj.id)
         if student is not None:
             return dict(

@@ -54,9 +54,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    # path('api/', include('applications.users.api.api_user.urls')),
     path('user/api/', include('applications.users.routers')),
-    # path('api/', include('applications.users.api.api_person.urls')),
-    # path('api/', include('applications.users.api.api_student.urls')),
-    # path('api/', include('applications.users.api.api_teacher.urls')),
+    path('school/api/', include('applications.school.routers')),
 ]

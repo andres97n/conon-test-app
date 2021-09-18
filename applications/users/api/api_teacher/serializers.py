@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from applications.users.models import Teacher, Person
-from applications.base.functions import is_person_assigned
+from applications.users.functions import is_person_assigned
 
 
 # Create or Update Teacher Serializer
@@ -43,7 +43,6 @@ class TeacherSerializer(serializers.ModelSerializer):
         return dict(
             id=instance.id,
             person=dict(
-                id=instance.person.id,
                 identification=instance.person.identification,
                 name=instance.person.name,
                 last_name=instance.person.last_name,
@@ -71,9 +70,9 @@ class TeacherListSerializer(serializers.ModelSerializer):
         teacher = Teacher.objects.get_person_data(pk=obj.id)
         if teacher is not None:
             return dict(
-                identification=student.person.identification,
-                name=student.person.name,
-                last_name=student.person.last_name,
+                identification=teacher.person.identification,
+                name=teacher.person.name,
+                last_name=teacher.person.last_name,
                 age=teacher.person.age,
                 phone=teacher.person.phone,
             )

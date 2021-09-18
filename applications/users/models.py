@@ -14,13 +14,25 @@ from applications.users.api.api_person.managers import PersonManager
 # TODO: Cambiar el tipo de campo a JSON de
 #   expectations y observations
 
-# Create your models here.
+
 class Person(BaseModel):
+
     # GENDERS
     class GenderChoices(models.IntegerChoices):
         FEMININE = 0
         MASCULINE = 1
         OTHER = 2
+
+    class IdentificationChoices(models.IntegerChoices):
+        CI = 0
+        OTHER = 1
+
+    identification_type = models.PositiveIntegerField(
+        choices=IdentificationChoices.choices,
+        default=0,
+        null=False,
+        blank=False,
+    )
 
     identification = models.CharField(
         max_length=20,
@@ -38,7 +50,7 @@ class Person(BaseModel):
         null=False,
         blank=False
     )
-    gender = models.PositiveIntegerField(
+    gender = models.PositiveSmallIntegerField(
         choices=GenderChoices.choices,
         null=False,
         blank=False,
@@ -169,6 +181,7 @@ class Teacher(BaseModel):
 
 
 class User(AbstractBaseUser, PermissionsMixin, BaseModel):
+
     # USERS
     class UserChoices(models.IntegerChoices):
         ADMINISTRATOR = 0
@@ -186,7 +199,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         blank=True,
         unique=True
     )
-    type = models.PositiveIntegerField(
+    type = models.PositiveSmallIntegerField(
         choices=UserChoices.choices,
         null=False,
         blank=False
@@ -228,6 +241,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
 
 class AuditUser(models.Model):
+
     # AUDIT TYPES
     class AuditTypesChoices(models.IntegerChoices):
         CREATE = 0
