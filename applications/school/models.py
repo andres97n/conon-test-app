@@ -3,6 +3,9 @@ from django.db import models
 from applications.base.models import BaseModel
 from applications.users.models import Teacher, Student
 from applications.school.api_knowledge_area.managers import KnowledgeAreaManager
+from applications.school.api_school_period.managers import SchoolPeriodManager
+from applications.school.api_classroom.managers import ClassroomManager
+from applications.school.api_asignature.managers import AsignatureManager
 
 
 class SchoolPeriod(BaseModel):
@@ -14,7 +17,8 @@ class SchoolPeriod(BaseModel):
     name = models.CharField(
         max_length=50,
         null=False,
-        blank=False
+        blank=False,
+        unique=True
     )
     init_date = models.DateTimeField(
         null=False,
@@ -39,6 +43,8 @@ class SchoolPeriod(BaseModel):
         null=True,
         blank=True,
     )
+
+    objects = SchoolPeriodManager()
 
     class Meta:
         db_table = 'school_period'
@@ -119,11 +125,10 @@ class Classroom(BaseModel):
 
     name = models.CharField(
         max_length=30,
-        unique=True,
         null=False,
         blank=False
     )
-    grade_level = models.PositiveSmallIntegerField(
+    curse_level = models.PositiveSmallIntegerField(
         choices=GradeChoices.choices,
         null=False,
         blank=False
@@ -144,6 +149,8 @@ class Classroom(BaseModel):
         blank=True
     )
 
+    objects = ClassroomManager()
+
     class Meta:
         db_table = 'classroom'
         verbose_name = 'Classroom'
@@ -158,7 +165,6 @@ class Asignature(BaseModel):
         max_length=40,
         null=False,
         blank=False,
-        unique=True
     )
     objective = models.TextField(
         null=True,
@@ -170,12 +176,19 @@ class Asignature(BaseModel):
         null=False,
         blank=False
     )
+    observations = models.TextField(
+        default='S/N',
+        null=True,
+        blank=True
+    )
 
     classrooms = models.ManyToManyField(
         Classroom,
         through='AsignatureClassroom',
         blank=True
     )
+
+    objects = AsignatureManager()
 
     class Meta:
         db_table = 'asignature'

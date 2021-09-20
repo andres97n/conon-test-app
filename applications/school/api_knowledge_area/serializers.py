@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from applications.school.models import KnowledgeArea
+from applications.users.models import Teacher
+
 
 # TODO: Investigar la manera de retornar los datos de los
 #   profesores dentro de la lista del área
@@ -15,6 +17,14 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
             'updated_at',
             'auth_state'
         ]
+
+    # Validate Teachers
+    def validate_teachers(self, value):
+        if value:
+            for teacher in value:
+                if not Teacher.objects.is_active(teacher.id):
+                    raise serializers.ValidationError(f'Error, este Docente [{teacher}] no existe.')
+        return value
 
     def validate(self, attrs):
         if attrs['coordinator'].id == attrs['sub_coordinator'].id:

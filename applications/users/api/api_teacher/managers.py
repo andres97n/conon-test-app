@@ -12,7 +12,19 @@ class TeacherManager(models.Manager):
             pass
         return teacher
 
-    # Ger Active Teacher List
+    # Get Active Teacher List
     def get_teacher_list(self):
         teachers = self.select_related('person').filter(auth_state='A').order_by('person__last_name')
         return teachers
+
+    # Return if the Teacher is active
+    def is_active(self, pk=None):
+        teacher = None
+        try:
+            teacher = self.filter(id=pk, auth_state='A').first()
+        except:
+            pass
+        if teacher is None:
+            return False
+
+        return True

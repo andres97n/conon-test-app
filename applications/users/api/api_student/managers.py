@@ -16,3 +16,14 @@ class StudentManager(models.Manager):
     def get_student_list(self):
         students = self.select_related('person').filter(auth_state='A').order_by('person__last_name')
         return students
+
+    def is_active(self, pk=None):
+        student = None
+        try:
+            student = self.filter(id=pk, auth_state='A').first()
+        except:
+            pass
+        if student is None:
+            return False
+
+        return True

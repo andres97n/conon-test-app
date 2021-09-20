@@ -20,3 +20,14 @@ class KnowledgeAreaManager(models.Manager):
             pass
 
         return area
+
+    def is_active(self, pk=None):
+        knowledge_area = None
+        try:
+            knowledge_area = self.filter(id=None, auth_state='A').first()
+        except:
+            pass
+        if knowledge_area is None:
+            return False
+
+        return True
