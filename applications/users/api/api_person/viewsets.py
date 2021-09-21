@@ -20,7 +20,6 @@ class PersonViewSet(viewsets.ModelViewSet):
 
     # Create Person
     def create(self, request, *args, **kwargs):
-
         # Send information to serializer
         person_serializer = self.serializer_class(data=request.data)
         if person_serializer.is_valid():
@@ -40,10 +39,10 @@ class PersonViewSet(viewsets.ModelViewSet):
 
     # Update Person
     def update(self, request, pk=None, *args, **kwargs):
-        if self.get_queryset(pk):
-
+        person = self.get_queryset(pk)
+        if person:
             # Send information to serializer referencing the instance
-            person_serializer = self.serializer_class(self.get_queryset(pk), data=request.data)
+            person_serializer = self.serializer_class(person, data=request.data)
             if person_serializer.is_valid():
                 person_serializer.save()
 
@@ -83,7 +82,6 @@ class PersonViewSet(viewsets.ModelViewSet):
 
     # Delete Person
     def destroy(self, request, pk=None, *args, **kwargs):
-
         # Get instance
         person = self.get_queryset(pk)
         if person:

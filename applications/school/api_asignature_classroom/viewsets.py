@@ -3,56 +3,55 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 
-from applications.school.api_classroom.serializers import ClassroomSerializer
+from .serializers import AsignatureClassroomSerializer
 from applications.base.paginations import CononPagination
 
 
-class ClassroomViewSet(viewsets.ModelViewSet):
+class AsignatureClassroomViewSet(viewsets.ModelViewSet):
     permission_classes = ([IsAdminUser])
-    serializer_class = ClassroomSerializer
+    serializer_class = AsignatureClassroomSerializer
     pagination_class = CononPagination
 
-    # Get Classroom Data
     def get_queryset(self, pk=None):
         if pk is None:
-            return self.get_serializer().Meta.model.objects.get_classroom_list()
-        return self.get_serializer().Meta.model.objects.get_classroom_by_id(pk)
+            return self.get_serializer().Meta.model.objects.get_asignature_classroom_list()
+        return self.get_serializer().Meta.model.objects.get_asignature_classroom_by_id(pk)
 
-    # Create Classroom
+    # Create Asignature Classroom Data
     def create(self, request, *args, **kwargs):
         # Send information to serializer
-        classroom_serializer = self.serializer_class(data=request.data)
-        if classroom_serializer.is_valid():
-            classroom_serializer.save()
+        asignature_classroom_serializer = self.serializer_class(data=request.data)
+        if asignature_classroom_serializer.is_valid():
+            asignature_classroom_serializer.save()
 
             return Response(
                 {
-                    'message': 'Aula creada correctamente.'
+                    'message': 'Valores creados correctamente.'
                 },
                 status=status.HTTP_201_CREATED
             )
 
         return Response(
-            classroom_serializer.errors,
+            asignature_classroom_serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Update Classroom
+    # Update Asignature Classroom Data
     def update(self, request, pk=None, *args, **kwargs):
-        clasroom = self.get_queryset(pk)
-        if clasroom:
+        asignature_classroom = self.get_queryset(pk)
+        if asignature_classroom:
             # Send information to serializer referencing the instance
-            classroom_serializer = self.serializer_class(clasroom, data=request.data)
-            if classroom_serializer.is_valid():
-                classroom_serializer.save()
+            asignature_classroom_serializer = self.serializer_class(asignature_classroom, data=request.data)
+            if asignature_classroom_serializer.is_valid():
+                asignature_classroom_serializer.save()
 
                 return Response(
-                    classroom_serializer.data,
+                    asignature_classroom_serializer.data,
                     status=status.HTTP_200_OK
                 )
 
             return Response(
-                classroom_serializer.errors,
+                asignature_classroom_serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -63,42 +62,41 @@ class ClassroomViewSet(viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Detail Classroom Data
+    # Detail Asignature Classroom Data
     def retrieve(self, request, pk=None, *args, **kwargs):
         if self.get_queryset(pk):
-            classroom_serializer = self.serializer_class(self.get_queryset(pk))
+            asignature_classroom_serializer = self.serializer_class(self.get_queryset(pk))
 
             return Response(
-                classroom_serializer.data,
+                asignature_classroom_serializer.data,
                 status=status.HTTP_200_OK
             )
 
         return Response(
             {
-                'error': 'No existe esta Aula.'
+                'error': 'No existe este Registro.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Delete Classroom
+    # Delete Asignature Classroom Data
     def destroy(self, request, pk=None, *args, **kwargs):
         # Get instance
-        classroom = self.get_queryset(pk)
-        if classroom:
-            classroom.auth_state = 'I'
-            classroom.save()
+        asignature_classroom = self.get_queryset(pk)
+        if asignature_classroom:
+            asignature_classroom.auth_state = 'I'
+            asignature_classroom.save()
 
             return Response(
                 {
-                    'message': 'Aula eliminada correctamente.'
+                    'message': 'Registro eliminado correctamente.'
                 },
                 status=status.HTTP_200_OK
             )
 
         return Response(
             {
-                'error': 'No existe esta Aula.'
+                'error': 'No existe este Registro.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )
-

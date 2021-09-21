@@ -6,6 +6,10 @@ from applications.school.api_knowledge_area.managers import KnowledgeAreaManager
 from applications.school.api_school_period.managers import SchoolPeriodManager
 from applications.school.api_classroom.managers import ClassroomManager
 from applications.school.api_asignature.managers import AsignatureManager
+from applications.school.api_asignature_classroom.managers import AsignatureClassroomManager
+
+# TODO: Crear una tabla de niveles para las tablas
+#   Aula y Asignatura
 
 
 class SchoolPeriod(BaseModel):
@@ -15,30 +19,35 @@ class SchoolPeriod(BaseModel):
         OPEN = 1
 
     name = models.CharField(
+        'nombre',
         max_length=50,
         null=False,
         blank=False,
-        unique=True
     )
-    init_date = models.DateTimeField(
+    init_date = models.DateField(
+        'fecha de inicio',
         null=False,
         blank=False
     )
-    end_date = models.DateTimeField(
+    end_date = models.DateField(
+        'fecha fin',
         null=False,
         blank=False
     )
-    school_end_date = models.DateTimeField(
+    school_end_date = models.DateField(
+        'fecha fin de clases',
         null=False,
         blank=False
     )
     state = models.PositiveSmallIntegerField(
+        'estado',
         choices=PeriodStatus.choices,
         default=1,
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
     )
     observations = models.TextField(
+        'observaciones',
         default='S/N',
         null=True,
         blank=True,
@@ -93,6 +102,12 @@ class KnowledgeArea(BaseModel):
         null=False,
         blank=False
     )
+    observations = models.TextField(
+        'observaciones',
+        default='S/N',
+        null=True,
+        blank=True,
+    )
 
     teachers = models.ManyToManyField(
         Teacher,
@@ -119,9 +134,9 @@ class KnowledgeArea(BaseModel):
 class Classroom(BaseModel):
 
     class GradeChoices(models.IntegerChoices):
-        PRIMERO = 1
+        PRIMER = 1
         SEGUNDO = 2
-        TERCERO = 3
+        TERCER = 3
 
     name = models.CharField(
         max_length=30,
@@ -222,6 +237,8 @@ class AsignatureClassroom(BaseModel):
         null=True,
         blank=True
     )
+
+    objects = AsignatureClassroomManager()
 
     class Meta:
         db_table = 'asignature_classroom'

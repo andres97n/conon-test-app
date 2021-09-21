@@ -21,9 +21,21 @@ class AsignatureSerializer(serializers.ModelSerializer):
     # Return Asignature Data
     def to_representation(self, instance):
         return dict(
+            id=instance.id,
             name=instance.name,
             objective=instance.objective,
-            knowledge_area=instance.knowledge_area,
+            knowledge_area=dict(
+                name=instance.knowledge_area.name,
+                coordinator=instance.knowledge_area.get_coordinator()
+            ),
             observations=instance.observations,
             # classrooms = instance.classrooms
         )
+
+    # Update Asignature
+    def update(self, instance, validated_data):
+        if instance.knowledge_area != validated_data['knowledge_area']:
+            raise serializers.ValidationError('Error, una vez ingresada el Área de Conocimiento no se puede cambiar el mismo.')
+        update_classroom = super().update(instance, validated_data)
+        update_classroom.save()
+        return update_classroom

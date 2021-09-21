@@ -9,7 +9,6 @@ from applications.users.models import Teacher
 
 
 class KnowledgeAreaSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = KnowledgeArea
         exclude = [
@@ -32,8 +31,8 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    # Get Knowledge Area Data
     def to_representation(self, instance):
-
         return dict(
             id=instance.id,
             name=instance.name,
@@ -46,5 +45,23 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
                 last_name=instance.sub_coordinator.person.last_name
             ),
             objective=instance.objective,
+            observations=instance.observations,
             # teachers=instance.teachers
         )
+
+    # Create a Knowledge Area
+    def create(self, validated_data):
+        if not KnowledgeArea.objects.is_name_exists(validated_data['name']):
+            raise serializers.ValidationError('Error, esta Área de Conocimiento ya existe.')
+        knowledge_area = KnowledgeArea(**validated_data)
+        knowledge_area.save()
+        return knowledge_area
+
+    # Update Knowledge Area
+    def update(self, instance, validated_data):
+        if instance.name != validated_data['name']:
+            if not KnowledgeArea.objects.is_name_exists(validated_data['name']):
+                raise serializers.ValidationError('Error, esta Área de Conocimiento ya existe.')
+        update_knowledge_area = super().update(instance, validated_data)
+        update_knowledge_area.save()
+        return update_knowledge_area

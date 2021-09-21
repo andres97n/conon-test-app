@@ -13,3 +13,18 @@ class ClassroomManager(models.Manager):
         except:
             pass
         return classroom
+
+    def is_active(self, pk=None):
+        classroom = None
+        try:
+            classroom = self.select_related('school_period').filter(
+                id=pk,
+                auth_state='A',
+                school_period__state=1
+            ).first()
+        except:
+            pass
+        if classroom is None:
+            return False
+        else:
+            return True

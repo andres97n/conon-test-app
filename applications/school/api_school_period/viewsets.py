@@ -7,7 +7,7 @@ from .serializers import SchoolPeriodSerializer
 
 
 class SchoolPeriodViewSet(viewsets.ModelViewSet):
-    permission_classes = ([IsAdminUser]),
+    permission_classes = ([IsAdminUser])
     serializer_class = SchoolPeriodSerializer
 
     # Get School Period Data
@@ -18,7 +18,6 @@ class SchoolPeriodViewSet(viewsets.ModelViewSet):
 
     # Create School Period
     def create(self, request, *args, **kwargs):
-
         # Send information to serializer
         school_period_serializer = self.serializer_class(data=request.data)
         if school_period_serializer.is_valid():
@@ -38,10 +37,10 @@ class SchoolPeriodViewSet(viewsets.ModelViewSet):
 
     # Update School Period
     def update(self, request, pk=None, *args, **kwargs):
-        if self.get_queryset(pk):
-
+        school_period = self.get_queryset(pk)
+        if school_period:
             # Send information to serializer referencing the instance
-            school_period_serializer = self.serializer_class(self.get_queryset(pk), data=request.data)
+            school_period_serializer = self.serializer_class(school_period, data=request.data)
             if school_period_serializer.is_valid():
                 school_period_serializer.save()
 
@@ -81,7 +80,6 @@ class SchoolPeriodViewSet(viewsets.ModelViewSet):
 
     # Delete School Period
     def destroy(self, request, pk=None, *args, **kwargs):
-
         # Get instance
         school_period = self.get_queryset(pk)
         if school_period:

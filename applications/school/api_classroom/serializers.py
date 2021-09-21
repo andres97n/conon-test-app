@@ -21,12 +21,6 @@ class ClassroomSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Error, no existe este Nivel de Curso.')
         return value
 
-    # School Period Id Validation
-    def validate_school_period(self, value):
-        if not SchoolPeriod.objects.is_period_active(value.id):
-            raise serializers.ValidationError('Error, el Período Lectivo que ingresó no existe o no está activo.')
-        return value
-
     # Validate Students
     def validate_students(self, value):
         if value:
@@ -38,7 +32,7 @@ class ClassroomSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return dict(
             name=instance.name,
-            curse_level=instance.curse_level.__str__(),
+            curse_level=instance.curse_level,
             capacity=instance.capacity,
             school_period=dict(
                 name=instance.school_period.__str__(),
@@ -46,3 +40,19 @@ class ClassroomSerializer(serializers.ModelSerializer):
             ),
             # students=instance.students
         )
+
+    # Create a Classroom
+    def create(self, validated_data):
+        if not SchoolPeriod.objects.is_period_active(validated_data['school_period'].id):
+            raise serializers.ValidationError('Error, el Período Lectivo que ingresó no existe o no está activo.')
+        classroom = Classroom(**validated_data)
+        classroom.save()
+        return classroom
+
+    # Update Classroom
+    def update(self, instance, validated_data):
+        if instance.school_period != validated_data['school_period']:
+            raise serializers.ValidationError('Error, una vez ingresado el Período Lectivo no se puede cambiar el mismo.')
+        update_classroom = super().update(instance, validated_data)
+        update_classroom.save()
+        return update_classroom

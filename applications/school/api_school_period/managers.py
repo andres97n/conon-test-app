@@ -9,7 +9,7 @@ class SchoolPeriodManager(models.Manager):
     def get_period_by_pk(self, pk=None):
         period = None
         try:
-            period = self.filter(id=pk, auth_state='A')
+            period = self.filter(id=pk, auth_state='A').first()
         except:
             pass
 
@@ -25,3 +25,13 @@ class SchoolPeriodManager(models.Manager):
             return True
         else:
             return False
+
+    def is_name_exists(self, name=None):
+        school_period = None
+        try:
+            school_period = self.filter(name=name, auth_state='A').first()
+        except:
+            pass
+        if school_period is None:
+            return False
+        return True

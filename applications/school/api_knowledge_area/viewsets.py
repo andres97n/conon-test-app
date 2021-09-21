@@ -18,7 +18,6 @@ class KnowledgeAreaViewSet(viewsets.ModelViewSet):
 
     # Create Knowledge Area
     def create(self, request, *args, **kwargs):
-
         # Send information to serializer
         knowledge_area_serializer = self.serializer_class(data=request.data)
         if knowledge_area_serializer.is_valid():
@@ -38,10 +37,10 @@ class KnowledgeAreaViewSet(viewsets.ModelViewSet):
 
     # Update Knowledge Area
     def update(self, request, pk=None, *args, **kwargs):
-        if self.get_queryset(pk):
-
+        knowledge_area = self.get_queryset(pk)
+        if knowledge_area:
             # Send information to serializer referencing the instance
-            knowledge_area_serializer = self.serializer_class(self.get_queryset(pk), data=request.data)
+            knowledge_area_serializer = self.serializer_class(knowledge_area, data=request.data)
             if knowledge_area_serializer.is_valid():
                 knowledge_area_serializer.save()
 
@@ -81,7 +80,6 @@ class KnowledgeAreaViewSet(viewsets.ModelViewSet):
 
     # Delete Knowledge Area
     def destroy(self, request, pk=None, *args, **kwargs):
-
         # Get instance
         knowledge_area = self.get_queryset(pk)
         if knowledge_area:

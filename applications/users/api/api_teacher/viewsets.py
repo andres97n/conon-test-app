@@ -24,7 +24,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
 
     # Create Teacher
     def create(self, request, *args, **kwargs):
-
         # Send information to serializer
         teacher_serializer = self.serializer_class(data=request.data)
         if teacher_serializer.is_valid():
@@ -44,10 +43,10 @@ class TeacherViewSet(viewsets.ModelViewSet):
 
     # Update Teacher
     def update(self, request, pk=None, *args, **kwargs):
-        if self.get_queryset(pk):
-
+        teacher = self.get_queryset(pk)
+        if teacher:
             # Send information to serializer referencing the instance
-            teacher_serializer = self.serializer_class(self.get_queryset(pk), data=request.data)
+            teacher_serializer = self.serializer_class(teacher, data=request.data)
             if teacher_serializer.is_valid():
                 teacher_serializer.save()
 
@@ -87,7 +86,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
 
     # Delete Teacher
     def destroy(self, request, pk=None, *args, **kwargs):
-
         # Get instance
         teacher = self.get_queryset(pk)
         if teacher:

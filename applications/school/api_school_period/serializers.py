@@ -20,16 +20,34 @@ class SchoolPeriodSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['init_date'] >= attrs['end_date']:
-            raise serializers.ValidationError('Error: la Fecha de Inicio no puede ser la misma o mayor que la Fecha ' 
+            raise serializers.ValidationError('Error: la Fecha de Inicio no puede ser la misma o mayor que la Fecha '
                                               'de Final de Período.')
         return attrs
 
+    # Get School Period Data
     def to_representation(self, instance):
         return dict(
+            id=instance.id,
             name=instance.name,
             init_date=instance.init_date,
             end_date=instance.end_date,
             school_end_date=instance.school_end_date,
-            state=instance.state.__str__(),
+            state=instance.state,
             observations=instance.observations
         )
+
+    # Create a School Period
+    def create(self, validated_data):
+        if SchoolPeriod.objects.is_name_exists(validated_data['name']):
+            raise serializers.ValidationError('Error, este Período Lectivo ya existe.')
+        school_period = SchoolPeriod(**validated_data)
+        school_period.save()
+        return school_period
+
+    # Update School Period
+    def update(self, instance, validated_data):
+        if instance.name != validated_data['name']:
+            raise serializers.ValidationError('Error, no se puede cambiar el nombre del Período Lectivo.')
+        update_school_period = super().update(instance, validated_data)
+        update_school_period.save()
+        return update_school_period

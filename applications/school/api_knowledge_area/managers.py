@@ -24,10 +24,20 @@ class KnowledgeAreaManager(models.Manager):
     def is_active(self, pk=None):
         knowledge_area = None
         try:
-            knowledge_area = self.filter(id=None, auth_state='A').first()
+            knowledge_area = self.filter(id=pk, auth_state='A').first()
         except:
             pass
         if knowledge_area is None:
             return False
 
+        return True
+
+    def is_name_exists(self, name=None):
+        knowledge_area = None
+        try:
+            knowledge_area = self.filter(name=name, auth_state='A').first()
+        except:
+            pass
+        if knowledge_area is None:
+            return False
         return True

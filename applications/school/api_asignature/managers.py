@@ -6,7 +6,7 @@ class AsignatureManager(models.Manager):
     def is_active(self, pk=None):
         asignature = None
         try:
-            asignature = self.filter(id=None, auth_state='A').first()
+            asignature = self.filter(id=pk, auth_state='A').first()
         except:
             pass
         if asignature is None:
