@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from applications.school.models import Classroom, SchoolPeriod
 from applications.users.models import Student
+from applications.users.api.api_student.serializers import StudentListByClassroom
 
 # TODO: Verificar si el método validate_students() es eficiente
 
@@ -29,6 +30,10 @@ class ClassroomSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError(f'Error, este Estudiante [{student}] no existe.')
         return value
 
+    def get_students(self, students=None):
+        student_serializer = StudentListByClassroom(students, many=True)
+        return student_serializer.data
+
     def to_representation(self, instance):
         return dict(
             name=instance.name,
@@ -38,7 +43,7 @@ class ClassroomSerializer(serializers.ModelSerializer):
                 name=instance.school_period.__str__(),
                 period_date=instance.school_period.get_period_date()
             ),
-            # students=instance.students
+            students=self.get_students(instance.students)
         )
 
     # Create a Classroom

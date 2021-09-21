@@ -4,9 +4,11 @@ from applications.users.models import Teacher, Person
 from applications.users.functions import is_person_assigned
 
 
+# TODO: Quitar el Serializador Teacher List
+
+
 # Create or Update Teacher Serializer
 class TeacherSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Teacher
         exclude = [
@@ -77,3 +79,20 @@ class TeacherListSerializer(serializers.ModelSerializer):
                 phone=teacher.person.phone,
             )
         return teacher
+
+
+class TeacherByAreaListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Teacher
+        fields = [
+            'id',
+            'person',
+            'title',
+        ]
+
+    def to_representation(self, instance):
+        return dict(
+            id=instance.id,
+            identification=instance.person.identification,
+            name=instance.__str__()
+        )

@@ -233,7 +233,8 @@ class AsignatureClassroom(BaseModel):
         null=False,
         blank=False
     )
-    observation = models.TextField(
+    observations = models.TextField(
+        default='S/N',
         null=True,
         blank=True
     )

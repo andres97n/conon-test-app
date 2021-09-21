@@ -11,12 +11,12 @@ router = routers.DefaultRouter()
 router.register(
     r'school-period',
     SchoolPeriodViewSet,
-    basename='school-period'
+    basename='school_period'
 )
 router.register(
     r'knowledge-area',
     KnowledgeAreaViewSet,
-    basename='knowledge-area'
+    basename='knowledge_area'
 )
 router.register(
     r'classroom',
@@ -29,7 +29,7 @@ router.register(
     basename='asignature'
 )
 router.register(
-    r'asignature_classroom',
+    r'asignature-classroom',
     AsignatureClassroomViewSet,
     basename='asignature_classroom'
 )

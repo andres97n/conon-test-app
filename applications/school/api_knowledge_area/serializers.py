@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from applications.school.models import KnowledgeArea
 from applications.users.models import Teacher
-
+from applications.users.api.api_teacher.serializers import TeacherByAreaListSerializer
 
 # TODO: Investigar la manera de retornar los datos de los
 #   profesores dentro de la lista del área
@@ -31,8 +31,13 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    def get_teachers(self, teachers=None):
+        teacher_serializer = TeacherByAreaListSerializer(teachers, many=True)
+        return teacher_serializer.data
+
     # Get Knowledge Area Data
     def to_representation(self, instance):
+
         return dict(
             id=instance.id,
             name=instance.name,
@@ -46,7 +51,7 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
             ),
             objective=instance.objective,
             observations=instance.observations,
-            # teachers=instance.teachers
+            teachers=self.get_teachers(instance.teachers),
         )
 
     # Create a Knowledge Area

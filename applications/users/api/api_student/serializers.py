@@ -92,3 +92,20 @@ class StudentListSerializer(serializers.ModelSerializer):
                 phone=student.person.phone,
             )
         return student
+
+
+class StudentListByClassroom(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = [
+            'id',
+            'person',
+        ]
+
+    def to_representation(self, instance):
+        return dict(
+            id=instance.id,
+            identification=instance.person.identification,
+            name=instance.__str__()
+        )
+
