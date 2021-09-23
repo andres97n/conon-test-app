@@ -1,4 +1,6 @@
 venv/
 secret/
+applications/base/migrations/*
 applications/users/migrations/*
+applications/school/migrations/*
 .idea/

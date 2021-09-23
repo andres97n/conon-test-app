@@ -79,14 +79,14 @@ class Person(BaseModel):
         return f'{self.name} {self.last_name}'
 
     def mapper(self):
-        return dist(
+        return dict(
             id=self.id,
-            name=self.person.name,
-            last_name=self.person.last_name,
-            identification=self.person.identification,
+            name=self.name,
+            last_name=self.last_name,
+            identification=self.identification,
             gender=self.gender,
             age=self.age,
-            phone=self.person.phone
+            phone=self.phone
         )
 
 
@@ -130,7 +130,7 @@ class Student(BaseModel):
         return f'{self.representative_name} - {self.emergency_contact}'
 
     def mapper(self):
-        return dist(
+        return dict(
             id=self.id,
             name=self.person.name,
             last_name=self.person.last_name,
@@ -169,7 +169,7 @@ class Teacher(BaseModel):
         return f'{self.person.name} {self.person.last_name}'
 
     def mapper(self):
-        return dist(
+        return dict(
             id=self.id,
             name=self.person.name,
             last_name=self.person.last_name,
@@ -300,7 +300,7 @@ class AuditUser(models.Model):
             id=self.id,
             add_by=self.add_by,
             table=self.table,
-            fields=self.fields,
+            fields_changed=self.fields,
             record_id=self.record_id,
             audit_type=self.audit_type,
             old_values=self.old_values,
