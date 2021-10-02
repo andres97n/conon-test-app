@@ -9,7 +9,13 @@
       <change beforePath="$PROJECT_DIR$/.idea/conon_app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/conon_app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/auth/authentication_mixins.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/auth/authentication_mixins.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/auth/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/auth/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conon/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conon/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements/local.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements/local.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,6 +153,21 @@
       <workItem from="1632354344096" duration="131000" />
       <workItem from="1632354482363" duration="1953000" />
       <workItem from="1632408398601" duration="182000" />
+      <workItem from="1632789537586" duration="16000" />
+      <workItem from="1632863862144" duration="1011000" />
+      <workItem from="1632865408929" duration="71000" />
+      <workItem from="1632865487829" duration="526000" />
+      <workItem from="1632866023086" duration="533000" />
+      <workItem from="1632866986782" duration="256000" />
+      <workItem from="1632877142618" duration="534000" />
+      <workItem from="1632929423087" duration="172000" />
+      <workItem from="1632950357359" duration="731000" />
+      <workItem from="1632956148163" duration="1514000" />
+      <workItem from="1633014372963" duration="2732000" />
+      <workItem from="1633026872481" duration="11058000" />
+      <workItem from="1633102565412" duration="4214000" />
+      <workItem from="1633112050296" duration="3703000" />
+      <workItem from="1633119680096" duration="19307000" />
     </task>
     <servers />
   </component>

@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import BaseUserManager
 
 
@@ -14,8 +15,13 @@ class UserManager(BaseUserManager, models.Manager):
             is_active=is_active,
             **extra_fields
         )
+        if len(password) < 6:
+            raise ValidationError(
+                message='Error, La contraseña debe tener por lo menos 6 caracteres.'
+            )
         user.set_password(password)
         user.save(using=self.db)
+
         return user
 
     def create_user(self, username, email, password=None, type=None, **extra_fields):

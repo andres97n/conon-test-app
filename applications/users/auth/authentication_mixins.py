@@ -4,8 +4,11 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.authentication import get_authorization_header
 
 from applications.users.auth.authentication import ExpiringTokenAuthentication
+from applications.users.models import User
 
+#NO SIRVE
 
+'''
 class Authentication(authentication.BaseAuthentication):
     user = None
 
@@ -40,6 +43,35 @@ class Authentication(authentication.BaseAuthentication):
             if self.user is None:
                 raise exceptions.AuthenticationFailed('No se han enviado las credendiales')
         return self.user, None
+
+'''
+
+
+class NewAuthentication(authentication.BaseAuthentication):
+
+    user = None
+
+    def get_user(self, username):
+        try:
+            self.user = User.objects.filter(username=username).first()
+        except:
+            pass
+        if self.user is not None:
+            return user
+
+        return None
+
+    def authenticate(self, request):
+        try:
+            if request.data['username'] and request.data['password']:
+                self.get_user(request.data['username'])
+        except:
+            pass
+
+        if self.user is not None:
+            return self.user, None
+
+        return None, None
 
 
 '''

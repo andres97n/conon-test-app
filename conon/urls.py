@@ -25,7 +25,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 
-from applications.users.views import LoginView, LogoutView
+from applications.users.views import LoginView, LogoutView, RefreshView
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -56,4 +56,5 @@ urlpatterns = [
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('user/api/', include('applications.users.routers')),
     path('school/api/', include('applications.school.routers')),
+    path('refresh/', RefreshView.as_view(), name='refresh'),
 ]

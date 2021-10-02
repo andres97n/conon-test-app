@@ -2,26 +2,23 @@
 
 from django.contrib.sessions.models import Session
 from django.utils import timezone
+from django.contrib.auth import login
 
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
-from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import AllowAny
 
 from applications.users.api.api_user.serializers import UserTokenSerializer
-from applications.users.auth.authentication_mixins import Authentication
-from applications.users.auth.serializers import LoginSerializer, LogoutSerializer
+from applications.users.auth.serializers import LoginSerializer, LogoutSerializer, \
+    CustomTokenRefreshSerializer
 
 
 # TODO: Mejorar el borrado de las sesiones
 #   y hacer uso del método user_logged_in() de signals
 
-
-# Create your views here.
-class UserToken(APIView, Authentication):
+'''
+class UserToken(APIView):
 
     def get(self, request, *args, **kwargs):
         try:
@@ -41,6 +38,7 @@ class UserToken(APIView, Authentication):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+'''
 
 '''
 class Login(ObtainAuthToken):
@@ -139,13 +137,33 @@ class Logout(APIView):
 class LoginView(GenericAPIView):
     serializer_class = LoginSerializer
     permission_classes = [AllowAny]
+    '''
+    def get_serializer_context(self):
+        return {
+            'request': self.request,
+            'format': self.format_kwarg,
+            'view': self
+        }
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        return self.serializer_class(*args, **kwargs)
+'''
 
     def post(self, request):
 
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
+            '''
+            username = serializer.data['username']
+            user = User.objects.filter(username=username).first()
+            login(request, user)
+            '''
             return Response(
-                serializer.data,
+                {
+                    'ok': True,
+                    'conon_data': serializer.data
+                },
                 status=status.HTTP_200_OK
             )
         return Response(
@@ -177,4 +195,28 @@ class LogoutView(GenericAPIView):
                 'error': 'No se ha encontrado el token en la petición.'
             },
             status=status.HTTP_409_CONFLICT
+        )
+
+
+class RefreshView(GenericAPIView):
+    serializer_class = CustomTokenRefreshSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args):
+
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'error': 'Token incorrecto.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
         )
