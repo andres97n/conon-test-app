@@ -3,6 +3,7 @@ from rest_framework import serializers, pagination
 from applications.users.models import User, Person
 from applications.users.functions import user_validate
 
+
 # TODO: Realizar un serializer para el cambio de contraseña
 
 
@@ -21,20 +22,28 @@ class UserSerializer(serializers.ModelSerializer):
     def validate_person(self, value):
         person = Person.objects.is_deleted(value.id)
         if person is None:
-            raise serializers.ValidationError('Error, esta Persona no existe.')
+            raise serializers.ValidationError(
+                detail='Error, esta Persona no existe.'
+            )
         return value
 
     # Type field validation
     def validate_type(self, value):
         if value == 0:
-            raise serializers.ValidationError('Error, el Usuario que se intenta crear no pueder ser de este tipo.')
+            raise serializers.ValidationError(
+                detail='Error, el Usuario que se intenta crear no pueder ser de este tipo.'
+            )
         if value > 2:
-            raise serializers.ValidationError('Error, no existe este Tipo.')
+            raise serializers.ValidationError(
+                detail='Error, no existe este Tipo.'
+            )
         return value
 
     def validate(self, attrs):
         if not user_validate(attrs['person'].id, attrs['type']):
-            raise serializers.ValidationError('Error, este Usuario no puede ser de este tipo.')
+            raise serializers.ValidationError(
+                detail='Error, este Usuario no puede ser de este tipo.'
+            )
         return attrs
 
     # Create a normal User
@@ -64,6 +73,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 
+'''
 class UserTokenSerializer(serializers.ModelSerializer):
     person = serializers.SerializerMethodField
 
@@ -81,3 +91,4 @@ class UserTokenSerializer(serializers.ModelSerializer):
             'person__last_name'
         )
         return person
+'''

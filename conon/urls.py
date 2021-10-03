@@ -40,21 +40,21 @@ schema_view = get_schema_view(
    permission_classes=(permissions.AllowAny,),
 )
 
-
 urlpatterns = [
     # path('login/', Login.as_view(), name='login'),
     # path('logout/', Logout.as_view(), name='logout'),
     # path('refresh-token/', UserToken.as_view(), name='refresh_token'),
     # path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path(r'swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path(r'redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('admin/', admin.site.urls),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/refresh/', RefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('user/api/', include('applications.users.routers')),
     path('school/api/', include('applications.school.routers')),
-    path('refresh/', RefreshView.as_view(), name='refresh'),
 ]
+

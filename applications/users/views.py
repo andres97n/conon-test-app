@@ -8,14 +8,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
-from applications.users.api.api_user.serializers import UserTokenSerializer
 from applications.users.auth.serializers import LoginSerializer, LogoutSerializer, \
     CustomTokenRefreshSerializer
-
-
-# TODO: Mejorar el borrado de las sesiones
-#   y hacer uso del método user_logged_in() de signals
 
 '''
 class UserToken(APIView):
@@ -151,14 +148,8 @@ class LoginView(GenericAPIView):
 '''
 
     def post(self, request):
-
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            '''
-            username = serializer.data['username']
-            user = User.objects.filter(username=username).first()
-            login(request, user)
-            '''
             return Response(
                 {
                     'ok': True,
@@ -168,6 +159,7 @@ class LoginView(GenericAPIView):
             )
         return Response(
             {
+                'ok': False,
                 'error': 'No se ha encontrado un usuario con estas credenciales.'
             },
             status=status.HTTP_400_BAD_REQUEST
@@ -175,6 +167,12 @@ class LoginView(GenericAPIView):
 
 
 class LogoutView(GenericAPIView):
+
+    """
+    TODO: Investigar y hacer mas eficiente el eliminado de Sesiones
+        por usuario, y evitar que entre en ese bucle
+    """
+
     serializer_class = LogoutSerializer
 
     def post(self, request, *args):
@@ -192,31 +190,36 @@ class LogoutView(GenericAPIView):
 
         return Response(
             {
-                'error': 'No se ha encontrado el token en la petición.'
+                'ok': False,
+                'detail': 'No se ha encontrado el token en la petición.'
             },
             status=status.HTTP_409_CONFLICT
         )
 
 
-class RefreshView(GenericAPIView):
+class RefreshView(TokenRefreshView):
     serializer_class = CustomTokenRefreshSerializer
     permission_classes = [AllowAny]
 
     def post(self, request, *args):
 
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            return Response(
-                {
-                    'ok': True,
-                    'conon_data': serializer.data
-                },
-                status=status.HTTP_200_OK
-            )
+        try:
+            if serializer.is_valid():
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': serializer.data
+                    },
+                    status=status.HTTP_200_OK
+                )
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
 
         return Response(
             {
-                'error': 'Token incorrecto.'
+                'ok': False,
+                'detail': 'Token incorrecto.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )

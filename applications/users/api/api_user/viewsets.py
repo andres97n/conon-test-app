@@ -30,6 +30,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
             return Response(
                 {
+                    'ok': True,
                     'message': 'Usuario creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED
@@ -50,18 +51,25 @@ class UserViewSet(viewsets.ModelViewSet):
                 user_serializer.save()
 
                 return Response(
-                    user_serializer.data,
+                    {
+                        'ok': True,
+                        'conon_data': user_serializer.data
+                    },
                     status=status.HTTP_200_OK
                 )
 
             return Response(
-                user_serializer.errors,
+                {
+                    'ok': False,
+                    'detail': user_serializer.errors
+                },
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         return Response(
             {
-                'error': 'No existe este Usuario.'
+                'ok': False,
+                'detail': 'No existe este Usuario.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )
@@ -72,13 +80,17 @@ class UserViewSet(viewsets.ModelViewSet):
             user_serializer = self.serializer_class(self.get_queryset(pk))
 
             return Response(
-                user_serializer.data,
+                {
+                    'ok': True,
+                    'conon_data': user_serializer.data,
+                },
                 status=status.HTTP_200_OK
             )
 
         return Response(
             {
-                'error': 'No existe este Usuario.'
+                'ok': False,
+                'detail': 'No existe este Usuario.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )
@@ -94,14 +106,16 @@ class UserViewSet(viewsets.ModelViewSet):
 
             return Response(
                 {
-                    'message': 'Usuario eliminado correctamente.'
+                    'ok': True,
+                    'detail': 'Usuario eliminado correctamente.'
                 },
                 status=status.HTTP_200_OK
             )
 
         return Response(
             {
-                'error': 'No existe este Usuario.'
+                'ok': False,
+                'detail': 'No existe este Usuario.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )

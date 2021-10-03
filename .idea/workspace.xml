@@ -5,17 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/conon_app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/conon_app.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/viewsets.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/auth/authentication_mixins.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/auth/authentication_mixins.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/auth/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/auth/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/managers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conon/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/base.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conon/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements/local.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements/local.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,6 +164,10 @@
       <workItem from="1633102565412" duration="4214000" />
       <workItem from="1633112050296" duration="3703000" />
       <workItem from="1633119680096" duration="19307000" />
+      <workItem from="1633186829024" duration="5834000" />
+      <workItem from="1633194333716" duration="86000" />
+      <workItem from="1633198537102" duration="1000" />
+      <workItem from="1633219588129" duration="2393000" />
     </task>
     <servers />
   </component>

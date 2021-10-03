@@ -47,6 +47,7 @@ class LoginSerializer(serializers.ModelSerializer):
             'tokens'
         ]
 
+    # Get Tokens
     def get_tokens(self, obj):
         user = User.objects.get(username=obj['username'])
 
@@ -55,6 +56,7 @@ class LoginSerializer(serializers.ModelSerializer):
             refresh=user.get_tokens()['refresh'],
         )
 
+    # Validate the user data and create a session
     def validate(self, attrs):
         username = attrs.get('username', '')
         password = attrs.get('password', '')
@@ -114,14 +116,12 @@ class LogoutSerializer(serializers.Serializer):
         except TokenError:
             self.fail('bad_token')
 
+        # auth.logout(self.context.get('request'))
+
 
 class CustomTokenRefreshSerializer(TokenRefreshSerializer):
 
-    '''
-        TODO: Mostrar los errores cuando un token esté
-            en la lista negra
-    '''
-
+    # Extract the user_id and return user data with the tokens
     def validate(self, attrs):
         data = super(CustomTokenRefreshSerializer, self).validate(attrs)
         decoded_payload = token_backend.decode(data['access'], verify=True)
@@ -136,6 +136,7 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
         # add filter query
         return data
 
+    # Get data
     def to_representation(self, instance):
         return dict(
             uid=instance['uid'],
