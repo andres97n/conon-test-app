@@ -2,11 +2,11 @@ from django.db import models
 
 from applications.base.models import BaseModel
 from applications.users.models import Teacher, Student
-from applications.school.api_knowledge_area.managers import KnowledgeAreaManager
-from applications.school.api_school_period.managers import SchoolPeriodManager
-from applications.school.api_classroom.managers import ClassroomManager
-from applications.school.api_asignature.managers import AsignatureManager
-from applications.school.api_asignature_classroom.managers import AsignatureClassroomManager
+from applications.school.api.api_knowledge_area.managers import KnowledgeAreaManager
+from applications.school.api.api_school_period.managers import SchoolPeriodManager
+from applications.school.api.api_classroom.managers import ClassroomManager
+from applications.school.api.api_asignature.managers import AsignatureManager
+from applications.school.api.api_asignature_classroom.managers import AsignatureClassroomManager
 
 # TODO: Crear una tabla de niveles para las tablas
 #   Aula y Asignatura

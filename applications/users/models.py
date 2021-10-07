@@ -9,6 +9,8 @@ from applications.users.managers import UserManager
 from applications.users.api.api_student.managers import StudentManager
 from applications.users.api.api_teacher.managers import TeacherManager
 from applications.users.api.api_person.managers import PersonManager
+from applications.users.api.api_conversation.managers import ConversationManager
+from applications.users.api.api_conversation_detail.managers import ConversationDetailManager
 
 
 # TODO: Cambiar el tipo de campo a JSON de
@@ -238,6 +240,90 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
             refresh=str(refresh),
             access=str(refresh.access_token)
         )
+
+
+class Conversation(BaseModel):
+
+    blocked = models.BooleanField(
+        'Bloqueado',
+        default=False,
+        null=False,
+        blank=True
+    )
+
+    first_user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='first_user',
+        null=False,
+        blank=False
+    )
+    second_user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='second_user',
+        null=False,
+        blank=False
+    )
+
+    objects = ConversationManager()
+
+    class Meta:
+        db_table = 'conversation'
+        verbose_name = 'Conversation'
+        verbose_name_plural = 'Conversations'
+
+
+class Conversation_Detail(BaseModel):
+
+    class MessageStateChoices(models.IntegerChoices):
+        NOT_VIEW = 0
+        VIEW = 1
+
+    detail = models.TextField(
+        'Mensaje',
+        null=False,
+        blank=False
+    )
+    send_date = models.DateTimeField(
+        'Fecha de Creación',
+        auto_now_add=True,
+        auto_now=False,
+        blank=True
+    )
+    state = models.PositiveSmallIntegerField(
+        'Estado',
+        choices=MessageStateChoices.choices,
+        default=0,
+        null=False,
+        blank=True
+    )
+    blocked = models.BooleanField(
+        'Bloqueado',
+        default=False,
+        null=True,
+        blank=True
+    )
+
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+    conversation = models.ForeignKey(
+        Conversation,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+
+    objects = ConversationDetailManager()
+
+    class Meta:
+        db_table = 'conversation_detail'
+        verbose_name = 'Conversation Detail'
+        verbose_name_plural = 'Conversation Details'
 
 
 class AuditUser(models.Model):

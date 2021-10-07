@@ -15,10 +15,6 @@ class UserManager(BaseUserManager, models.Manager):
             is_active=is_active,
             **extra_fields
         )
-        if len(password) < 6:
-            raise ValidationError(
-                message='Error, La contraseña debe tener por lo menos 6 caracteres.'
-            )
         user.set_password(password)
         user.save(using=self.db)
 
@@ -29,6 +25,9 @@ class UserManager(BaseUserManager, models.Manager):
 
     def create_superuser(self, username, email, password=None, **extra_fields):
         return self._create_user(username, email, password, '0', True, True, True, **extra_fields)
+
+    def __str__(self):
+        return f'{self.person.name} {self.person.last_name}'
 
     def user_list(self):
         return self.select_related('person').filter(is_active=True).values(
@@ -52,7 +51,19 @@ class UserManager(BaseUserManager, models.Manager):
                 is_active=True,
                 auth_state='A'
             ).first()
-        except:
+        except None:
             pass
 
         return user
+
+    def user_exists(self, pk=None):
+        result = None
+        try:
+            result = self.filter(id=pk, is_active=True, auth_state='A').first()
+        except None:
+            pass
+
+        if result is not None:
+            return True
+
+        return False

@@ -27,6 +27,13 @@ class UserSerializer(serializers.ModelSerializer):
             )
         return value
 
+    def validate_password(self, value):
+        if len(value) < 6:
+            raise serializers.ValidationError(
+                detail='Error, la contraseña debe contener por lo menos 6 caracteres.'
+            )
+        return value
+
     # Type field validation
     def validate_type(self, value):
         if value == 0:
@@ -55,13 +62,16 @@ class UserSerializer(serializers.ModelSerializer):
 
     # Update a normal User
     def update(self, instance, validated_data):
+        if instance.person != validated_data['person']:
+            raise serializers.ValidationError(
+                detail='Error, no se puede cambiar de Persona.'
+            )
         updated_user = super().update(instance, validated_data)
         updated_user.set_password(validated_data['password'])
         updated_user.save()
         return updated_user
 
     def to_representation(self, instance):
-        print(instance.id)
         return dict(
             id=instance.id,
             username=instance.username,
