@@ -3,7 +3,6 @@ from rest_framework import serializers
 from applications.users.models import Student, Person
 from applications.users.functions import is_person_assigned
 
-
 # TODO: Validar los números de teléfono
 
 
@@ -21,7 +20,6 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         exclude = [
-            'created_at',
             'updated_at',
             'auth_state'
         ]
@@ -32,20 +30,6 @@ class StudentSerializer(serializers.ModelSerializer):
         if person is None:
             raise serializers.ValidationError('Error, esta Persona no existe.')
         return value
-
-    def to_representation(self, instance):
-        return dict(
-            id=instance.id,
-            person=dict(
-                identification=instance.person.identification,
-                name=instance.person.name,
-                last_name=instance.person.last_name,
-            ),
-            representative_name=instance.representative_name,
-            emergency_contact=instance.emergency_contact,
-            expectations=instance.expectations,
-            observations=instance.observations
-        )
 
     # Create Student Method
     def create(self, validated_data):
@@ -64,7 +48,22 @@ class StudentSerializer(serializers.ModelSerializer):
         update_student.save()
         return update_student
 
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'person': {
+                'id': instance.person.id,
+                'identification': instance.person.identification,
+                'name': instance.person.name,
+                'last_name': instance.person.last_name,
+             },
+            'representative_name': instance.representative_name,
+            'emergency_contact': instance.emergency_contact,
+            'expectations': instance.expectations,
+            'observations': instance.observations
+        }
 
+'''
 # Person List or Person Detail Serializer
 class StudentListSerializer(serializers.ModelSerializer):
     person = serializers.SerializerMethodField()
@@ -92,6 +91,7 @@ class StudentListSerializer(serializers.ModelSerializer):
                 phone=student.person.phone,
             )
         return student
+'''
 
 
 class StudentListByClassroom(serializers.ModelSerializer):

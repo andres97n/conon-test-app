@@ -26,18 +26,19 @@ class UserManager(BaseUserManager, models.Manager):
     def create_superuser(self, username, email, password=None, **extra_fields):
         return self._create_user(username, email, password, '0', True, True, True, **extra_fields)
 
-    def __str__(self):
-        return f'{self.person.name} {self.person.last_name}'
+    def get_email(self):
+        return self.email
 
-    def user_list(self):
-        return self.select_related('person').filter(is_active=True).values(
+    def user_data(self):
+        return self.select_related('person').filter(is_active=True, auth_state='A').values(
             'id',
             'username',
             'person__name',
             'person__last_name',
             'email',
             'type',
-            'is_superuser'
+            'is_superuser',
+            'created_at'
         ).order_by('username')
 
     def get_user_data(self):
@@ -67,3 +68,39 @@ class UserManager(BaseUserManager, models.Manager):
             return True
 
         return False
+
+    def validate_user_type(self, pk=None, type=None):
+        users = None
+        is_admin, is_teacher, is_student, is_valid = False, False, False, True
+
+        try:
+            users = self.select_related('person').filter(
+                person_id=pk,
+                is_active=True,
+                auth_state='A'
+            ).values('type')
+        except None:
+            pass
+
+        if users:
+            for user in users:
+                if user['type'] == 0:
+                    is_admin = True
+                elif user['type'] == 1:
+                    is_teacher = True
+                elif user['type'] == 2:
+                    is_student = True
+
+            # The student cannot be an admin or a teacher
+            if is_student and type == 0:
+                is_valid = False
+            if is_student and type == 1:
+                is_valid = False
+
+            # The admin or the teacher cannot be an student
+            if is_admin and type == 2:
+                is_valid = False
+            if is_teacher and type == 2:
+                is_valid = False
+
+        return is_valid

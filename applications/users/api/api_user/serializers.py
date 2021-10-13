@@ -1,7 +1,7 @@
 from rest_framework import serializers, pagination
 
 from applications.users.models import User, Person
-from applications.users.functions import user_validate
+from applications.base.functions import save_auth_user
 
 
 # TODO: Realizar un serializer para el cambio de contraseña
@@ -17,6 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'password',
             'type',
+            'created_at'
         )
 
     def validate_person(self, value):
@@ -47,7 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, attrs):
-        if not user_validate(attrs['person'].id, attrs['type']):
+        if not User.objects.validate_user_type(attrs['person'].id, attrs['type']):
             raise serializers.ValidationError(
                 detail='Error, este Usuario no puede ser de este tipo.'
             )
@@ -72,15 +73,18 @@ class UserSerializer(serializers.ModelSerializer):
         return updated_user
 
     def to_representation(self, instance):
-        return dict(
-            id=instance.id,
-            username=instance.username,
-            name=instance.person.name,
-            last_name=instance.person.last_name,
-            email=instance.email,
-            type=instance.type,
-            is_superuser=instance.is_superuser
-        )
+        return {
+            'id': instance.id,
+            'username': instance.username,
+            'person': {
+                'id': instance.person.id,
+                'name': instance.person.name,
+                'last_name': instance.person.last_name,
+            },
+            'email': instance.email,
+            'type': instance.type,
+            'created_at': instance.created_at
+        }
 
 
 '''

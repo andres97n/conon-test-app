@@ -42,18 +42,20 @@ class TeacherSerializer(serializers.ModelSerializer):
         return update_teacher
 
     def to_representation(self, instance):
-        return dict(
-            id=instance.id,
-            person=dict(
-                identification=instance.person.identification,
-                name=instance.person.name,
-                last_name=instance.person.last_name,
-            ),
-            title=instance.title,
-            objective=instance.objective,
-        )
+        return {
+            'id': instance.id,
+            'person': {
+                'id': instance.person.id,
+                'identification': instance.person.identification,
+                'name': instance.person.name,
+                'last_name': instance.person.last_name,
+            },
+            'title': instance.title,
+            'objective': instance.objective,
+        }
 
 
+'''
 # Teacher List or Teacher Detail Serializer
 class TeacherListSerializer(serializers.ModelSerializer):
     person = serializers.SerializerMethodField()
@@ -79,6 +81,7 @@ class TeacherListSerializer(serializers.ModelSerializer):
                 phone=teacher.person.phone,
             )
         return teacher
+'''
 
 
 class TeacherByAreaListSerializer(serializers.ModelSerializer):
@@ -94,5 +97,5 @@ class TeacherByAreaListSerializer(serializers.ModelSerializer):
         return dict(
             id=instance.id,
             identification=instance.person.identification,
-            name=instance.__str__()
+            name=instance.person.full_name()
         )

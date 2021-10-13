@@ -18,6 +18,18 @@ class AsignatureClassroomManager(models.Manager):
                 'asignature',
                 'teacher'
             ).filter(id=pk, auth_state='A').first()
-        except:
+        except None:
             pass
         return asignature_classroom
+
+    def asignature_classroom_exists(self, pk=None):
+        result = None
+        try:
+            result = self.filter(id=pk, auth_state='A')
+        except None:
+            pass
+
+        if result is None:
+            return False
+
+        return True

@@ -10,6 +10,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
+from rest_framework_tracking.mixins import LoggingMixin
 
 from applications.users.auth.serializers import LoginSerializer, LogoutSerializer, \
     CustomTokenRefreshSerializer
@@ -130,10 +131,15 @@ class Logout(APIView):
             )
 '''
 
+# TODO: Investigate some way for to edit the data
+#   of response field
 
-class LoginView(GenericAPIView):
+
+class LoginView(LoggingMixin, GenericAPIView):
     serializer_class = LoginSerializer
     permission_classes = [AllowAny]
+    logging_methods = ['POST']
+    sensitive_fields = {'access', 'refresh'}
     '''
     def get_serializer_context(self):
         return {
@@ -166,7 +172,7 @@ class LoginView(GenericAPIView):
         )
 
 
-class LogoutView(GenericAPIView):
+class LogoutView(LoggingMixin, GenericAPIView):
 
     """
     TODO: Investigar y hacer mas eficiente el eliminado de Sesiones
@@ -174,6 +180,8 @@ class LogoutView(GenericAPIView):
     """
 
     serializer_class = LogoutSerializer
+    logging_methods = ['POST']
+    sensitive_fields = {'access', 'refresh'}
 
     def post(self, request, *args):
         data_serializer = self.get_serializer(data=request.data)
@@ -197,9 +205,11 @@ class LogoutView(GenericAPIView):
         )
 
 
-class RefreshView(TokenRefreshView):
+class RefreshView(LoggingMixin, TokenRefreshView):
     serializer_class = CustomTokenRefreshSerializer
     permission_classes = [AllowAny]
+    logging_methods = ['POST']
+    sensitive_fields = {'access', 'refresh'}
 
     def post(self, request, *args):
 

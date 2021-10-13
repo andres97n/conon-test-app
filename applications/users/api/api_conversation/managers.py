@@ -3,10 +3,6 @@ from django.db import models
 
 class ConversationManager(models.Manager):
 
-    def __str__(self):
-        return f'Conversación entre {self.first_user.person.name} {self.first_user.person.last_name} - ' \
-               f'{self.second_user.person.name} {self.second_user.person.last_name}'
-
     def get_conversation_list(self):
         return self.select_related('first_user', 'second_user').filter(blocked=False, auth_state='A').order_by('-created_at')
 

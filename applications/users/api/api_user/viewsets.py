@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
+from rest_framework_tracking.mixins import LoggingMixin
 
 from applications.base.paginations import CononPagination
 from .serializers import UserSerializer
@@ -11,20 +12,41 @@ from .serializers import UserSerializer
 #   futuro se espera cambiarlo
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(LoggingMixin, viewsets.ModelViewSet):
     permission_classes = ([IsAdminUser])
     serializer_class = UserSerializer
     pagination_class = CononPagination
+    logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+    sensitive_fields = {'access', 'refresh'}
 
     def get_queryset(self, pk=None):
         if pk is None:
             return self.get_serializer().Meta.model.objects.get_user_data()
         return self.get_serializer().Meta.model.objects.get_user_detail_data(pk)
 
+    # Get User List
+    def list(self, request, *args, **kwargs):
+        user_queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(user_queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        user_serializer = self.get_serializer(queryset, many=True)
+
+        return Response(
+            {
+                'ok': True,
+                'conon_data': user_serializer.data
+            },
+            status=status.HTTP_200_OK
+        )
+
     # Create User
     def create(self, request, *args, **kwargs):
         # Send information to serializer
-        user_serializer = self.serializer_class(data=request.data)
+        user_serializer = self.get_serializer(data=request.data)
         if user_serializer.is_valid():
             user_serializer.save()
 
@@ -46,7 +68,7 @@ class UserViewSet(viewsets.ModelViewSet):
         user = self.get_queryset(pk)
         if user:
             # Send information to serializer referencing the instance
-            user_serializer = self.serializer_class(user, data=request.data)
+            user_serializer = self.get_serializer(user, data=request.data)
             if user_serializer.is_valid():
                 user_serializer.save()
 
@@ -77,7 +99,7 @@ class UserViewSet(viewsets.ModelViewSet):
     # Detail User data
     def retrieve(self, request, pk=None, *args, **kwargs):
         if self.get_queryset(pk):
-            user_serializer = self.serializer_class(self.get_queryset(pk))
+            user_serializer = self.get_serializer(self.get_queryset(pk))
 
             return Response(
                 {
@@ -107,7 +129,7 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
-                    'detail': 'Usuario eliminado correctamente.'
+                    'message': 'Usuario eliminado correctamente.'
                 },
                 status=status.HTTP_200_OK
             )

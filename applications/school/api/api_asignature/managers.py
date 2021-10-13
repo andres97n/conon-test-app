@@ -7,7 +7,7 @@ class AsignatureManager(models.Manager):
         asignature = None
         try:
             asignature = self.filter(id=pk, auth_state='A').first()
-        except:
+        except None:
             pass
         if asignature is None:
             return False
@@ -21,6 +21,6 @@ class AsignatureManager(models.Manager):
         asignature = None
         try:
             asignature = self.select_related('knowledge_area').filter(id=pk, auth_state='A').first()
-        except:
+        except None:
             pass
         return asignature

@@ -40,12 +40,14 @@ LOCAL_APPS = [
     'applications.school',
 ]
 
+# Authtoken Deprecated
 THIRD_APPS = [
     'corsheaders',
     'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
+    'rest_framework_tracking'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_APPS

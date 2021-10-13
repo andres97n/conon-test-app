@@ -32,6 +32,8 @@ DATABASES = {
     }
 }
 
+DRF_TRACKING_ADMIN_LOG_READONLY = True
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]

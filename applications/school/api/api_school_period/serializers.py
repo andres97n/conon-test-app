@@ -7,7 +7,6 @@ class SchoolPeriodSerializer(serializers.ModelSerializer):
     class Meta:
         model = SchoolPeriod
         exclude = [
-            'created_at',
             'updated_at',
             'auth_state'
         ]
@@ -24,18 +23,6 @@ class SchoolPeriodSerializer(serializers.ModelSerializer):
                                               'de Final de Período.')
         return attrs
 
-    # Get School Period Data
-    def to_representation(self, instance):
-        return dict(
-            id=instance.id,
-            name=instance.name,
-            init_date=instance.init_date,
-            end_date=instance.end_date,
-            school_end_date=instance.school_end_date,
-            state=instance.state,
-            observations=instance.observations
-        )
-
     # Create a School Period
     def create(self, validated_data):
         if SchoolPeriod.objects.is_name_exists(validated_data['name']):
@@ -51,3 +38,16 @@ class SchoolPeriodSerializer(serializers.ModelSerializer):
         update_school_period = super().update(instance, validated_data)
         update_school_period.save()
         return update_school_period
+
+    # Get School Period Data
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'name': instance.name,
+            'init_date': instance.init_date,
+            'end_date': instance.end_date,
+            'school_end_date': instance.school_end_date,
+            'state': instance.state,
+            'observations': instance.observations,
+            'created_at': instance.created_at
+        }

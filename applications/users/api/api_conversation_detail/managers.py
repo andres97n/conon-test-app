@@ -3,9 +3,6 @@ from django.db import models
 
 class ConversationDetailManager(models.Manager):
 
-    def __str__(self):
-        return self.detail
-
     def get_conversation_detail_list(self):
         return self.select_related('conversation', 'owner').filter(auth_state='A').order_by('-send_date')
 
@@ -54,5 +51,3 @@ class ConversationDetailManager(models.Manager):
             return True
         else:
             return False
-
-

@@ -4,14 +4,11 @@ from applications.school.models import Classroom, SchoolPeriod
 from applications.users.models import Student
 from applications.users.api.api_student.serializers import StudentListByClassroom
 
-# TODO: Verificar si el método validate_students() es eficiente
-
 
 class ClassroomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Classroom
         exclude = [
-            'created_at',
             'updated_at',
             'auth_state'
         ]
@@ -34,18 +31,6 @@ class ClassroomSerializer(serializers.ModelSerializer):
         student_serializer = StudentListByClassroom(students, many=True)
         return student_serializer.data
 
-    def to_representation(self, instance):
-        return dict(
-            name=instance.name,
-            curse_level=instance.curse_level,
-            capacity=instance.capacity,
-            school_period=dict(
-                name=instance.school_period.__str__(),
-                period_date=instance.school_period.get_period_date()
-            ),
-            students=self.get_students(instance.students)
-        )
-
     # Create a Classroom
     def create(self, validated_data):
         if not SchoolPeriod.objects.is_period_active(validated_data['school_period'].id):
@@ -61,3 +46,17 @@ class ClassroomSerializer(serializers.ModelSerializer):
         update_classroom = super().update(instance, validated_data)
         update_classroom.save()
         return update_classroom
+
+    # Get Classroom List
+    def to_representation(self, instance):
+        return {
+            'name': instance.name,
+            'curse_level': instance.curse_level,
+            'capacity': instance.capacity,
+            'school_period': {
+                'name': instance.school_period.__str__(),
+                'period_date': instance.school_period.get_period_date()
+            },
+            'students': self.get_students(instance.students),
+            'created_at': instance.created_at
+        }

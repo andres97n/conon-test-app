@@ -15,12 +15,19 @@ class PersonSerializer(serializers.ModelSerializer):
             'gender',
             'age',
             'phone',
+            'created_at'
         )
 
     # Validate Identification
     def validate_identification(self, value):
         if not value.isdecimal():
             raise serializers.ValidationError('Error, la Identificación debe contener solo números.')
+        return value
+
+    # Validate Identification Type
+    def validate_identification_type(self, value):
+        if value > 1:
+            raise serializers.ValidationError('Error, no existe este tipo de identificación.')
         return value
 
     # Validate Gender
@@ -36,7 +43,6 @@ class PersonSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, attrs):
-
         # Validate the length of the identification
         if attrs['identification_type'] == 0:
             if len(attrs['identification']) != 10:
@@ -45,27 +51,13 @@ class PersonSerializer(serializers.ModelSerializer):
         return attrs
 
     def to_representation(self, instance):
-        return dict(
-            id=instance.id,
-            identification=instance.identification,
-            name=instance.name,
-            last_name=instance.last_name,
-            gender=instance.gender,
-            age=instance.age,
-            phone=instance.phone
-        )
-
-
-# Person List or Person Detail Serializer
-class PersonListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Person
-        fields = (
-            'id',
-            'identification',
-            'name',
-            'last_name',
-            'gender',
-            'age',
-            'phone',
-        )
+        return {
+            'id': instance.id,
+            'identification': instance.identification,
+            'name': instance.name,
+            'last_name': instance.last_name,
+            'gender': instance.gender,
+            'age': instance.age,
+            'phone': instance.phone,
+            'created_at': instance.created_at
+        }

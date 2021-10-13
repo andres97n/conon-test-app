@@ -13,10 +13,6 @@ from applications.users.api.api_conversation.managers import ConversationManager
 from applications.users.api.api_conversation_detail.managers import ConversationDetailManager
 
 
-# TODO: Cambiar el tipo de campo a JSON de
-#   expectations y observations
-
-
 class Person(BaseModel):
 
     # GENDERS
@@ -35,7 +31,6 @@ class Person(BaseModel):
         null=False,
         blank=False,
     )
-
     identification = models.CharField(
         max_length=20,
         unique=True,
@@ -75,30 +70,21 @@ class Person(BaseModel):
         verbose_name_plural = 'Persons'
 
     def __str__(self):
-        return f'{self.identification} - {self.full_name()}'
+        return f'{self.identification} - {self.person.name} {self.person.last_name}'
 
     def full_name(self):
         return f'{self.name} {self.last_name}'
 
-    def mapper(self):
-        return dict(
-            id=self.id,
-            name=self.name,
-            last_name=self.last_name,
-            identification=self.identification,
-            gender=self.gender,
-            age=self.age,
-            phone=self.phone
-        )
-
 
 class Student(BaseModel):
+
     representative_name = models.CharField(
         max_length=100,
         null=True,
         blank=True
     )
-    expectations = models.TextField(
+    expectations = models.JSONField(
+        default=dict,
         null=True,
         blank=True
     )
@@ -107,11 +93,12 @@ class Student(BaseModel):
         null=True,
         blank=True,
     )
-    observations = models.TextField(
-        default='S/N',
+    observations = models.JSONField(
+        default=dict,
         null=True,
         blank=True,
     )
+
     person = models.OneToOneField(
         Person,
         on_delete=models.CASCADE,
@@ -127,20 +114,6 @@ class Student(BaseModel):
 
     def __str__(self):
         return f'{self.person.name} {self.person.last_name}'
-
-    def get_representative(self):
-        return f'{self.representative_name} - {self.emergency_contact}'
-
-    def mapper(self):
-        return dict(
-            id=self.id,
-            name=self.person.name,
-            last_name=self.person.last_name,
-            identification=self.person.identification,
-            expectations=self.expectations,
-            phone=self.person.phone,
-            representative=self.get_representative()
-        )
 
 
 class Teacher(BaseModel):
@@ -169,17 +142,6 @@ class Teacher(BaseModel):
 
     def __str__(self):
         return f'{self.person.name} {self.person.last_name}'
-
-    def mapper(self):
-        return dict(
-            id=self.id,
-            name=self.person.name,
-            last_name=self.person.last_name,
-            identification=self.person.identification,
-            phone=self.person.phone,
-            title=self.title,
-            objective=self.objective
-        )
 
 
 class User(AbstractBaseUser, PermissionsMixin, BaseModel):
@@ -228,18 +190,15 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         verbose_name = 'User'
         verbose_name_plural = 'Users'
 
-    def get_username(self):
-        return self.username
-
-    def get_email(self):
-        return self.email
-
     def get_tokens(self):
         refresh = RefreshToken.for_user(self)
         return dict(
             refresh=str(refresh),
             access=str(refresh.access_token)
         )
+
+    def get_username(self):
+        return self.username
 
 
 class Conversation(BaseModel):
@@ -272,6 +231,10 @@ class Conversation(BaseModel):
         db_table = 'conversation'
         verbose_name = 'Conversation'
         verbose_name_plural = 'Conversations'
+
+    def __str__(self):
+        return f'Conversación entre {self.first_user.person.name} {self.first_user.person.last_name} - ' \
+               f'{self.second_user.person.name} {self.second_user.person.last_name}'
 
 
 class Conversation_Detail(BaseModel):
@@ -325,7 +288,11 @@ class Conversation_Detail(BaseModel):
         verbose_name = 'Conversation Detail'
         verbose_name_plural = 'Conversation Details'
 
+    def __str__(self):
+        return self.detail
 
+
+# DEPRECATED MODEL
 class AuditUser(models.Model):
 
     # AUDIT TYPES
@@ -340,7 +307,7 @@ class AuditUser(models.Model):
         null=False,
         blank=False
     )
-    fields_changed = models.JSONField(
+    new_values = models.JSONField(
         null=False,
         blank=False
     )
@@ -357,7 +324,7 @@ class AuditUser(models.Model):
         null=True,
         blank=True
     )
-    new_values = models.JSONField(
+    fields_changed = models.JSONField(
         null=True,
         blank=True
     )

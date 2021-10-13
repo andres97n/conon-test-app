@@ -89,13 +89,13 @@ class LoginSerializer(serializers.ModelSerializer):
                 user
             )
 
-        return dict(
-            uid=user.id,
-            username=user.username,
-            email=user.email,
-            type=user.type,
-            tokens=user.get_tokens
-        )
+        return {
+            'uid': user.id,
+            'username': user.username,
+            'email': user.email,
+            'type': user.type,
+            'tokens': user.get_tokens
+        }
 
 
 class LogoutSerializer(serializers.Serializer):
@@ -138,13 +138,13 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
 
     # Get data
     def to_representation(self, instance):
-        return dict(
-            uid=instance['uid'],
-            username=instance['username'],
-            email=instance['email'],
-            type=instance['type'],
-            tokens=dict(
-                access=instance['access'],
-                refresh=instance['refresh']
-            )
-        )
+        return {
+            'uid': instance['uid'],
+            'username': instance['username'],
+            'email': instance['email'],
+            'type': instance['type'],
+            'tokens': {
+                'access': instance['access'],
+                'refresh': instance['refresh']
+            }
+        }

@@ -1,7 +1,7 @@
 from django.utils import timezone
 
 from django.contrib.sessions.models import Session
-from applications.users.models import Student, Teacher, User
+from applications.users.models import Student, Teacher
 
 
 def close_sessions(user):
@@ -21,50 +21,13 @@ def is_person_assigned(pk=None):
     teacher_validate, student_validate = None, None
     try:
         teacher_validate = Teacher.objects.select_related('person').filter(person__id=pk, auth_state='A')
-    except:
+    except None:
         pass
     try:
         student_validate = Student.objects.select_related('person').filter(person_id=pk, auth_state='A')
-    except:
+    except None:
         pass
     if teacher_validate or student_validate:
         return True
 
     return False
-
-
-def user_validate(pk=None, type=None):
-    users = None
-    is_admin, is_teacher, is_student, is_valid = False, False, False, True
-
-    try:
-        users = User.objects.select_related('person').filter(
-            person__id=pk,
-            is_active=True,
-            auth_state='A'
-        ).values('type')
-    except:
-        pass
-
-    if users:
-        for user in users:
-            if user['type'] == 0:
-                is_admin = True
-            elif user['type'] == 1:
-                is_teacher = True
-            elif user['type'] == 2:
-                is_student = True
-
-        # The student cannot be an admin or a teacher
-        if is_student and type == 0:
-            is_valid = False
-        if is_student and type == 1:
-            is_valid = False
-
-        # The admin or the teacher cannot be an student
-        if is_admin and type == 2:
-            is_valid = False
-        if is_teacher and type == 2:
-            is_valid = False
-
-    return is_valid

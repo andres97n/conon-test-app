@@ -1,22 +1,44 @@
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser
+from rest_framework_tracking.mixins import LoggingMixin
 
-from .serializers import StudentSerializer, StudentListSerializer
+from .serializers import StudentSerializer
+from applications.base.permissions import IsTeacher
 from applications.base.paginations import CononPagination
 
 
-class StudentViewSet(viewsets.ModelViewSet):
-    permission_classes = ([IsAdminUser])
+class StudentViewSet(LoggingMixin, viewsets.ModelViewSet):
+    permission_classes = ([IsTeacher])
     pagination_class = CononPagination
     serializer_class = StudentSerializer
+    logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+    sensitive_fields = {'access', 'refresh'}
 
     # Return Student data
     def get_queryset(self, pk=None):
         if pk is None:
             return self.get_serializer().Meta.model.objects.get_student_list()
-        return self.get_serializer().Meta.model.objects.get_person_data(pk)
+        return self.get_serializer().Meta.model.objects.get_student_detail_data(pk)
+
+    # Get Student List
+    def list(self, request, *args, **kwargs):
+        student_queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(student_queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        student_serializer = self.get_serializer(queryset, many=True)
+
+        return Response(
+            {
+                'ok': True,
+                'conon_data': student_serializer.data
+            },
+            status=status.HTTP_200_OK
+        )
 
     # Create Student data
     def create(self, request, *args, **kwargs):
@@ -27,13 +49,17 @@ class StudentViewSet(viewsets.ModelViewSet):
 
             return Response(
                 {
+                    'ok': True,
                     'message': 'Estudiante creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED
             )
 
         return Response(
-            student_serializer.errors,
+            {
+                'ok': False,
+                'detail': student_serializer.errors,
+            },
             status=status.HTTP_400_BAD_REQUEST
         )
 
@@ -47,35 +73,46 @@ class StudentViewSet(viewsets.ModelViewSet):
                 student_serializer.save()
 
                 return Response(
-                    student_serializer.data,
+                    {
+                        'ok': True,
+                        'conon_data': student_serializer.data,
+                    },
                     status=status.HTTP_200_OK
                 )
 
             return Response(
-                student_serializer.errors,
+                {
+                    'ok': False,
+                    'detail': student_serializer.errors,
+                },
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         return Response(
             {
-                'error': 'No existe este Estudiante.'
+                'ok': False,
+                'detail': 'No existe este Estudiante.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Detail Student data
+    # Detail Student Data
     def retrieve(self, request, pk=None, *args, **kwargs):
         if self.get_queryset(pk):
-            student_serializer = StudentListSerializer(self.get_queryset(pk))
+            student_serializer = self.get_serializer(self.get_queryset(pk))
 
             return Response(
-                student_serializer.data,
+                {
+                    'ok': True,
+                    'conon_data': student_serializer.data,
+                },
                 status=status.HTTP_200_OK
             )
 
         return Response(
             {
-                'error': 'No existe este Estudiante.'
+                'ok': False,
+                'detail': 'No existe este Estudiante.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )
@@ -90,6 +127,7 @@ class StudentViewSet(viewsets.ModelViewSet):
 
             return Response(
                 {
+                    'ok': True,
                     'message': 'Estudiante eliminado correctamente.'
                 },
                 status=status.HTTP_200_OK
@@ -97,7 +135,8 @@ class StudentViewSet(viewsets.ModelViewSet):
 
         return Response(
             {
-                'error': 'No existe este Estudiante.'
+                'ok': False,
+                'detail': 'No existe este Estudiante.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )

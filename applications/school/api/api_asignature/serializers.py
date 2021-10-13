@@ -12,25 +12,13 @@ class AsignatureSerializer(serializers.ModelSerializer):
             'auth_state'
         ]
 
-    # Validate Knowledge Area
-    def validate_knowledge_area(self, value):
+    # Create a Asignature
+    def create(self, validated_data):
         if not KnowledgeArea.objects.is_active(value.id):
             raise serializers.ValidationError('Error, esta Área de Conocimiento no existe.')
-        return value
-
-    # Return Asignature Data
-    def to_representation(self, instance):
-        return dict(
-            id=instance.id,
-            name=instance.name,
-            objective=instance.objective,
-            knowledge_area=dict(
-                name=instance.knowledge_area.name,
-                coordinator=instance.knowledge_area.get_coordinator()
-            ),
-            observations=instance.observations,
-            # classrooms = instance.classrooms
-        )
+        classroom = Classroom(**validated_data)
+        classroom.save()
+        return classroom
 
     # Update Asignature
     def update(self, instance, validated_data):
@@ -39,3 +27,17 @@ class AsignatureSerializer(serializers.ModelSerializer):
         update_classroom = super().update(instance, validated_data)
         update_classroom.save()
         return update_classroom
+
+    # Return Asignature Data
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'name': instance.name,
+            'objective': instance.objective,
+            'knowledge_area': {
+                'name': instance.knowledge_area.name,
+                'coordinator': instance.knowledge_area.get_coordinator()
+            },
+            'observations': instance.observations,
+            # classrooms = instance.classrooms
+        }
