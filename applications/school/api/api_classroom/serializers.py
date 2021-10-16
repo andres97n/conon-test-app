@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from applications.school.models import Classroom, SchoolPeriod
 from applications.users.models import Student
-from applications.users.api.api_student.serializers import StudentListByClassroom
+from applications.users.api.api_student.serializers import StudentListManyToMany
 
 
 class ClassroomSerializer(serializers.ModelSerializer):
@@ -24,11 +24,11 @@ class ClassroomSerializer(serializers.ModelSerializer):
         if value:
             for student in value:
                 if not Student.objects.is_active(student.id):
-                    raise serializers.ValidationError(f'Error, este Estudiante [{student}] no existe.')
+                    raise serializers.ValidationError(f'Error, el siguiente Estudiante no existe.')
         return value
 
     def get_students(self, students=None):
-        student_serializer = StudentListByClassroom(students, many=True)
+        student_serializer = StudentListManyToMany(students, many=True)
         return student_serializer.data
 
     # Create a Classroom

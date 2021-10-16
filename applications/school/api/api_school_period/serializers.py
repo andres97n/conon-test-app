@@ -14,13 +14,17 @@ class SchoolPeriodSerializer(serializers.ModelSerializer):
     # State Validation
     def validate_state(self, value):
         if value > 1:
-            raise serializers.ValidationError('Error, no se puede asignar este Estado a un Período Lectivo.')
+            raise serializers.ValidationError(
+                detail='Error, no se puede asignar este Estado a un Período Lectivo.'
+            )
         return value
 
     def validate(self, attrs):
         if attrs['init_date'] >= attrs['end_date']:
-            raise serializers.ValidationError('Error: la Fecha de Inicio no puede ser la misma o mayor que la Fecha '
-                                              'de Final de Período.')
+            raise serializers.ValidationError(
+                detail='Error: la Fecha de Inicio no puede ser la misma o mayor que la Fecha '
+                       'Final de Período.'
+            )
         return attrs
 
     # Create a School Period

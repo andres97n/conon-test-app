@@ -5,59 +5,59 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/applications/base/functions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/school/api/api_glosary/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/school/api/api_glosary/managers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/school/api/api_glosary/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/school/api/api_glosary/viewsets.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/school/api/api_glosary_detail/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/school/api/api_glosary_detail/managers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/school/api/api_glosary_detail/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/school/api/api_glosary_detail/viewsets.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/users/signals.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_activity/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_activity/managers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_activity/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_activity/viewsets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_activity_student/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_activity_student/managers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_activity_student/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_activity_student/viewsets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_answer/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_answer/managers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_answer/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_answer/viewsets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_dua/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_dua/managers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_dua/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_dua/viewsets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_question/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_question/managers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_question/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/api/api_question/viewsets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/dua/routers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/api/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/api/api_comment/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/api/api_comment/managers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/api/api_comment/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/api/api_comment/viewsets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/api/api_reply/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/api/api_reply/managers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/api/api_reply/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/api/api_reply/viewsets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/api/api_topic/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/api/api_topic/managers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/api/api_topic/serializers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/api/api_topic/viewsets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/topic/routers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/base/paginations.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/base/paginations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/base/permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/base/permissions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_asignature/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_asignature/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_asignature/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_asignature/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_asignature/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_asignature/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_asignature_classroom/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_asignature_classroom/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_asignature_classroom/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_asignature_classroom/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_asignature_classroom/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_asignature_classroom/viewsets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/dua/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/dua/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/school/api/api_classroom/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_classroom/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_classroom/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_classroom/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_school_period/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_school_period/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/api/api_glosary/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_glosary/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/api/api_glosary_detail/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_glosary_detail/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/api/api_glosary_detail/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_glosary_detail/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/api/api_glosary_detail/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_glosary_detail/viewsets.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/school/api/api_school_period/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_school_period/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_school_period/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_school_period/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/school/routers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/routers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_conversation/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_conversation/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_conversation/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_conversation/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_conversation_detail/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_conversation_detail/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_person/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_person/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_person/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_person/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_person/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_person/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_student/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_student/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/topic/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/topic/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/api/api_student/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_student/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_student/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_student/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_teacher/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_teacher/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_teacher/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_teacher/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_teacher/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_teacher/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/apps.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/auth/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/auth/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/managers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/conon/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conon/settings/prod.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/prod.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conon/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,11 +104,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/applications/topic/api" />
       <recent name="$PROJECT_DIR$/applications/school/api" />
       <recent name="$PROJECT_DIR$/applications/users" />
       <recent name="$PROJECT_DIR$/applications/base" />
       <recent name="$PROJECT_DIR$/applications/users/api/api_user" />
-      <recent name="$PROJECT_DIR$/applications/users/api/user_api" />
     </key>
   </component>
   <component name="RunManager">
@@ -236,6 +236,14 @@
       <workItem from="1634044595379" duration="10434000" />
       <workItem from="1634061459989" duration="11625000" />
       <workItem from="1634085401099" duration="9526000" />
+      <workItem from="1634131132830" duration="9411000" />
+      <workItem from="1634148775796" duration="4028000" />
+      <workItem from="1634157478438" duration="15016000" />
+      <workItem from="1634228873878" duration="2088000" />
+      <workItem from="1634234553762" duration="2775000" />
+      <workItem from="1634310361390" duration="3308000" />
+      <workItem from="1634322224607" duration="5093000" />
+      <workItem from="1634334252977" duration="6920000" />
     </task>
     <servers />
   </component>

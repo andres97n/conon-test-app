@@ -124,7 +124,7 @@ class GlosaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Delete Glosary
+    # Delete Term
     def destroy(self, request, pk=None, *args, **kwargs):
         # Get instance
         term = self.get_queryset(pk)

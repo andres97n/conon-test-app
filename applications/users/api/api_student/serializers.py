@@ -94,7 +94,7 @@ class StudentListSerializer(serializers.ModelSerializer):
 '''
 
 
-class StudentListByClassroom(serializers.ModelSerializer):
+class StudentListManyToMany(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = [

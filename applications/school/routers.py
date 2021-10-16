@@ -45,4 +45,5 @@ router.register(
     GlosaryDetailViewSet,
     basename='glosary-detail'
 )
+
 urlpatterns = router.urls

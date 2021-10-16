@@ -56,5 +56,7 @@ urlpatterns = [
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('user/api/', include('applications.users.routers')),
     path('school/api/', include('applications.school.routers')),
+    path('topic/api/', include('applications.topic.routers')),
+    path('dua/api/', include('applications.dua.routers')),
 ]
 

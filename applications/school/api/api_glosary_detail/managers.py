@@ -21,13 +21,12 @@ class GlosaryDetailManager(models.Manager):
         try:
             result = self.select_related('glosary').filter(
                 glosary_id=pk,
-                title__exact=title,
+                title=title,
                 auth_state='A'
-            ).first()
+            )
         except None:
             pass
+        if result.exists():
+            return True
 
-        if result is None:
-            return False
-
-        return True
+        return False

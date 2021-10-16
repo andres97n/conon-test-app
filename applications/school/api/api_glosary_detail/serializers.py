@@ -10,25 +10,19 @@ class GlosaryDetailSerializer(serializers.ModelSerializer):
             'auth_state'
         ]
 
-    def validate(self, attrs):
-        if not GlosaryDetail.objects.title_exists(
-            pk=attrs['glosary'].id,
-            title=attrs['title']
-        ):
-            raise serializers.ValidationError(
-                detail='Error, este Glosario ya contiene este término.'
-            )
-        return attrs
-
-    # Create a Glosary Detail
+    # Create a Term
     def create(self, validated_data):
-        if not Glosary.objects.glosary_exists(validated_data['glosary'].id):
+        if not Glosary.objects.glosary_exists(attrs['glosary'].id):
             raise serializers.ValidationError(
                 detail='Error, no se encuentra relación con este valor; consulte con el Administrador.'
             )
-        glosary = Glosary(**validated_data)
-        glosary.save()
-        return glosary
+        if GlosaryDetail.objects.title_exists(attrs['glosary'].id, attrs['title']):
+            raise serializers.ValidationError(
+                detail='Error, este Glosario ya contiene este término.'
+            )
+        knowledge_area = KnowledgeArea(**validated_data)
+        knowledge_area.save()
+        return knowledge_area
 
     # Update Glosary Detail
     def update(self, instance, validated_data):
@@ -37,6 +31,11 @@ class GlosaryDetailSerializer(serializers.ModelSerializer):
                 detail='Error, no se puede cambiar la relación de este registro; '
                        'consulte con el Administrador.'
             )
+        if instance.title != validated_data['title']:
+            if GlosaryDetail.objects.title_exists(attrs['glosary'].id, attrs['title']):
+                raise serializers.ValidationError(
+                    detail='Error, este Glosario ya contiene este término.'
+                )
         update_glosary_detail = super().update(instance, validated_data)
         update_glosary_detail.save()
         return update_glosary_detail

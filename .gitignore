@@ -3,4 +3,6 @@ secret/
 applications/base/migrations/*
 applications/users/migrations/*
 applications/school/migrations/*
+applications/topic/migrations/*
+applications/dua/migrations/*
 .idea

@@ -197,6 +197,9 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
             access=str(refresh.access_token)
         )
 
+    def __str__(self):
+        return f'{self.person.name} {self.person.last_name}'
+
     def get_username(self):
         return self.username
 
