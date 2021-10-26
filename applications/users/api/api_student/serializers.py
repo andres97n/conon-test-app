@@ -3,12 +3,12 @@ from rest_framework import serializers
 from applications.users.models import Student, Person
 from applications.users.functions import is_person_assigned
 
+
 # TODO: Validar los números de teléfono
 
 
 # Create or Update Student Serializer
 class StudentSerializer(serializers.ModelSerializer):
-
     """
     person = serializers.PrimaryKeyRelatedField(
         many=False,
@@ -16,6 +16,9 @@ class StudentSerializer(serializers.ModelSerializer):
         queryset=Person.objects.all()
     )
     """
+    user = serializers.SerializerMethodField(
+        read_only=True
+    )
 
     class Meta:
         model = Student
@@ -24,17 +27,27 @@ class StudentSerializer(serializers.ModelSerializer):
             'auth_state'
         ]
 
+    def get_user(self, obj):
+        return Student.objects.get_user(obj.id)
+
     # Validation if the Person exists
     def validate_person(self, value):
         person = Person.objects.is_deleted(value.id)
         if person is None:
-            raise serializers.ValidationError('Error, esta Persona no existe.')
+            raise serializers.ValidationError(
+                detail='Error, esta Persona no existe.'
+            )
         return value
 
     # Create Student Method
     def create(self, validated_data):
         if is_person_assigned(validated_data['person'].id):
-            raise serializers.ValidationError('Error, esta Persona ya fue asignada.')
+            raise serializers.ValidationError(
+                detail={
+                    'ok': False,
+                    'detail': 'Error, esta Persona ya fue asignada.'
+                }
+            )
 
         student = Student(**validated_data)
         student.save()
@@ -43,25 +56,46 @@ class StudentSerializer(serializers.ModelSerializer):
     # Update Student Method
     def update(self, instance, validated_data):
         if instance.person != validated_data['person']:
-            raise serializers.ValidationError('Error, no se puede cambiar de Persona.')
+            raise serializers.ValidationError(
+                detail={
+                    'ok': False,
+                    'detail': 'Error, no se puede cambiar de Persona.'
+                }
+            )
         update_student = super().update(instance, validated_data)
         update_student.save()
         return update_student
 
     def to_representation(self, instance):
+        data = super().to_representation(instance)
+        user = None
+
+        if data['user']:
+            user = {
+                'id': data['user'][0],
+                'username': data['user'][1],
+                'email': data['user'][2]
+            }
+
         return {
             'id': instance.id,
             'person': {
                 'id': instance.person.id,
+                'identification_type': instance.person.get_identification_type_display(),
                 'identification': instance.person.identification,
                 'name': instance.person.name,
                 'last_name': instance.person.last_name,
-             },
+                'gender': instance.person.get_gender_display(),
+                'age': instance.person.age,
+                'phone': instance.person.phone
+            },
+            'user': user,
             'representative_name': instance.representative_name,
             'emergency_contact': instance.emergency_contact,
             'expectations': instance.expectations,
             'observations': instance.observations
         }
+
 
 '''
 # Person List or Person Detail Serializer
@@ -108,4 +142,3 @@ class StudentListManyToMany(serializers.ModelSerializer):
             identification=instance.person.identification,
             name=instance.__str__()
         )
-

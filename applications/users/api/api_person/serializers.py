@@ -21,33 +21,45 @@ class PersonSerializer(serializers.ModelSerializer):
     # Validate Identification
     def validate_identification(self, value):
         if not value.isdecimal():
-            raise serializers.ValidationError('Error, la Identificación debe contener solo números.')
+            raise serializers.ValidationError(
+                detail='Error, la Identificación debe contener solo números.'
+            )
         return value
 
     # Validate Identification Type
     def validate_identification_type(self, value):
         if value > 1:
-            raise serializers.ValidationError('Error, no existe este tipo de identificación.')
+            raise serializers.ValidationError(
+                detail='Error, no existe este tipo de identificación.'
+            )
         return value
 
     # Validate Gender
     def validate_gender(self, value):
         if value > 2:
-            raise serializers.ValidationError('Error, no existe este Género.')
+            raise serializers.ValidationError(
+                detail='Error, no existe este Género.'
+            )
         return value
 
     # Validate Age
     def validate_age(self, value):
         if value >= 80:
-            raise serializers.ValidationError('Error, esta persona no debe tener 80 años o más.')
+            raise serializers.ValidationError(
+                detail='Error, esta persona no debe tener 80 años o más.'
+            )
         return value
 
     def validate(self, attrs):
         # Validate the length of the identification
         if attrs['identification_type'] == 0:
             if len(attrs['identification']) != 10:
-                raise serializers.ValidationError('Error, la Identificación debe contener 10 números.')
-
+                raise serializers.ValidationError(
+                    detail={
+                        'ok': False,
+                        'detail': 'Error, la Identificación debe contener 10 números.'
+                    }
+                )
         return attrs
 
     def to_representation(self, instance):

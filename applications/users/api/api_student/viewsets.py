@@ -30,7 +30,7 @@ class StudentViewSet(LoggingMixin, viewsets.ModelViewSet):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        student_serializer = self.get_serializer(queryset, many=True)
+        student_serializer = self.get_serializer(student_queryset, many=True)
 
         return Response(
             {
@@ -50,6 +50,7 @@ class StudentViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': student_serializer.data['id'],
                     'message': 'Estudiante creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED

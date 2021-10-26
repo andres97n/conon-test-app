@@ -22,7 +22,7 @@ class StudentManager(models.Manager):
         student = None
         try:
             student = self.select_related('person').filter(id=pk, auth_state='A').first()
-        except None:
+        except:
             pass
 
         return student
@@ -36,9 +36,20 @@ class StudentManager(models.Manager):
         student = None
         try:
             student = self.filter(id=pk, auth_state='A').first()
-        except None:
+        except:
             pass
         if student is None:
             return False
 
         return True
+
+    def get_user(self, pk=None):
+        result = None
+        try:
+            result = self.filter(person__user__type=2). \
+                values_list(
+                'person__user__id', 'person__user__username', 'person__user__email',
+            ).get(id=pk)
+        except:
+            pass
+        return result

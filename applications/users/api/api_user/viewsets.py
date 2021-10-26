@@ -53,6 +53,7 @@ class UserViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': user_serializer.data['id'],
                     'message': 'Usuario creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED

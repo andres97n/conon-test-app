@@ -13,6 +13,9 @@ from applications.users.models import User
 # TODO: Resolver el duplicado al momento de
 #   hacer el logout y el token pase al Blackilist table
 
+# TODO: Crea un serializador para el envío de la contraseña al correo
+#   de cada usuario.
+
 
 class LoginSerializer(serializers.ModelSerializer):
     uid = serializers.IntegerField(

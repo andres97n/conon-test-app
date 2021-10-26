@@ -50,7 +50,10 @@ class UserSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if not User.objects.validate_user_type(attrs['person'].id, attrs['type']):
             raise serializers.ValidationError(
-                detail='Error, este Usuario no puede ser de este tipo.'
+                detail={
+                    'ok': False,
+                    'detail': 'Error, este Usuario no puede ser de este tipo.'
+                }
             )
         return attrs
 
@@ -65,10 +68,14 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if instance.person != validated_data['person']:
             raise serializers.ValidationError(
-                detail='Error, no se puede cambiar de Persona.'
+                detail={
+                    'ok': False,
+                    'detail': 'Error, no se puede cambiar de Persona.'
+                }
             )
         updated_user = super().update(instance, validated_data)
-        updated_user.set_password(validated_data['password'])
+        if validated_data['password']:
+            updated_user.set_password(validated_data['password'])
         updated_user.save()
         return updated_user
 

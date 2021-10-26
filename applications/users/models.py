@@ -17,9 +17,9 @@ class Person(BaseModel):
 
     # GENDERS
     class GenderChoices(models.IntegerChoices):
-        FEMININE = 0
-        MASCULINE = 1
-        OTHER = 2
+        FEMENINO = 0
+        MASCULINO = 1
+        OTRO = 2
 
     class IdentificationChoices(models.IntegerChoices):
         CI = 0
