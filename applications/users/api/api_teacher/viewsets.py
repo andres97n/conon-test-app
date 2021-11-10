@@ -1,11 +1,13 @@
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 
 from applications.base.paginations import CononPagination
-from .serializers import TeacherSerializer
+from .serializers import TeacherSerializer, TeacherByAreaListSerializer, \
+    CoordinatorSerializer
 
 
 class TeacherViewSet(LoggingMixin, viewsets.ModelViewSet):
@@ -50,6 +52,7 @@ class TeacherViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': teacher_serializer.data['id'],
                     'message': 'Docente creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED
@@ -140,3 +143,51 @@ class TeacherViewSet(LoggingMixin, viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    # Delete Many Teachers
+    @action(detail=False, methods=(['DELETE']))
+    def destroy_teachers(self, request):
+        teachers = self.get_serializer().Meta.model.objects.get_many_teachers(request.data['teachers'])
+        if teachers:
+            for teacher in teachers:
+                teacher.auth_state = 'I'
+
+            self.get_serializer().Meta.model.objects.bulk_update(teachers, ['auth_state'])
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Docentes eliminados correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No se puede eliminar a estos Docentes.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    @action(detail=False, methods=(['GET']))
+    def get_coordinators(self, request):
+        teachers = self.get_serializer().Meta.model.objects.get_coordinators_data()
+        if teachers:
+            coordinator_serializer = CoordinatorSerializer(teachers, many=True)
+
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': coordinator_serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No existen Docentes.'
+                },
+                status=status.HTTP_200_OK
+            )

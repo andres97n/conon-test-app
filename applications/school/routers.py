@@ -43,7 +43,7 @@ router.register(
 router.register(
     r'glosary-detail',
     GlosaryDetailViewSet,
-    basename='glosary-detail'
+    basename='glosary_detail'
 )
 
 urlpatterns = router.urls

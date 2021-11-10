@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
@@ -138,6 +139,31 @@ class PersonViewSet(LoggingMixin, viewsets.ModelViewSet):
             {
                 'ok': False,
                 'detail': 'No existe esta Persona.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Delete Many Persons
+    @action(detail=False, methods=(['DELETE']))
+    def destroy_persons(self, request):
+        persons = self.get_serializer().Meta.model.objects.get_many_persons(request.data['persons'])
+        if persons:
+            for person in persons:
+                person.auth_state = 'I'
+
+            self.get_serializer().Meta.model.objects.bulk_update(persons, ['auth_state'])
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Personas eliminadas correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {
+                'ok': False,
+                'detail': 'Ocurrió un error con el proceso, consulte con el Administrador.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )

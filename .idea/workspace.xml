@@ -5,17 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/applications/users/api/api_student/serializers_admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_person/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_person/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/viewsets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/routers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/routers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_person/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_person/managers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/api/api_person/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_person/viewsets.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/api/api_student/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_student/managers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/api/api_student/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_student/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/api/api_student/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_student/viewsets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_teacher/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_teacher/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_teacher/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_teacher/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_teacher/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_teacher/viewsets.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/auth/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/auth/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/managers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conon/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements/local.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements/local.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -218,6 +229,32 @@
       <workItem from="1635169719734" duration="599000" />
       <workItem from="1635177163947" duration="2677000" />
       <workItem from="1635186271348" duration="14929000" />
+      <workItem from="1635254518171" duration="21789000" />
+      <workItem from="1635341111242" duration="151000" />
+      <workItem from="1635341269010" duration="89000" />
+      <workItem from="1635341462548" duration="3767000" />
+      <workItem from="1635361215026" duration="1487000" />
+      <workItem from="1635379060607" duration="624000" />
+      <workItem from="1635427184359" duration="3116000" />
+      <workItem from="1635445593789" duration="1212000" />
+      <workItem from="1635460527374" duration="2166000" />
+      <workItem from="1635517162419" duration="384000" />
+      <workItem from="1635525180993" duration="2818000" />
+      <workItem from="1635540864032" duration="3461000" />
+      <workItem from="1635615823484" duration="1937000" />
+      <workItem from="1635630525395" duration="8098000" />
+      <workItem from="1635703794318" duration="719000" />
+      <workItem from="1635726163279" duration="2427000" />
+      <workItem from="1635732826692" duration="116000" />
+      <workItem from="1635773474367" duration="8963000" />
+      <workItem from="1636040056796" duration="5466000" />
+      <workItem from="1636048260795" duration="2708000" />
+      <workItem from="1636071848977" duration="5605000" />
+      <workItem from="1636138801826" duration="2129000" />
+      <workItem from="1636158890010" duration="6609000" />
+      <workItem from="1636328975371" duration="1714000" />
+      <workItem from="1636386110521" duration="10440000" />
+      <workItem from="1636471290743" duration="14822000" />
     </task>
     <servers />
   </component>

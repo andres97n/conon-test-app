@@ -104,3 +104,12 @@ class UserManager(BaseUserManager, models.Manager):
                 is_valid = False
 
         return is_valid
+
+    def get_many_users(self, users=None):
+        result = None
+        try:
+            if users is not None:
+                result = list(self.in_bulk(users).values())
+        except:
+            pass
+        return result

@@ -1,10 +1,12 @@
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 
 from applications.school.api.api_knowledge_area.serializers import KnowledgeAreaSerializer
+from applications.users.api.api_teacher.serializers import TeacherByAreaListSerializer
 
 
 class KnowledgeAreaViewSet(LoggingMixin, viewsets.ModelViewSet):
@@ -42,6 +44,7 @@ class KnowledgeAreaViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': knowledge_area_serializer.data['id'],
                     'message': 'Área de Conocimiento creada correctamente.'
                 },
                 status=status.HTTP_201_CREATED
@@ -132,3 +135,26 @@ class KnowledgeAreaViewSet(LoggingMixin, viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    # Return Teachers by Knowledge Area
+    @action(detail=True, methods=['GET'], url_path='teachers')
+    def get_teachers_by_area(self, request, pk=None):
+        teachers = self.get_serializer().Meta.model.objects.get_teachers_by_area_id(pk=pk)
+        if teachers:
+            teacher_serializer = TeacherByAreaListSerializer(teachers, many=True)
+
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': teacher_serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se encontró el Área de Conocimiento.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )

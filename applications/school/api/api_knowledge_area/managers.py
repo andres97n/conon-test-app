@@ -44,3 +44,11 @@ class KnowledgeAreaManager(models.Manager):
         if knowledge_area is None:
             return False
         return True
+
+    def get_teachers_by_area_id(self, pk=None):
+        teachers = None
+        try:
+            teachers = self.filter(id=pk, auth_state='A').values_list('teachers', flat=True)
+        except:
+            pass
+        return teachers

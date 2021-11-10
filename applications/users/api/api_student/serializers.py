@@ -4,9 +4,6 @@ from applications.users.models import Student, Person
 from applications.users.functions import is_person_assigned
 
 
-# TODO: Validar los números de teléfono
-
-
 # Create or Update Student Serializer
 class StudentSerializer(serializers.ModelSerializer):
     """
@@ -34,18 +31,25 @@ class StudentSerializer(serializers.ModelSerializer):
     def validate_person(self, value):
         person = Person.objects.is_deleted(value.id)
         if person is None:
-            raise serializers.ValidationError(
-                detail='Error, esta Persona no existe.'
-            )
+            raise serializers.ValidationError('Error, esta Persona no existe.')
         return value
+
+    def validate_emergency_contact(self, value):
+        if not value.isdecimal():
+            raise serializers.ValidationError(
+                'Error, el contacto debe contener solo números.'
+            )
+        elif value > 10:
+            raise serializers.ValidationError(
+                'Error, el número de contacto no debe tener más de 10 números.'
+            )
 
     # Create Student Method
     def create(self, validated_data):
         if is_person_assigned(validated_data['person'].id):
             raise serializers.ValidationError(
-                detail={
-                    'ok': False,
-                    'detail': 'Error, esta Persona ya fue asignada.'
+                {
+                    'person': ['Error, esta Persona ya fue asignada.']
                 }
             )
 
@@ -57,9 +61,8 @@ class StudentSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if instance.person != validated_data['person']:
             raise serializers.ValidationError(
-                detail={
-                    'ok': False,
-                    'detail': 'Error, no se puede cambiar de Persona.'
+                {
+                    'person': ['Error, no se puede cambiar de Persona.']
                 }
             )
         update_student = super().update(instance, validated_data)
@@ -75,6 +78,12 @@ class StudentSerializer(serializers.ModelSerializer):
                 'id': data['user'][0],
                 'username': data['user'][1],
                 'email': data['user'][2]
+            }
+        else:
+            user = {
+                'id': 0,
+                'username': 'No existe',
+                'email': 'No existe'
             }
 
         return {

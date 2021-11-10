@@ -22,7 +22,7 @@ class PersonManager(models.Manager):
         person = None
         try:
             person = self.filter(id=pk, auth_state='A').first()
-        except None:
+        except:
             pass
         return person
 
@@ -33,7 +33,16 @@ class PersonManager(models.Manager):
         person = None
         try:
             person = self.filter(id=pk, auth_state='A').first()
-        except None:
+        except:
             pass
 
         return person
+
+    def get_many_persons(self, persons=None):
+        result = None
+        try:
+            if persons is not None:
+                result = list(self.in_bulk(persons).values())
+        except:
+            pass
+        return result

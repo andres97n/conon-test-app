@@ -1,11 +1,12 @@
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 
 from applications.base.paginations import CononPagination
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UpdateUserSerializer
 
 
 # TODO: API provisonal del Usuario, en un
@@ -69,7 +70,7 @@ class UserViewSet(LoggingMixin, viewsets.ModelViewSet):
         user = self.get_queryset(pk)
         if user:
             # Send information to serializer referencing the instance
-            user_serializer = self.get_serializer(user, data=request.data)
+            user_serializer = UpdateUserSerializer(user, data=request.data)
             if user_serializer.is_valid():
                 user_serializer.save()
 
@@ -143,3 +144,28 @@ class UserViewSet(LoggingMixin, viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    # Delete Many Users
+    @action(detail=False, methods=(['DELETE']))
+    def destroy_users(self, request):
+        users = self.get_serializer().Meta.model.objects.get_many_users(request.data['users'])
+        if users:
+            for user in users:
+                user.is_active = False
+                user.auth_state = 'I'
+
+            self.get_serializer().Meta.model.objects.bulk_update(users, ['auth_state', 'is_active'])
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Usuarios eliminados correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {
+                'ok': False,
+                'detail': 'Ocurrió un error con el proceso, consulte con el Administrador.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )

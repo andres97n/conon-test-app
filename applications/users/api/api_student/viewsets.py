@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_tracking.mixins import LoggingMixin
 
@@ -138,6 +139,31 @@ class StudentViewSet(LoggingMixin, viewsets.ModelViewSet):
             {
                 'ok': False,
                 'detail': 'No existe este Estudiante.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Delete Many Students
+    @action(detail=False, methods=(['DELETE']))
+    def destroy_students(self, request):
+        students = self.get_serializer().Meta.model.objects.get_many_students(request.data['students'])
+        if students:
+            for student in students:
+                student.auth_state = 'I'
+
+            self.get_serializer().Meta.model.objects.bulk_update(students, ['auth_state'])
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Estudiantes eliminados correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No se puede eliminar a estos Estudiantes.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )

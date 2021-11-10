@@ -46,10 +46,19 @@ class StudentManager(models.Manager):
     def get_user(self, pk=None):
         result = None
         try:
-            result = self.filter(person__user__type=2). \
+            result = self.filter(person__user__type=2, auth_state='A'). \
                 values_list(
                 'person__user__id', 'person__user__username', 'person__user__email',
             ).get(id=pk)
+        except:
+            pass
+        return result
+
+    def get_many_students(self, students=None):
+        result = None
+        try:
+            if students is not None:
+                result = list(self.in_bulk(students).values())
         except:
             pass
         return result

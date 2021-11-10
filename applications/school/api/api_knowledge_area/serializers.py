@@ -6,11 +6,25 @@ from applications.users.api.api_teacher.serializers import TeacherByAreaListSeri
 
 
 class KnowledgeAreaSerializer(serializers.ModelSerializer):
+    """
+    teachers_data = serializers.HyperlinkedRelatedField(
+        view_name='teachers-by-area',
+        read_only=True,
+        lookup_field='pk',
+        lookup_url_kwarg='pk'
+    )
+    """
+
     class Meta:
         model = KnowledgeArea
-        exclude = [
-            'updated_at',
-            'auth_state'
+        fields = [
+            'id',
+            'name',
+            'coordinator',
+            'sub_coordinator',
+            'objective',
+            'observations',
+            'created_at',
         ]
 
     # Validate Teachers
@@ -27,13 +41,14 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    '''
     def get_teachers(self, teachers=None):
         teacher_serializer = TeacherByAreaListSerializer(teachers, many=True)
-        return teacher_serializer.data
+        return teacher_serializer.data'''
 
     # Create a Knowledge Area
     def create(self, validated_data):
-        if not KnowledgeArea.objects.is_name_exists(validated_data['name']):
+        if KnowledgeArea.objects.is_name_exists(validated_data['name']):
             raise serializers.ValidationError('Error, esta Área de Conocimiento ya existe.')
         knowledge_area = KnowledgeArea(**validated_data)
         knowledge_area.save()
@@ -50,6 +65,9 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
 
     # Get Knowledge Area Data
     def to_representation(self, instance):
+
+        # data = super().to_representation(instance)
+
         return {
             'id': instance.id,
             'name': instance.name,
@@ -63,6 +81,6 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
             },
             'objective': instance.objective,
             'observations': instance.observations,
-            'teachers': self.get_teachers(instance.teachers),
+            # 'teachers': data['teachers'],
             'created_at': instance.created_at
         }

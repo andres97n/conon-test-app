@@ -4,18 +4,23 @@ from applications.users.models import Teacher, Person
 from applications.users.functions import is_person_assigned
 
 
-# TODO: Quitar el Serializador Teacher List
-
-
 # Create or Update Teacher Serializer
 class TeacherSerializer(serializers.ModelSerializer):
+
+    user = serializers.SerializerMethodField(
+        read_only=True
+    )
+
     class Meta:
         model = Teacher
         exclude = [
-            'created_at',
             'updated_at',
             'auth_state'
         ]
+
+    # Return Teacher Users
+    def get_user(self, obj):
+        return Teacher.objects.get_user(obj.id)
 
     # Validation if the Person exists
     def validate_person(self, value):
@@ -27,7 +32,11 @@ class TeacherSerializer(serializers.ModelSerializer):
     # Create Teacher Method
     def create(self, validated_data):
         if is_person_assigned(validated_data['person'].id):
-            raise serializers.ValidationError('Error, esta Persona ya fue asignada.')
+            raise serializers.ValidationError(
+                {
+                    person: ['Error, esta Persona ya fue asignada.']
+                }
+            )
 
         teacher = Teacher(**validated_data)
         teacher.save()
@@ -36,66 +45,111 @@ class TeacherSerializer(serializers.ModelSerializer):
     # Update Teacher Method
     def update(self, instance, validated_data):
         if instance.person != validated_data['person']:
-            raise serializers.ValidationError('Error, no se puede cambiar de Persona.')
+            raise serializers.ValidationError(
+                {
+                    person: ['Error, no se puede cambiar de Persona.']
+                }
+            )
         update_teacher = super().update(instance, validated_data)
         update_teacher.save()
         return update_teacher
 
     def to_representation(self, instance):
+        data = super().to_representation(instance)
+        user = None
+
+        if data['user']:
+            user = {
+                'id': data['user'][0],
+                'username': data['user'][1],
+                'email': data['user'][2]
+            }
+        else:
+            user = {
+                'id': 0,
+                'username': 'No existe',
+                'email': 'No existe'
+            }
+
         return {
             'id': instance.id,
             'person': {
                 'id': instance.person.id,
+                'identification_type': instance.person.get_identification_type_display(),
                 'identification': instance.person.identification,
                 'name': instance.person.name,
                 'last_name': instance.person.last_name,
+                'gender': instance.person.get_gender_display(),
+                'age': instance.person.age,
+                'phone': instance.person.phone
             },
+            'user': user,
             'title': instance.title,
             'objective': instance.objective,
         }
 
 
-'''
-# Teacher List or Teacher Detail Serializer
-class TeacherListSerializer(serializers.ModelSerializer):
-    person = serializers.SerializerMethodField()
+class TeacherByAreaListSerializer(serializers.Serializer):
+
+    id = serializers.IntegerField(
+        read_only=True
+    )
+    identification = serializers.CharField(
+        read_only=True
+    )
+    name = serializers.CharField(
+        read_only=True
+    )
+    last_name = serializers.CharField(
+        read_only=True
+    )
+    title = serializers.CharField(
+        read_only=True
+    )
 
     class Meta:
-        model = Teacher
         fields = [
             'id',
-            'person',
+            'identification',
+            'name',
+            'last_name'
             'title',
-            'objective'
         ]
 
-    # Return Person Data
-    def get_person(self, obj):
-        teacher = Teacher.objects.get_person_data(pk=obj.id)
-        if teacher is not None:
-            return dict(
-                identification=teacher.person.identification,
-                name=teacher.person.name,
-                last_name=teacher.person.last_name,
-                age=teacher.person.age,
-                phone=teacher.person.phone,
-            )
-        return teacher
-'''
+    def get_teacher(self, value):
+        return Teacher.objects.get_teacher_data_by_area(pk=value)
+
+    def to_representation(self, instance):
+        teacher = self.get_teacher(instance)
+        if teacher is None:
+            return {}
+
+        return {
+            'id': teacher['id'],
+            'identification': teacher['person__identification'],
+            'name': teacher['person__name'],
+            'last_name': teacher['person__last_name'],
+            'title': teacher['title']
+        }
 
 
-class TeacherByAreaListSerializer(serializers.ModelSerializer):
+class CoordinatorSerializer(serializers.Serializer):
+
+    id = serializers.IntegerField(
+        read_only=True
+    )
+    name = serializers.CharField(
+        read_only=True
+    )
+
     class Meta:
-        model = Teacher
         fields = [
             'id',
-            'person',
-            'title',
+            'name'
         ]
 
     def to_representation(self, instance):
-        return dict(
-            id=instance.id,
-            identification=instance.person.identification,
-            name=instance.person.full_name()
-        )
+        return {
+            'id': instance['id'],
+            'name': f"{instance['person__name']} {instance['person__last_name']}"
+        }

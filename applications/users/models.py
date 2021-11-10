@@ -26,37 +26,44 @@ class Person(BaseModel):
         OTHER = 1
 
     identification_type = models.PositiveIntegerField(
+        'tipo de identificación',
         choices=IdentificationChoices.choices,
         default=0,
         null=False,
         blank=False,
     )
     identification = models.CharField(
+        'identificación',
         max_length=20,
         unique=True,
         null=False,
         blank=False
     )
     name = models.CharField(
+        'nombre',
         max_length=80,
         null=False,
         blank=False
     )
     last_name = models.CharField(
+        'apellido',
         max_length=100,
         null=False,
         blank=False
     )
     gender = models.PositiveSmallIntegerField(
+        'género',
         choices=GenderChoices.choices,
         null=False,
         blank=False,
     )
     age = models.PositiveIntegerField(
+        'edad',
         null=False,
         blank=False
     )
     phone = models.CharField(
+        'teléfono',
         max_length=20,
         null=False,
         blank=False,
@@ -66,8 +73,8 @@ class Person(BaseModel):
 
     class Meta:
         db_table = 'person'
-        verbose_name = 'Person'
-        verbose_name_plural = 'Persons'
+        verbose_name = 'Persona'
+        verbose_name_plural = 'Personas'
 
     def __str__(self):
         return f'{self.identification} - {self.person.name} {self.person.last_name}'
@@ -79,21 +86,25 @@ class Person(BaseModel):
 class Student(BaseModel):
 
     representative_name = models.CharField(
+        'nombre del representante',
         max_length=100,
         null=True,
         blank=True
     )
     expectations = models.JSONField(
+        'expectativas',
         default=dict,
         null=True,
         blank=True
     )
     emergency_contact = models.CharField(
+        'contacto de emergencia',
         max_length=20,
         null=True,
         blank=True,
     )
     observations = models.JSONField(
+        'observaciones',
         default=dict,
         null=True,
         blank=True,
@@ -109,8 +120,8 @@ class Student(BaseModel):
 
     class Meta:
         db_table = 'student'
-        verbose_name = 'Student'
-        verbose_name_plural = 'Students'
+        verbose_name = 'Estudiante'
+        verbose_name_plural = 'Estudiantes'
 
     def __str__(self):
         return f'{self.person.name} {self.person.last_name}'
@@ -153,17 +164,18 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         STUDENT = 2
 
     username = models.CharField(
-        'Nombre de Usuario',
+        'nombre de usuario',
         max_length=100,
         unique=True
     )
     email = models.EmailField(
-        'Correo Electrónico',
+        'correo electrónico',
         null=True,
         blank=True,
         unique=True
     )
     type = models.PositiveSmallIntegerField(
+        'tipo de usuario',
         choices=UserChoices.choices,
         null=False,
         blank=False

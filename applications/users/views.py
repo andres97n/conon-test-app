@@ -140,18 +140,6 @@ class LoginView(LoggingMixin, GenericAPIView):
     permission_classes = [AllowAny]
     logging_methods = ['POST']
     sensitive_fields = {'access', 'refresh'}
-    '''
-    def get_serializer_context(self):
-        return {
-            'request': self.request,
-            'format': self.format_kwarg,
-            'view': self
-        }
-
-    def get_serializer(self, *args, **kwargs):
-        kwargs['context'] = self.get_serializer_context()
-        return self.serializer_class(*args, **kwargs)
-'''
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
@@ -205,11 +193,9 @@ class LogoutView(LoggingMixin, GenericAPIView):
         )
 
 
-class RefreshView(LoggingMixin, TokenRefreshView):
+class RefreshView(TokenRefreshView):
     serializer_class = CustomTokenRefreshSerializer
     permission_classes = [AllowAny]
-    logging_methods = ['POST']
-    sensitive_fields = {'access', 'refresh'}
 
     def post(self, request, *args):
 

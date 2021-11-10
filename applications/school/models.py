@@ -243,7 +243,7 @@ class AsignatureClassroom(BaseModel):
 class Glosary(BaseModel):
     state = models.BooleanField(
         'Estado',
-        default=True,
+        default=False,
         null=False,
         blank=True
     )
@@ -277,7 +277,7 @@ class GlosaryDetail(BaseModel):
         blank=False,
     )
     description = models.TextField(
-        'Descripción',
+        'descripción',
         null=False,
         blank=False
     )
@@ -292,9 +292,15 @@ class GlosaryDetail(BaseModel):
         blank=True
     )
     observation = models.TextField(
-        'Observación',
+        'observación',
         default='S/N',
         null=True,
+        blank=True
+    )
+    state = models.BooleanField(
+        'estado',
+        default=True,
+        null=False,
         blank=True
     )
 

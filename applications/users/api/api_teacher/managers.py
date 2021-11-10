@@ -39,3 +39,32 @@ class TeacherManager(models.Manager):
             return False
 
         return True
+
+    def get_user(self, pk=None):
+        result = None
+        try:
+            result = self.filter(person__user__type=1, auth_state='A'). \
+                values_list(
+                'person__user__id', 'person__user__username', 'person__user__email',
+            ).get(id=pk)
+        except:
+            pass
+        return result
+
+    def get_many_teachers(self, teachers=None):
+        result = None
+        try:
+            if teachers is not None:
+                result = list(self.in_bulk(teachers).values())
+        except:
+            pass
+        return result
+
+    def get_coordinators_data(self):
+        teachers = self.select_related('person').filter(auth_state='A').\
+            values(
+            'id',
+            'person__name',
+            'person__last_name'
+        )
+        return teachers

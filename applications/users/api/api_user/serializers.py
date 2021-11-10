@@ -1,4 +1,4 @@
-from rest_framework import serializers, pagination
+from rest_framework import serializers
 
 from applications.users.models import User, Person
 from applications.base.functions import save_auth_user
@@ -50,9 +50,9 @@ class UserSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if not User.objects.validate_user_type(attrs['person'].id, attrs['type']):
             raise serializers.ValidationError(
-                detail={
+                {
                     'ok': False,
-                    'detail': 'Error, este Usuario no puede ser de este tipo.'
+                    'type': 'Error, este Usuario no puede ser de este tipo.'
                 }
             )
         return attrs
@@ -65,6 +65,7 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     # Update a normal User
+    '''
     def update(self, instance, validated_data):
         if instance.person != validated_data['person']:
             raise serializers.ValidationError(
@@ -78,6 +79,7 @@ class UserSerializer(serializers.ModelSerializer):
             updated_user.set_password(validated_data['password'])
         updated_user.save()
         return updated_user
+    '''
 
     def to_representation(self, instance):
         return {
@@ -92,6 +94,16 @@ class UserSerializer(serializers.ModelSerializer):
             'type': instance.type,
             'created_at': instance.created_at
         }
+
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username',
+            'email'
+        ]
 
 
 '''
