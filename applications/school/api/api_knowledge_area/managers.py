@@ -48,7 +48,29 @@ class KnowledgeAreaManager(models.Manager):
     def get_teachers_by_area_id(self, pk=None):
         teachers = None
         try:
-            teachers = self.filter(id=pk, auth_state='A').values_list('teachers', flat=True)
+            # teachers = self.filter(id=pk, auth_state='A').values_list('teachers', flat=True)
+            teachers = self.filter(id=pk, auth_state='A').values(
+                'teachers__id',
+                'teachers__person__identification',
+                'teachers__person__name',
+                'teachers__person__last_name',
+                'teachers__title'
+            )
         except:
             pass
         return teachers
+
+    def get_teachers_count(self, pk=None):
+        try:
+            return self.filter(
+                pk=pk, auth_state='A', teachers__isnull=True
+            ).count()
+        except:
+            return 1
+
+    def get_many_areas(self, areas=None):
+        try:
+            if areas is not None:
+                return list(self.in_bulk(areas).values())
+        except:
+            return None

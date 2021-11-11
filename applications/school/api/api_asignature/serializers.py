@@ -16,17 +16,17 @@ class AsignatureSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         if not KnowledgeArea.objects.is_active(value.id):
             raise serializers.ValidationError('Error, esta Área de Conocimiento no existe.')
-        classroom = Classroom(**validated_data)
-        classroom.save()
-        return classroom
+        asignature = Asignature(**validated_data)
+        asignature.save()
+        return asignature
 
     # Update Asignature
     def update(self, instance, validated_data):
         if instance.knowledge_area != validated_data['knowledge_area']:
             raise serializers.ValidationError('Error, una vez ingresada el Área de Conocimiento no se puede cambiar el mismo.')
-        update_classroom = super().update(instance, validated_data)
-        update_classroom.save()
-        return update_classroom
+        update_asignature = super().update(instance, validated_data)
+        update_asignature.save()
+        return update_asignature
 
     # Return Asignature Data
     def to_representation(self, instance):

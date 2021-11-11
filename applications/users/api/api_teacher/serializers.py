@@ -89,47 +89,23 @@ class TeacherSerializer(serializers.ModelSerializer):
         }
 
 
-class TeacherByAreaListSerializer(serializers.Serializer):
-
-    id = serializers.IntegerField(
-        read_only=True
-    )
-    identification = serializers.CharField(
-        read_only=True
-    )
-    name = serializers.CharField(
-        read_only=True
-    )
-    last_name = serializers.CharField(
-        read_only=True
-    )
-    title = serializers.CharField(
-        read_only=True
-    )
+class TeacherByAreaListSerializer(serializers.ModelSerializer):
 
     class Meta:
+        model = Teacher
         fields = [
             'id',
-            'identification',
-            'name',
-            'last_name'
+            'person',
             'title',
         ]
 
-    def get_teacher(self, value):
-        return Teacher.objects.get_teacher_data_by_area(pk=value)
-
     def to_representation(self, instance):
-        teacher = self.get_teacher(instance)
-        if teacher is None:
-            return {}
-
         return {
-            'id': teacher['id'],
-            'identification': teacher['person__identification'],
-            'name': teacher['person__name'],
-            'last_name': teacher['person__last_name'],
-            'title': teacher['title']
+            'id': instance['teachers__id'],
+            'identification': instance['teachers__person__identification'],
+            'name': instance['teachers__person__name'],
+            'last_name': instance['teachers__person__last_name'],
+            'title': instance['teachers__title'],
         }
 
 

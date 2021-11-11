@@ -144,7 +144,7 @@ class PersonViewSet(LoggingMixin, viewsets.ModelViewSet):
         )
 
     # Delete Many Persons
-    @action(detail=False, methods=(['DELETE']))
+    @action(detail=False, methods=(['DELETE']), url_path='destroy-persons')
     def destroy_persons(self, request):
         persons = self.get_serializer().Meta.model.objects.get_many_persons(request.data['persons'])
         if persons:

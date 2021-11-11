@@ -68,3 +68,6 @@ class TeacherManager(models.Manager):
             'person__last_name'
         )
         return teachers
+
+    # def get_teacher_data_by_area(self, pk=None):
+

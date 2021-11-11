@@ -144,7 +144,7 @@ class StudentViewSet(LoggingMixin, viewsets.ModelViewSet):
         )
 
     # Delete Many Students
-    @action(detail=False, methods=(['DELETE']))
+    @action(detail=False, methods=(['DELETE']), url_path='destroy-students')
     def destroy_students(self, request):
         students = self.get_serializer().Meta.model.objects.get_many_students(request.data['students'])
         if students:

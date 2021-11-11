@@ -49,6 +49,7 @@ class AsignatureViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': asignature_serializer.data['id'],
                     'message': 'Asignatura creada correctamente.'
                 },
                 status=status.HTTP_201_CREATED

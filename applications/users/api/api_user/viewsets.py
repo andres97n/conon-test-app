@@ -145,7 +145,7 @@ class UserViewSet(LoggingMixin, viewsets.ModelViewSet):
         )
 
     # Delete Many Users
-    @action(detail=False, methods=(['DELETE']))
+    @action(detail=False, methods=(['DELETE']), url_path='destroy-users')
     def destroy_users(self, request):
         users = self.get_serializer().Meta.model.objects.get_many_users(request.data['users'])
         if users:

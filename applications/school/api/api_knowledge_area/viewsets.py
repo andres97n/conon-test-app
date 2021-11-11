@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 
-from applications.school.api.api_knowledge_area.serializers import KnowledgeAreaSerializer
+from applications.school.api.api_knowledge_area.serializers import KnowledgeAreaSerializer, \
+    KnowledgeAreaByAsignature
 from applications.users.api.api_teacher.serializers import TeacherByAreaListSerializer
 
 
@@ -140,16 +141,25 @@ class KnowledgeAreaViewSet(LoggingMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=['GET'], url_path='teachers')
     def get_teachers_by_area(self, request, pk=None):
         teachers = self.get_serializer().Meta.model.objects.get_teachers_by_area_id(pk=pk)
-        if teachers:
-            teacher_serializer = TeacherByAreaListSerializer(teachers, many=True)
+        if teachers is not None:
+            if self.get_serializer().Meta.model.objects.get_teachers_count(pk=pk) == 0:
+                teacher_serializer = TeacherByAreaListSerializer(teachers, many=True)
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': teacher_serializer.data
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': True,
+                        'message': 'La siguiente Área de Conocimiento no contiene Docentes.'
+                    },
+                    status=status.HTTP_200_OK
+                )
 
-            return Response(
-                {
-                    'ok': True,
-                    'conon_data': teacher_serializer.data
-                },
-                status=status.HTTP_200_OK
-            )
         else:
             return Response(
                 {
@@ -158,3 +168,49 @@ class KnowledgeAreaViewSet(LoggingMixin, viewsets.ModelViewSet):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    # Delete Many Areas
+    @action(detail=False, methods=['DELETE'], url_path='destroy-areas')
+    def destroy_areas(self, request):
+        areas = self.get_serializer().Meta.model.objects.get_many_areas(areas=request.data['areas'])
+        if areas:
+            for area in areas:
+                area.auth_state = 'I'
+
+            self.get_serializer().Meta.model.objects.bulk_update(areas, ['auth_state'])
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Áreas de Conocimiento eliminadas correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No se puede eliminar las siguientes Áreas de Conocimiento.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Get Areas for the Asignatures
+    @action(detail=False, methods=['GET'], url_path='asignature')
+    def get_areas_asignature(self, request):
+        areas = self.get_queryset()
+        if areas:
+            area_serializer = KnowledgeAreaByAsignature(areas, many=True)
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': area_serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No se puedo retornar las Áreas de Conocimiento.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )

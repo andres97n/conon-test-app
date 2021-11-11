@@ -84,3 +84,18 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
             # 'teachers': data['teachers'],
             'created_at': instance.created_at
         }
+
+
+class KnowledgeAreaByAsignature(serializers.ModelSerializer):
+    class Meta:
+        model = KnowledgeArea
+        fields = [
+            'id',
+            'name'
+        ]
+
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'name': instance.name
+        }

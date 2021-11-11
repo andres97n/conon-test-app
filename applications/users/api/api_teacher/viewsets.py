@@ -145,7 +145,7 @@ class TeacherViewSet(LoggingMixin, viewsets.ModelViewSet):
         )
 
     # Delete Many Teachers
-    @action(detail=False, methods=(['DELETE']))
+    @action(detail=False, methods=(['DELETE']), url_path='destroy-teachers')
     def destroy_teachers(self, request):
         teachers = self.get_serializer().Meta.model.objects.get_many_teachers(request.data['teachers'])
         if teachers:
