@@ -34,7 +34,7 @@ class TeacherSerializer(serializers.ModelSerializer):
         if is_person_assigned(validated_data['person'].id):
             raise serializers.ValidationError(
                 {
-                    person: ['Error, esta Persona ya fue asignada.']
+                    'person': ['Error, esta Persona ya fue asignada.']
                 }
             )
 
@@ -47,7 +47,7 @@ class TeacherSerializer(serializers.ModelSerializer):
         if instance.person != validated_data['person']:
             raise serializers.ValidationError(
                 {
-                    person: ['Error, no se puede cambiar de Persona.']
+                    'person': ['Error, no se puede cambiar de Persona.']
                 }
             )
         update_teacher = super().update(instance, validated_data)

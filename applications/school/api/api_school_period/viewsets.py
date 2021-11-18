@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
@@ -42,6 +43,7 @@ class SchoolPeriodViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': school_period_serializer.data['id'],
                     'message': 'Período Lectivo creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED
@@ -130,6 +132,37 @@ class SchoolPeriodViewSet(LoggingMixin, viewsets.ModelViewSet):
             {
                 'ok': False,
                 'detail': 'No existe este Período Lectivo.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    @action(detail=False, methods=['DELETE'], url_path='destroys-periods')
+    def destroys_school_periods(self, request):
+        school_periods = self.get_serializer().Meta.model.objects.get_many_school_periods(
+            periods=request.data['school_periods']
+        )
+        if school_periods:
+            for school_period in school_periods:
+                """
+                Producción
+                if school_period.state == 0:
+                    school_period.auth_state = 'I'
+                """
+                school_period.auth_state = 'I'
+
+            self.get_serializer().Meta.model.objects.bulk_update(school_periods, ['auth_state'])
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Períodos Lectivos eliminados correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No se puede eliminar los siguientes Períodos Lectivos.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )

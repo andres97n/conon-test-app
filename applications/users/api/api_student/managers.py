@@ -44,15 +44,13 @@ class StudentManager(models.Manager):
         return True
 
     def get_user(self, pk=None):
-        result = None
         try:
-            result = self.filter(person__user__type=2, auth_state='A'). \
+            return self.filter(person__user__type=2, auth_state='A'). \
                 values_list(
                 'person__user__id', 'person__user__username', 'person__user__email',
             ).get(id=pk)
         except:
-            pass
-        return result
+            return None
 
     def get_many_students(self, students=None):
         result = None

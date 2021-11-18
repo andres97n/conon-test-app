@@ -24,14 +24,14 @@ class UserSerializer(serializers.ModelSerializer):
         person = Person.objects.is_deleted(value.id)
         if person is None:
             raise serializers.ValidationError(
-                detail='Error, esta Persona no existe.'
+                'Error, esta Persona no existe.'
             )
         return value
 
     def validate_password(self, value):
         if len(value) < 6:
             raise serializers.ValidationError(
-                detail='Error, la contraseña debe contener por lo menos 6 caracteres.'
+                'Error, la contraseña debe contener por lo menos 6 caracteres.'
             )
         return value
 
@@ -39,7 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
     def validate_type(self, value):
         if value == 0:
             raise serializers.ValidationError(
-                detail='Error, el Usuario que se intenta crear no pueder ser de este tipo.'
+                'Error, el Usuario que se intenta crear no pueder ser de este tipo.'
             )
         if value > 2:
             raise serializers.ValidationError(
@@ -51,7 +51,6 @@ class UserSerializer(serializers.ModelSerializer):
         if not User.objects.validate_user_type(attrs['person'].id, attrs['type']):
             raise serializers.ValidationError(
                 {
-                    'ok': False,
                     'type': 'Error, este Usuario no puede ser de este tipo.'
                 }
             )

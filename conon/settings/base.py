@@ -3,6 +3,8 @@ from datetime import timedelta
 import json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.core.exceptions import ImproperlyConfigured
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 with open("secret/base.json") as f:
@@ -47,7 +49,7 @@ THIRD_APPS = [
     'corsheaders',
     'drf_yasg',
     'rest_framework',
-    'rest_framework.authtoken',
+    # 'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
     'rest_framework_tracking'
 ]

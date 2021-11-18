@@ -22,7 +22,7 @@ class PersonSerializer(serializers.ModelSerializer):
     def validate_identification(self, value):
         if not value.isdecimal():
             raise serializers.ValidationError(
-                detail='Error, la Identificación debe contener solo números.'
+                'Error, la Identificación debe contener solo números.'
             )
         return value
 
@@ -30,15 +30,15 @@ class PersonSerializer(serializers.ModelSerializer):
     def validate_identification_type(self, value):
         if value > 1:
             raise serializers.ValidationError(
-                detail='Error, no existe este tipo de identificación.'
+                'Error, no existe este tipo de identificación.'
             )
         return value
 
     # Validate Gender
     def validate_gender(self, value):
-        if value > 2:
+        if value > 3:
             raise serializers.ValidationError(
-                detail='Error, no existe este Género.'
+                'Error, no existe este Género.'
             )
         return value
 
@@ -46,7 +46,7 @@ class PersonSerializer(serializers.ModelSerializer):
     def validate_age(self, value):
         if value >= 80:
             raise serializers.ValidationError(
-                detail='Error, esta persona no debe tener 80 años o más.'
+                'Error, esta persona no debe tener 80 años o más.'
             )
         return value
 
@@ -55,9 +55,8 @@ class PersonSerializer(serializers.ModelSerializer):
         if attrs['identification_type'] == 0:
             if len(attrs['identification']) != 10:
                 raise serializers.ValidationError(
-                    detail={
-                        'ok': False,
-                        'detail': 'Error, la Identificación debe contener 10 números.'
+                    {
+                        'identification': 'Error, la Identificación debe contener 10 números.'
                     }
                 )
         return attrs

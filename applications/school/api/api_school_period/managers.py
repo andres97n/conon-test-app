@@ -45,3 +45,11 @@ class SchoolPeriodManager(models.Manager):
         if school_period is None:
             return False
         return True
+
+    def get_many_school_periods(self, periods=None):
+        try:
+            if periods is not None:
+                return list(self.in_bulk(periods).values())
+        except:
+            return None
+

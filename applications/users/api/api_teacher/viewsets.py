@@ -32,7 +32,7 @@ class TeacherViewSet(LoggingMixin, viewsets.ModelViewSet):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        teacher_serializer = self.get_serializer(queryset, many=True)
+        teacher_serializer = self.get_serializer(teacher_queryset, many=True)
 
         return Response(
             {

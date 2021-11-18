@@ -35,14 +35,16 @@ class StudentSerializer(serializers.ModelSerializer):
         return value
 
     def validate_emergency_contact(self, value):
-        if not value.isdecimal():
-            raise serializers.ValidationError(
-                'Error, el contacto debe contener solo números.'
-            )
-        elif value > 10:
-            raise serializers.ValidationError(
-                'Error, el número de contacto no debe tener más de 10 números.'
-            )
+        if value:
+            if not value.isdecimal():
+                raise serializers.ValidationError(
+                    'Error, el contacto debe contener solo números.'
+                )
+            elif len(value) > 10:
+                raise serializers.ValidationError(
+                    'Error, el número de contacto no debe tener más de 10 números.'
+                )
+        return value
 
     # Create Student Method
     def create(self, validated_data):

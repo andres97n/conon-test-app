@@ -5,18 +5,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/conon_app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/conon_app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/base/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/dua/migrations/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/school/api/api_asignature/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_asignature/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_asignature/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_asignature/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/api/api_classroom/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_classroom/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_person/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_person/viewsets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/api/api_school_period/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_school_period/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/api/api_school_period/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_school_period/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/api/api_school_period/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_school_period/viewsets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/migrations/0002_auto_20210917_2309.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/migrations/0003_alter_knowledgearea_teachers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/migrations/0004_auto_20210919_1640.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/migrations/0005_alter_asignature_name.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/migrations/0006_auto_20210920_2221.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/migrations/0007_auto_20210920_2230.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/migrations/0008_alter_schoolperiod_name.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/migrations/0009_knowledgearea_observations.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/migrations/0010_auto_20210921_1328.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/topic/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/topic/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/topic/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_person/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_person/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_student/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_student/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_student/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_student/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/api/api_student/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_student/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/users/api/api_teacher/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_teacher/managers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/api/api_teacher/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_teacher/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/api/api_teacher/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_teacher/viewsets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/viewsets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/apps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conon/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conon/settings/local.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/local.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conon/settings/prod.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/prod.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +80,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -248,6 +274,18 @@
       <workItem from="1636551982735" duration="5010000" />
       <workItem from="1636568284373" duration="3877000" />
       <workItem from="1636578930379" duration="7803000" />
+      <workItem from="1637024782450" duration="998000" />
+      <workItem from="1637025813977" duration="53000" />
+      <workItem from="1637025883525" duration="3180000" />
+      <workItem from="1637029086977" duration="108000" />
+      <workItem from="1637029403035" duration="1371000" />
+      <workItem from="1637069084141" duration="2843000" />
+      <workItem from="1637082131285" duration="33000" />
+      <workItem from="1637086761878" duration="1916000" />
+      <workItem from="1637118435552" duration="825000" />
+      <workItem from="1637155244431" duration="8303000" />
+      <workItem from="1637173258310" duration="9080000" />
+      <workItem from="1637202033625" duration="101000" />
     </task>
     <servers />
   </component>

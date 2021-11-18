@@ -8,6 +8,10 @@ from .serializers import StudentSerializer
 from applications.base.permissions import IsTeacher
 from applications.base.paginations import CononPagination
 
+# TODO: Crear un método que elimine de la base de datos la información de person,
+#   student y user si es que los métodos de guardar y eliminar fallan
+#       (Utilizar verifySaveTeacher en Frontend).
+
 
 class StudentViewSet(LoggingMixin, viewsets.ModelViewSet):
     permission_classes = ([IsTeacher])

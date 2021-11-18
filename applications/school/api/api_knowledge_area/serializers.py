@@ -32,12 +32,20 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
         if value:
             for teacher in value:
                 if not Teacher.objects.is_active(teacher.id):
-                    raise serializers.ValidationError(f'Error, este Docente [{teacher}] no existe.')
+                    raise serializers.ValidationError(
+                        {
+                            'teachers': f'Error, este Docente [{teacher}] no existe.'
+                        }
+                    )
         return value
 
     def validate(self, attrs):
         if attrs['coordinator'].id == attrs['sub_coordinator'].id:
-            raise serializers.ValidationError('Error, el Coordinador no puede ser el mismo que el Sub coordinador.')
+            raise serializers.ValidationError(
+                {
+                    'coordinator': 'Error, el Coordinador no puede ser el mismo que el Sub coordinador.'
+                }
+            )
 
         return attrs
 
@@ -49,7 +57,11 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
     # Create a Knowledge Area
     def create(self, validated_data):
         if KnowledgeArea.objects.is_name_exists(validated_data['name']):
-            raise serializers.ValidationError('Error, esta Área de Conocimiento ya existe.')
+            raise serializers.ValidationError(
+                {
+                    'name': 'Error, esta Área de Conocimiento ya existe.'
+                }
+            )
         knowledge_area = KnowledgeArea(**validated_data)
         knowledge_area.save()
         return knowledge_area
@@ -58,7 +70,11 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if instance.name != validated_data['name']:
             if not KnowledgeArea.objects.is_name_exists(validated_data['name']):
-                raise serializers.ValidationError('Error, esta Área de Conocimiento ya existe.')
+                raise serializers.ValidationError(
+                    {
+                        'name': 'Error, no se puede cambiar de Área de Conocimiento.'
+                    }
+                )
         update_knowledge_area = super().update(instance, validated_data)
         update_knowledge_area.save()
         return update_knowledge_area

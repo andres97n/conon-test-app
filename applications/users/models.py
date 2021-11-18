@@ -17,13 +17,13 @@ class Person(BaseModel):
 
     # GENDERS
     class GenderChoices(models.IntegerChoices):
-        FEMENINO = 0
-        MASCULINO = 1
-        OTRO = 2
+        FEMENINO = 1
+        MASCULINO = 2
+        OTRO = 3
 
     class IdentificationChoices(models.IntegerChoices):
-        CI = 0
-        OTHER = 1
+        CI = 1
+        OTHER = 2
 
     identification_type = models.PositiveIntegerField(
         'tipo de identificación',
@@ -77,7 +77,7 @@ class Person(BaseModel):
         verbose_name_plural = 'Personas'
 
     def __str__(self):
-        return f'{self.identification} - {self.person.name} {self.person.last_name}'
+        return f'{self.identification} - {self.name} {self.last_name}'
 
     def full_name(self):
         return f'{self.name} {self.last_name}'
@@ -368,7 +368,7 @@ class AuditUser(models.Model):
             id=self.id,
             add_by=self.add_by,
             table=self.table,
-            fields_changed=self.fields,
+            fields_changed=self.fields_changed,
             record_id=self.record_id,
             audit_type=self.audit_type,
             old_values=self.old_values,

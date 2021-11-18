@@ -34,7 +34,7 @@ class UserViewSet(LoggingMixin, viewsets.ModelViewSet):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        user_serializer = self.get_serializer(queryset, many=True)
+        user_serializer = self.get_serializer(user_queryset, many=True)
 
         return Response(
             {

@@ -24,7 +24,11 @@ class ClassroomSerializer(serializers.ModelSerializer):
         if value:
             for student in value:
                 if not Student.objects.is_active(student.id):
-                    raise serializers.ValidationError(f'Error, el siguiente Estudiante no existe.')
+                    raise serializers.ValidationError(
+                        {
+                            'students': 'Error, el siguiente Estudiante no existe.'
+                        }
+                    )
         return value
 
     def get_students(self, students=None):
@@ -34,7 +38,11 @@ class ClassroomSerializer(serializers.ModelSerializer):
     # Create a Classroom
     def create(self, validated_data):
         if not SchoolPeriod.objects.is_period_active(validated_data['school_period'].id):
-            raise serializers.ValidationError('Error, el Período Lectivo que ingresó no existe o no está activo.')
+            raise serializers.ValidationError(
+                {
+                    'school_period': 'Error, el Período Lectivo que ingresó no existe o no está activo.'
+                }
+            )
         classroom = Classroom(**validated_data)
         classroom.save()
         return classroom
@@ -42,7 +50,11 @@ class ClassroomSerializer(serializers.ModelSerializer):
     # Update Classroom
     def update(self, instance, validated_data):
         if instance.school_period != validated_data['school_period']:
-            raise serializers.ValidationError('Error, una vez ingresado el Período Lectivo no se puede cambiar el mismo.')
+            raise serializers.ValidationError(
+                {
+                    'school_period': 'Error, una vez ingresado el Período Lectivo no se puede cambiar el mismo.'
+                }
+            )
         update_classroom = super().update(instance, validated_data)
         update_classroom.save()
         return update_classroom

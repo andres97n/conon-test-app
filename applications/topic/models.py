@@ -1,7 +1,7 @@
 from django.db import models
 
 from applications.base.models import BaseModel
-from applications.users.models import Teacher, Student, User
+from applications.users.models import Student, User
 from applications.topic.api.api_topic.managers import TopicManager
 from applications.topic.api.api_comment.managers import CommentManager
 from applications.topic.api.api_reply.managers import ReplyManager

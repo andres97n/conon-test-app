@@ -14,8 +14,12 @@ class AsignatureSerializer(serializers.ModelSerializer):
 
     # Create a Asignature
     def create(self, validated_data):
-        if not KnowledgeArea.objects.is_active(value.id):
-            raise serializers.ValidationError('Error, esta Área de Conocimiento no existe.')
+        if not KnowledgeArea.objects.is_active(validated_data['knowledge_area'].id):
+            raise serializers.ValidationError(
+                {
+                    'knowledge_area': 'Error, esta Área de Conocimiento no existe.'
+                }
+            )
         asignature = Asignature(**validated_data)
         asignature.save()
         return asignature
@@ -23,7 +27,11 @@ class AsignatureSerializer(serializers.ModelSerializer):
     # Update Asignature
     def update(self, instance, validated_data):
         if instance.knowledge_area != validated_data['knowledge_area']:
-            raise serializers.ValidationError('Error, una vez ingresada el Área de Conocimiento no se puede cambiar el mismo.')
+            raise serializers.ValidationError(
+                {
+                    'knowledge_area': 'Error, una vez ingresada el Área de Conocimiento no se puede cambiar el mismo.'
+                }
+            )
         update_asignature = super().update(instance, validated_data)
         update_asignature.save()
         return update_asignature

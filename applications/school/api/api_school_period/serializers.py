@@ -15,22 +15,26 @@ class SchoolPeriodSerializer(serializers.ModelSerializer):
     def validate_state(self, value):
         if value > 1:
             raise serializers.ValidationError(
-                detail='Error, no se puede asignar este Estado a un Período Lectivo.'
+                'Error, no se puede asignar este Estado a un Período Lectivo.'
             )
         return value
 
     def validate(self, attrs):
         if attrs['init_date'] >= attrs['end_date']:
             raise serializers.ValidationError(
-                detail='Error: la Fecha de Inicio no puede ser la misma o mayor que la Fecha '
-                       'Final de Período.'
+                'Error: la Fecha de Inicio no puede ser la misma o mayor que la Fecha '
+                'Final de Período.'
             )
         return attrs
 
     # Create a School Period
     def create(self, validated_data):
         if SchoolPeriod.objects.is_name_exists(validated_data['name']):
-            raise serializers.ValidationError('Error, este Período Lectivo ya existe.')
+            raise serializers.ValidationError(
+                {
+                    'name': 'Error, este Período Lectivo ya existe.'
+                }
+            )
         school_period = SchoolPeriod(**validated_data)
         school_period.save()
         return school_period
@@ -38,7 +42,11 @@ class SchoolPeriodSerializer(serializers.ModelSerializer):
     # Update School Period
     def update(self, instance, validated_data):
         if instance.name != validated_data['name']:
-            raise serializers.ValidationError('Error, no se puede cambiar el nombre del Período Lectivo.')
+            raise serializers.ValidationError(
+                {
+                    'name': 'Error, no se puede cambiar el nombre del Período Lectivo.'
+                }
+            )
         update_school_period = super().update(instance, validated_data)
         update_school_period.save()
         return update_school_period
@@ -51,7 +59,7 @@ class SchoolPeriodSerializer(serializers.ModelSerializer):
             'init_date': instance.init_date,
             'end_date': instance.end_date,
             'school_end_date': instance.school_end_date,
-            'state': instance.state,
+            'state': instance.get_state_display(),
             'observations': instance.observations,
             'created_at': instance.created_at
         }
