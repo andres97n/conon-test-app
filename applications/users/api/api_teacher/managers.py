@@ -69,5 +69,15 @@ class TeacherManager(models.Manager):
         )
         return teachers
 
+    def get_teachers_short_data(self):
+        return self.select_related('person').filter(auth_state='A').\
+            values(
+            'id',
+            'person__identification',
+            'person__name',
+            'person__last_name',
+            'title'
+        )
+
     # def get_teacher_data_by_area(self, pk=None):
 

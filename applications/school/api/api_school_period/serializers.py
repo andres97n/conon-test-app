@@ -63,3 +63,19 @@ class SchoolPeriodSerializer(serializers.ModelSerializer):
             'observations': instance.observations,
             'created_at': instance.created_at
         }
+
+
+class SchoolPeriodForAutocompleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SchoolPeriod
+        include = [
+            'id',
+            'auth_state'
+        ]
+
+    def to_representation(self, instance):
+        return {
+            'id': instance['id'],
+            'name': instance['name'],
+        }
+

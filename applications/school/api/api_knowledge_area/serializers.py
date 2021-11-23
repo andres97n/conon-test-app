@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from applications.school.models import KnowledgeArea
 from applications.users.models import Teacher
-from applications.users.api.api_teacher.serializers import TeacherByAreaListSerializer
 
 
 class KnowledgeAreaSerializer(serializers.ModelSerializer):
@@ -25,6 +24,7 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
             'objective',
             'observations',
             'created_at',
+            'teachers'
         ]
 
     # Validate Teachers
@@ -114,4 +114,36 @@ class KnowledgeAreaByAsignature(serializers.ModelSerializer):
         return {
             'id': instance.id,
             'name': instance.name
+        }
+
+
+class KnowledgeAreaTeachersSerializer(serializers.Serializer):
+
+    id = serializers.IntegerField(
+        read_only=True
+    )
+    teacher_id = serializers.IntegerField(
+        read_only=True
+    )
+    identification = serializers.CharField(
+        read_only=True
+    )
+    name = serializers.CharField(
+        read_only=True
+    )
+    last_name = serializers.CharField(
+        read_only=True
+    )
+    title = serializers.CharField(
+        read_only=True
+    )
+
+    def to_representation(self, instance):
+        return {
+            'id': instance['id'],
+            'teacher_id': instance['teachers__id'],
+            'identification': instance['teachers__person__identification'],
+            'name': instance['teachers__person__name'],
+            'last_name': instance['teachers__person__last_name'],
+            'title': instance['teachers__title'],
         }

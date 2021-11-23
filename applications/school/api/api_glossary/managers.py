@@ -1,7 +1,9 @@
 from django.db import models
 
 
-class GlosaryManager(models.Manager):
+class GlossaryManager(models.Manager):
+
+    # TODO: Cambiar los nombres de los métodos por el nombre correcto
 
     def get_glosary_list(self):
         return self.select_related('asignature_classroom'). \

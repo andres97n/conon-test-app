@@ -1,3 +1,4 @@
+
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import action
@@ -6,8 +7,10 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 
 from applications.school.api.api_knowledge_area.serializers import KnowledgeAreaSerializer, \
-    KnowledgeAreaByAsignature
+    KnowledgeAreaByAsignature, KnowledgeAreaTeachersSerializer
 from applications.users.api.api_teacher.serializers import TeacherByAreaListSerializer
+from applications.users.models import Teacher
+from applications.users.api.api_teacher.serializers import TeachersShortSerializer
 
 
 class KnowledgeAreaViewSet(LoggingMixin, viewsets.ModelViewSet):
@@ -142,12 +145,13 @@ class KnowledgeAreaViewSet(LoggingMixin, viewsets.ModelViewSet):
     def get_teachers_by_area(self, request, pk=None):
         teachers = self.get_serializer().Meta.model.objects.get_teachers_by_area_id(pk=pk)
         if teachers is not None:
+
             if self.get_serializer().Meta.model.objects.get_teachers_count(pk=pk) == 0:
-                teacher_serializer = TeacherByAreaListSerializer(teachers, many=True)
+                area_teacher_serializer = TeacherByAreaListSerializer(teachers, many=True)
                 return Response(
                     {
                         'ok': True,
-                        'conon_data': teacher_serializer.data
+                        'conon_data': area_teacher_serializer.data
                     },
                     status=status.HTTP_200_OK
                 )
@@ -214,3 +218,53 @@ class KnowledgeAreaViewSet(LoggingMixin, viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    @action(detail=False, methods=['GET'], url_path='teachers')
+    def get_area_teachers(self, request):
+        teachers = self.get_serializer().Meta.model.objects.get_teachers_area()
+        if teachers:
+            teacher_serializer = KnowledgeAreaTeachersSerializer(teachers, many=True)
+
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': teacher_serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No existen Docentes.'
+                },
+                status=status.HTTP_200_OK
+            )
+
+    @action(detail=True, methods=['GET'], url_path='new-teachers')
+    def get_new_teachers_for_area(self, request, pk=None):
+        teachers = self.get_serializer().Meta.model.objects.get_teachers_by_area_id(pk=pk)
+        if teachers is not None:
+
+            teacher_serializer = TeachersShortSerializer(Teacher.objects.get_teachers_short_data(), many=True)
+            area_teacher_serializer = TeacherByAreaListSerializer(teachers, many=True)
+            valid_teachers = [
+                teacher for teacher in teacher_serializer.data if teacher not in area_teacher_serializer.data
+            ]
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': valid_teachers
+                },
+                status=status.HTTP_200_OK
+            )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se pudo cargar los Docentes.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )

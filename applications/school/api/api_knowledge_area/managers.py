@@ -19,7 +19,7 @@ class KnowledgeAreaManager(models.Manager):
                 'coordinator',
                 'sub_coordinator'
             ).filter(id=pk, auth_state='A').first()
-        except None:
+        except:
             pass
 
         return area
@@ -72,5 +72,18 @@ class KnowledgeAreaManager(models.Manager):
         try:
             if areas is not None:
                 return list(self.in_bulk(areas).values())
+        except:
+            return None
+
+    def get_teachers_area(self):
+        try:
+            return self.filter(auth_state='A').values(
+                'id',
+                'teachers__id',
+                'teachers__person__identification',
+                'teachers__person__name',
+                'teachers__person__last_name',
+                'teachers__title'
+            )
         except:
             return None

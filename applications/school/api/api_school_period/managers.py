@@ -16,6 +16,9 @@ class SchoolPeriodManager(models.Manager):
     def get_period_list(self):
         return self.filter(auth_state='A').order_by('name')
 
+    def get_period_active_list(self):
+        return self.filter(state=1, auth_state='A').order_by('name')
+
     def get_period_by_pk(self, pk=None):
         period = None
         try:
@@ -50,6 +53,12 @@ class SchoolPeriodManager(models.Manager):
         try:
             if periods is not None:
                 return list(self.in_bulk(periods).values())
+            return None
         except:
             return None
+
+    def get_school_periods_active(self):
+        return self.filter(state=1, auth_state='A').values(
+            'id', 'name'
+        )
 

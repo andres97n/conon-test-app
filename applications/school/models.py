@@ -7,8 +7,8 @@ from applications.school.api.api_school_period.managers import SchoolPeriodManag
 from applications.school.api.api_classroom.managers import ClassroomManager
 from applications.school.api.api_asignature.managers import AsignatureManager
 from applications.school.api.api_asignature_classroom.managers import AsignatureClassroomManager
-from applications.school.api.api_glosary.managers import GlosaryManager
-from applications.school.api.api_glosary_detail.managers import GlosaryDetailManager
+from applications.school.api.api_glossary.managers import GlossaryManager
+from applications.school.api.api_glossary_detail.managers import GlossaryDetailManager
 
 
 # TODO: Crear una tabla de niveles para las tablas
@@ -121,18 +121,18 @@ class KnowledgeArea(BaseModel):
 
 
 class Classroom(BaseModel):
-    class GradeChoices(models.IntegerChoices):
-        PRIMER = 1
-        SEGUNDO = 2
-        TERCER = 3
+
+    class ClassroomStatus(models.IntegerChoices):
+        CLOSE = 0
+        OPEN = 1
 
     name = models.CharField(
-        max_length=30,
+        max_length=100,
         null=False,
         blank=False
     )
-    curse_level = models.PositiveSmallIntegerField(
-        choices=GradeChoices.choices,
+    curse_level = models.CharField(
+        max_length=50,
         null=False,
         blank=False
     )
@@ -140,6 +140,14 @@ class Classroom(BaseModel):
         null=True,
         blank=True
     )
+    state = models.PositiveSmallIntegerField(
+        'estado',
+        choices=ClassroomStatus.choices,
+        default=1,
+        null=True,
+        blank=True,
+    )
+
     school_period = models.ForeignKey(
         SchoolPeriod,
         on_delete=models.CASCADE,
@@ -164,6 +172,11 @@ class Classroom(BaseModel):
 
 
 class Asignature(BaseModel):
+
+    class AsignatureStatus(models.IntegerChoices):
+        CLOSE = 0
+        OPEN = 1
+
     name = models.CharField(
         max_length=40,
         null=False,
@@ -177,6 +190,13 @@ class Asignature(BaseModel):
         default='S/N',
         null=True,
         blank=True
+    )
+    state = models.PositiveSmallIntegerField(
+        'estado',
+        choices=AsignatureStatus.choices,
+        default=1,
+        null=True,
+        blank=True,
     )
 
     knowledge_area = models.ForeignKey(
@@ -204,6 +224,11 @@ class Asignature(BaseModel):
 
 
 class AsignatureClassroom(BaseModel):
+
+    class AsignatureClassroomStatus(models.IntegerChoices):
+        CLOSE = 0
+        OPEN = 1
+
     classroom = models.ForeignKey(
         Classroom,
         on_delete=models.CASCADE,
@@ -227,6 +252,13 @@ class AsignatureClassroom(BaseModel):
         null=True,
         blank=True
     )
+    state = models.PositiveSmallIntegerField(
+        'estado',
+        choices=AsignatureClassroomStatus.choices,
+        default=1,
+        null=True,
+        blank=True,
+    )
 
     objects = AsignatureClassroomManager()
 
@@ -240,7 +272,7 @@ class AsignatureClassroom(BaseModel):
                f'{self.teacher.person.name} {self.teacher.person.last_name}'
 
 
-class Glosary(BaseModel):
+class Glossary(BaseModel):
     state = models.BooleanField(
         'Estado',
         default=False,
@@ -261,15 +293,15 @@ class Glosary(BaseModel):
         blank=False
     )
 
-    objects = GlosaryManager()
+    objects = GlossaryManager()
 
     class Meta:
-        db_table = 'glosary'
-        verbose_name = 'Glosary'
-        verbose_name_plural = 'Glosaries'
+        db_table = 'glossary'
+        verbose_name = 'Glossary'
+        verbose_name_plural = 'Glossaries'
 
 
-class GlosaryDetail(BaseModel):
+class GlossaryDetail(BaseModel):
     title = models.CharField(
         'Título',
         max_length=150,
@@ -304,16 +336,16 @@ class GlosaryDetail(BaseModel):
         blank=True
     )
 
-    glosary = models.ForeignKey(
-        Glosary,
+    glossary = models.ForeignKey(
+        Glossary,
         on_delete=models.CASCADE,
         null=False,
         blank=False
     )
 
-    objects = GlosaryDetailManager()
+    objects = GlossaryDetailManager()
 
     class Meta:
-        db_table = 'glosary_detail'
-        verbose_name = 'Glosary Detail'
-        verbose_name_plural = 'Glosary Details'
+        db_table = 'glossary_detail'
+        verbose_name = 'Glossary Detail'
+        verbose_name_plural = 'Glossary Details'

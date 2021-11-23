@@ -3,13 +3,13 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_tracking.mixins import LoggingMixin
 
-from .serializers import GlosaryDetailSerializer
+from .serializers import GlossaryDetailSerializer
 from applications.base.permissions import IsTeacherOrIsStudent, IsTeacher
 from applications.base.paginations import CononPagination
 
 
-class GlosaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
-    serializer_class = GlosaryDetailSerializer
+class GlossaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
+    serializer_class = GlossaryDetailSerializer
     pagination_class = CononPagination
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}
@@ -22,7 +22,7 @@ class GlosaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
             permission_classes = [IsTeacherOrIsStudent]
         return [permission() for permission in permission_classes]
 
-    # Return Glosary Detail Data
+    # Return Glossary Detail Data
     def get_queryset(self, pk=None):
         if pk is None:
             return self.get_serializer().Meta.model.objects.get_glosary_detail_list()
@@ -37,12 +37,12 @@ class GlosaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        glosary_detail_serializer = self.get_serializer(queryset, many=True)
+        glossary_detail_serializer = self.get_serializer(queryset, many=True)
 
         return Response(
             {
                 'ok': True,
-                'conon_data': glosary_detail_serializer.data
+                'conon_data': glossary_detail_serializer.data
             },
             status=status.HTTP_200_OK
         )
@@ -50,9 +50,9 @@ class GlosaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
     # Create a Term
     def create(self, request, *args, **kwargs):
         # Send information to serializer
-        glosary_detail_serializer = self.get_serializer(data=request.data)
-        if glosary_detail_serializer.is_valid():
-            glosary_detail_serializer.save()
+        glossary_detail_serializer = self.get_serializer(data=request.data)
+        if glossary_detail_serializer.is_valid():
+            glossary_detail_serializer.save()
 
             return Response(
                 {
@@ -65,7 +65,7 @@ class GlosaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
         return Response(
             {
                 'ok': False,
-                'detail': glosary_detail_serializer.errors,
+                'detail': glossary_detail_serializer.errors,
             },
             status=status.HTTP_400_BAD_REQUEST
         )
@@ -75,14 +75,14 @@ class GlosaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
         term = self.get_queryset(pk)
         if term:
             # Send information to serializer referencing the instance
-            glosary_detail_serializer = self.get_serializer(term, data=request.data)
-            if glosary_detail_serializer.is_valid():
-                glosary_detail_serializer.save()
+            glossary_detail_serializer = self.get_serializer(term, data=request.data)
+            if glossary_detail_serializer.is_valid():
+                glossary_detail_serializer.save()
 
                 return Response(
                     {
                         'ok': True,
-                        'conon_data': glosary_detail_serializer.data,
+                        'conon_data': glossary_detail_serializer.data,
                     },
                     status=status.HTTP_200_OK
                 )
@@ -90,7 +90,7 @@ class GlosaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': False,
-                    'detail': glosary_detail_serializer.errors,
+                    'detail': glossary_detail_serializer.errors,
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
@@ -106,12 +106,12 @@ class GlosaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
     # Detail Term
     def retrieve(self, request, pk=None, *args, **kwargs):
         if self.get_queryset(pk):
-            glosary_detail_serializer = self.get_serializer(self.get_queryset(pk))
+            glossary_detail_serializer = self.get_serializer(self.get_queryset(pk))
 
             return Response(
                 {
                     'ok': True,
-                    'conon_data': glosary_detail_serializer.data,
+                    'conon_data': glossary_detail_serializer.data,
                 },
                 status=status.HTTP_200_OK
             )

@@ -5,8 +5,8 @@ from applications.school.api.api_knowledge_area.viewsets import KnowledgeAreaVie
 from applications.school.api.api_classroom.viewsets import ClassroomViewSet
 from applications.school.api.api_asignature.viewsets import AsignatureViewSet
 from applications.school.api.api_asignature_classroom.viewsets import AsignatureClassroomViewSet
-from applications.school.api.api_glosary.viewsets import GlosaryViewSet
-from applications.school.api.api_glosary_detail.viewsets import GlosaryDetailViewSet
+from applications.school.api.api_glossary.viewsets import GlossaryViewSet
+from applications.school.api.api_glossary_detail.viewsets import GlossaryDetailViewSet
 
 router = routers.DefaultRouter()
 
@@ -37,12 +37,12 @@ router.register(
 )
 router.register(
     r'glosary',
-    GlosaryViewSet,
+    GlossaryViewSet,
     basename='glosary'
 )
 router.register(
     r'glosary-detail',
-    GlosaryDetailViewSet,
+    GlossaryDetailViewSet,
     basename='glosary_detail'
 )
 

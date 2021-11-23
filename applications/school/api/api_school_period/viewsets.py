@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 
-from .serializers import SchoolPeriodSerializer
+from .serializers import SchoolPeriodSerializer, SchoolPeriodForAutocompleteSerializer
 
 
 class SchoolPeriodViewSet(LoggingMixin, viewsets.ModelViewSet):
@@ -166,3 +166,46 @@ class SchoolPeriodViewSet(LoggingMixin, viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    @action(detail=False, methods=['GET'], url_path='classroom')
+    def get_school_periods_for_classroom(self, request):
+        school_periods = self.get_serializer().Meta.model.objects.get_school_periods_active()
+        if school_periods:
+            school_period_serializer = SchoolPeriodForAutocompleteSerializer(school_periods, many=True)
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': school_period_serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No se puedo retornar los siguientes Períodos Lectivos.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    @action(detail=False, methods=['GET'], url_path='active')
+    def get_school_periods_active(self, request):
+        school_periods = self.get_serializer().Meta.model.objects.get_period_active_list()
+        if school_periods:
+            school_period_serializer = self.get_serializer(school_periods, many=True)
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': school_period_serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No se puedo retornar los siguientes Períodos Lectivos.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+

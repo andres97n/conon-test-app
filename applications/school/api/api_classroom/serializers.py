@@ -13,11 +13,13 @@ class ClassroomSerializer(serializers.ModelSerializer):
             'auth_state'
         ]
 
-    # Curse Leve Validation
+    # Curse Level Validation
+    """
     def validate_curse_level(self, value):
         if value == 0 or value > 3:
             raise serializers.ValidationError('Error, no existe este Nivel de Curso.')
         return value
+    """
 
     # Validate Students
     def validate_students(self, value):
@@ -31,9 +33,11 @@ class ClassroomSerializer(serializers.ModelSerializer):
                     )
         return value
 
+    """
     def get_students(self, students=None):
         student_serializer = StudentListManyToMany(students, many=True)
         return student_serializer.data
+    """
 
     # Create a Classroom
     def create(self, validated_data):
@@ -62,13 +66,15 @@ class ClassroomSerializer(serializers.ModelSerializer):
     # Get Classroom List
     def to_representation(self, instance):
         return {
+            'id': instance.id,
             'name': instance.name,
             'curse_level': instance.curse_level,
             'capacity': instance.capacity,
             'school_period': {
+                'id': instance.school_period.id,
                 'name': instance.school_period.__str__(),
                 'period_date': instance.school_period.get_period_date()
             },
-            'students': self.get_students(instance.students),
+            # 'students': self.get_students(instance.students),
             'created_at': instance.created_at
         }

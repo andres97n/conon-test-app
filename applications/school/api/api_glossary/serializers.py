@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
-from applications.school.models import Glosary, AsignatureClassroom
+from applications.school.models import Glossary, AsignatureClassroom
 
 
-class GlosarySerializer(serializers.ModelSerializer):
+class GlossarySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Glosary
+        model = Glossary
         exclude = [
             'updated_at',
             'auth_state'

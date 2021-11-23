@@ -6,7 +6,8 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 
 from applications.base.paginations import CononPagination
-from .serializers import TeacherSerializer, TeacherByAreaListSerializer, \
+from applications.school.models import KnowledgeArea
+from .serializers import TeacherSerializer, TeachersShortSerializer, \
     CoordinatorSerializer
 
 
@@ -191,3 +192,27 @@ class TeacherViewSet(LoggingMixin, viewsets.ModelViewSet):
                 },
                 status=status.HTTP_200_OK
             )
+
+    @action(detail=False, methods=['GET'], url_path='short')
+    def get_teachers_data(self, request):
+        teachers = self.get_serializer().Meta.model.objects.get_teachers_short_data()
+        if teachers:
+            teacher_serializer = TeachersShortSerializer(teachers, many=True)
+
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': teacher_serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No existen Docentes.'
+                },
+                status=status.HTTP_200_OK
+            )
+

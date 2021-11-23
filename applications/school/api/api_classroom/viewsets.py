@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
@@ -30,7 +31,7 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        classroom_serializer = self.get_serializer(queryset, many=True)
+        classroom_serializer = self.get_serializer(classroom_queryset, many=True)
 
         return Response(
             {
@@ -50,6 +51,7 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': classroom_serializer.data['id'],
                     'message': 'Aula creada correctamente.'
                 },
                 status=status.HTTP_201_CREATED
@@ -122,6 +124,7 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
         # Get instance
         classroom = self.get_queryset(pk)
         if classroom:
+            classroom.state = 0
             classroom.auth_state = 'I'
             classroom.save()
 
@@ -137,6 +140,56 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
             {
                 'ok': False,
                 'detail': 'No existe esta Aula.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    @action(detail=False, methods=['DELETE'], url_path='destroy-classrooms')
+    def destroy_many_classrooms(self, request):
+        classrooms = self.get_serializer().Meta.model.objects.get_many_classrooms(
+            classrooms=request.data['classrooms']
+        )
+        if classrooms:
+            for classroom in classrooms:
+                classroom.state = 0
+                classroom.auth_state = 'I'
+
+            self.get_serializer().Meta.model.objects.bulk_update(
+                classrooms, ['state', 'auth_state']
+            )
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Aulas eliminadas correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No se puede eliminar las siguientes Aulas.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    @action(detail=False, methods=['GET'], url_path='active')
+    def get_classrooms_active(self, request):
+        classrooms = self.get_serializer().Meta.model.objects.get_classroom_active_list()
+        if classrooms:
+            classroom_serializer = self.get_serializer(classrooms, many=True)
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': classroom_serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No se puedo retornar las siguientes Aulas.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )

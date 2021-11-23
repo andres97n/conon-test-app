@@ -6,7 +6,6 @@ from applications.users.functions import is_person_assigned
 
 # Create or Update Teacher Serializer
 class TeacherSerializer(serializers.ModelSerializer):
-
     user = serializers.SerializerMethodField(
         read_only=True
     )
@@ -90,7 +89,6 @@ class TeacherSerializer(serializers.ModelSerializer):
 
 
 class TeacherByAreaListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Teacher
         fields = [
@@ -110,7 +108,6 @@ class TeacherByAreaListSerializer(serializers.ModelSerializer):
 
 
 class CoordinatorSerializer(serializers.Serializer):
-
     id = serializers.IntegerField(
         read_only=True
     )
@@ -129,3 +126,23 @@ class CoordinatorSerializer(serializers.Serializer):
             'id': instance['id'],
             'name': f"{instance['person__name']} {instance['person__last_name']}"
         }
+
+
+class TeachersShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Teacher
+        include = [
+            'id',
+            'person',
+            'title'
+        ]
+
+    def to_representation(self, instance):
+        return {
+            'id': instance['id'],
+            'identification': instance['person__identification'],
+            'name': instance['person__name'],
+            'last_name': instance['person__last_name'],
+            'title': instance['title']
+        }
+

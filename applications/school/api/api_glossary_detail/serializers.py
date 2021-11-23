@@ -1,49 +1,49 @@
 from rest_framework import serializers
 
-from applications.school.models import GlosaryDetail, Glosary
+from applications.school.models import GlossaryDetail, Glossary
 
 
-class GlosaryDetailSerializer(serializers.ModelSerializer):
+class GlossaryDetailSerializer(serializers.ModelSerializer):
     class Meta:
-        model = GlosaryDetail
+        model = GlossaryDetail
         exclude = [
             'auth_state'
         ]
 
     # Create a Term
     def create(self, validated_data):
-        if not Glosary.objects.glosary_exists(attrs['glosary'].id):
+        if not Glossary.objects.glosary_exists(validated_data['glosary'].id):
             raise serializers.ValidationError(
                 detail='Error, no se encuentra relación con este valor; consulte con el Administrador.'
             )
-        if GlosaryDetail.objects.title_exists(attrs['glosary'].id, attrs['title']):
+        if GlossaryDetail.objects.title_exists(validated_data['glosary'].id, validated_data['title']):
             raise serializers.ValidationError(
                 detail='Error, este Glosario ya contiene este término.'
             )
-        knowledge_area = KnowledgeArea(**validated_data)
-        knowledge_area.save()
-        return knowledge_area
+        glossary_detail = GlossaryDetail(**validated_data)
+        glossary_detail.save()
+        return glossary_detail
 
     # Update Glosary Detail
     def update(self, instance, validated_data):
-        if instance.glosary != validated_data['glosary']:
+        if instance.glossary != validated_data['glossary']:
             raise serializers.ValidationError(
                 detail='Error, no se puede cambiar la relación de este registro; '
                        'consulte con el Administrador.'
             )
         if instance.title != validated_data['title']:
-            if GlosaryDetail.objects.title_exists(attrs['glosary'].id, attrs['title']):
+            if GlossaryDetail.objects.title_exists(instance.glossary.id, instance.title):
                 raise serializers.ValidationError(
                     detail='Error, este Glosario ya contiene este término.'
                 )
-        update_glosary_detail = super().update(instance, validated_data)
-        update_glosary_detail.save()
-        return update_glosary_detail
+        update_glossary_detail = super().update(instance, validated_data)
+        update_glossary_detail.save()
+        return update_glossary_detail
 
     def to_representation(self, instance):
         return {
             'id': instance.id,
-            'glosary_id': instance.glosary.id,
+            'glossary_id': instance.glosary.id,
             'title': instance.title,
             'description': instance.description,
             'image': instance.image,
