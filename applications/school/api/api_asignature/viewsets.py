@@ -5,8 +5,12 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 
-from .serializers import AsignatureSerializer
+from .serializers import AsignatureSerializer, AsignatureDetailSerializer
 from applications.base.paginations import CononPagination
+from applications.users.models import Teacher
+from applications.school.models import Classroom, AsignatureClassroom
+from applications.users.api.api_teacher.serializers import TeachersShortSerializer
+from applications.school.api.api_classroom.serializers import ClassroomShortSerializer
 
 
 class AsignatureViewSet(LoggingMixin, viewsets.ModelViewSet):
@@ -192,3 +196,70 @@ class AsignatureViewSet(LoggingMixin, viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    @action(detail=True, methods=['GET'], url_path='classrooms')
+    def get_asignatures_detail_classrooms(self, request, pk=None):
+        asignatures = AsignatureClassroom.objects.get_asignature_classroom_by_asignature_short(pk=pk)
+        if asignatures is not None:
+            asignature_serializer = AsignatureDetailSerializer(asignatures, many=True)
+            classroom_serializer = ClassroomShortSerializer(
+                Classroom.objects.get_short_classroom(), many=True
+            )
+            asignature_keys = {asignature['classroom'] for asignature in asignature_serializer.data}
+            if len(asignatures) != 0:
+                valid_classrooms = [
+                    classroom for classroom in classroom_serializer.data
+                    if classroom['id'] not in asignature_keys
+                ]
+            else:
+                valid_classrooms = classroom_serializer.data
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': valid_classrooms
+                },
+                status=status.HTTP_200_OK
+            )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se pudo cargar las Aulas.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    @action(detail=True, methods=['GET'], url_path='teachers')
+    def get_asignatures_detail_teachers(self, request, pk=None):
+        asignatures = AsignatureClassroom.objects.get_asignature_classroom_by_asignature_short(pk=pk)
+        if asignatures is not None:
+            asignature_serializer = AsignatureDetailSerializer(asignatures, many=True)
+            teacher_serializer = TeachersShortSerializer(
+                Teacher.objects.get_teachers_short_data(), many=True
+            )
+            asignature_keys = {asignature['teacher'] for asignature in asignature_serializer.data}
+            if len(asignatures) != 0:
+                valid_teachers = [
+                    teacher for teacher in teacher_serializer.data
+                    if teacher['id'] not in asignature_keys
+                ]
+            else:
+                valid_teachers = teacher_serializer.data
+
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': valid_teachers
+                },
+                status=status.HTTP_200_OK
+            )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se pudo cargar los Docentes.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )

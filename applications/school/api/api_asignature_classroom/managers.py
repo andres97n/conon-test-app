@@ -33,3 +33,30 @@ class AsignatureClassroomManager(models.Manager):
             return False
 
         return True
+
+    def get_asignature_classroom_active(self):
+        return self.select_related('classroom', 'asignature', 'teacher'). \
+            filter(state=1, auth_state='A').values(
+            'id',
+            'classroom_id',
+            'asignature_id',
+            'teacher_id'
+        )
+
+    def get_asignature_classroom_by_asignature_short(self, pk=None):
+        try:
+            return self.select_related('classroom', 'teacher'). \
+                filter(asignature_id=pk, state=1, auth_state='A').values(
+                'id',
+                'classroom_id',
+                'teacher_id',
+            )
+        except:
+            return None
+
+    def get_asignature_classroom_by_asignature(self, pk=None):
+        try:
+            return self.select_related('classroom', 'teacher'). \
+                filter(asignature_id=pk, state=1, auth_state='A').order_by('created_at')
+        except:
+            return None

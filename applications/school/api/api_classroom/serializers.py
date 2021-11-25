@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from applications.school.models import Classroom, SchoolPeriod
 from applications.users.models import Student
-from applications.users.api.api_student.serializers import StudentListManyToMany
 
 
 class ClassroomSerializer(serializers.ModelSerializer):
@@ -14,12 +13,10 @@ class ClassroomSerializer(serializers.ModelSerializer):
         ]
 
     # Curse Level Validation
-    """
     def validate_curse_level(self, value):
         if value == 0 or value > 3:
             raise serializers.ValidationError('Error, no existe este Nivel de Curso.')
         return value
-    """
 
     # Validate Students
     def validate_students(self, value):
@@ -68,7 +65,7 @@ class ClassroomSerializer(serializers.ModelSerializer):
         return {
             'id': instance.id,
             'name': instance.name,
-            'curse_level': instance.curse_level,
+            'curse_level': instance.get_curse_level_display(),
             'capacity': instance.capacity,
             'school_period': {
                 'id': instance.school_period.id,
@@ -77,4 +74,40 @@ class ClassroomSerializer(serializers.ModelSerializer):
             },
             # 'students': self.get_students(instance.students),
             'created_at': instance.created_at
+        }
+
+
+class ClassroomShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Classroom
+        include = [
+            'id',
+            'name',
+            'curse_level'
+        ]
+
+    def to_representation(self, instance):
+        return {
+            'id': instance['id'],
+            'name': instance['name'],
+            'curse_level': instance['curse_level']
+        }
+
+
+class StudentsForClassroomSerializer(serializers.Serializer):
+    id = serializers.IntegerField(
+        read_only=True
+    )
+    identification = serializers.CharField(
+        read_only=True
+    )
+    name = serializers.CharField(
+        read_only=True
+    )
+
+    def to_representation(self, instance):
+        return {
+            'id': instance['students'],
+            'identification': instance['students__person__identification'],
+            'name': f"{instance['students__person__name']} {instance['students__person__last_name']}",
         }

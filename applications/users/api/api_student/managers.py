@@ -60,3 +60,11 @@ class StudentManager(models.Manager):
         except:
             pass
         return result
+
+    def get_student_short_data(self):
+        return self.select_related('person').filter(auth_state='A').values(
+            'id',
+            'person__identification',
+            'person__name',
+            'person__last_name'
+        ).order_by('person__last_name', 'person__identification')

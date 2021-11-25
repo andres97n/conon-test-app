@@ -49,11 +49,6 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
 
         return attrs
 
-    '''
-    def get_teachers(self, teachers=None):
-        teacher_serializer = TeacherByAreaListSerializer(teachers, many=True)
-        return teacher_serializer.data'''
-
     # Create a Knowledge Area
     def create(self, validated_data):
         if KnowledgeArea.objects.is_name_exists(validated_data['name']):
@@ -75,6 +70,12 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
                         'name': 'Error, no se puede cambiar de Área de Conocimiento.'
                     }
                 )
+        if validated_data['teachers']:
+            raise serializers.ValidationError(
+                {
+                    'teachers': 'Error, no se pueden actualizar los datos de los Docentes.'
+                }
+            )
         update_knowledge_area = super().update(instance, validated_data)
         update_knowledge_area.save()
         return update_knowledge_area
@@ -97,7 +98,6 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
             },
             'objective': instance.objective,
             'observations': instance.observations,
-            # 'teachers': data['teachers'],
             'created_at': instance.created_at
         }
 
@@ -145,5 +145,23 @@ class KnowledgeAreaTeachersSerializer(serializers.Serializer):
             'identification': instance['teachers__person__identification'],
             'name': instance['teachers__person__name'],
             'last_name': instance['teachers__person__last_name'],
+            'title': instance['teachers__title'],
+        }
+
+
+class TeacherByAreaListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Teacher
+        fields = [
+            'id',
+            'person',
+            'title',
+        ]
+
+    def to_representation(self, instance):
+        return {
+            'id': instance['teachers'],
+            'identification': instance['teachers__person__identification'],
+            'name': f"{instance['teachers__person__name']} {instance['teachers__person__last_name']}",
             'title': instance['teachers__title'],
         }

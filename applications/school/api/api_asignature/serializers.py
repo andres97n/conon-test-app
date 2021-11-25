@@ -49,3 +49,22 @@ class AsignatureSerializer(serializers.ModelSerializer):
             'observations': instance.observations,
             # classrooms = instance.classrooms
         }
+
+
+class AsignatureDetailSerializer(serializers.Serializer):
+    id = serializers.IntegerField(
+        read_only=True
+    )
+    classroom = serializers.IntegerField(
+        read_only=True
+    )
+    teacher = serializers.IntegerField(
+        read_only=True
+    )
+
+    def to_representation(self, instance):
+        return {
+            'id': instance['id'],
+            'classroom': instance['classroom_id'],
+            'teacher': instance['teacher_id']
+        }

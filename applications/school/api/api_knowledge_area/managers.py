@@ -13,16 +13,13 @@ class KnowledgeAreaManager(models.Manager):
         ).filter(auth_state='A').order_by('name')
 
     def get_are_by_id(self, pk=None):
-        area = None
         try:
-            area = self.select_related(
+            return self.select_related(
                 'coordinator',
                 'sub_coordinator'
             ).filter(id=pk, auth_state='A').first()
         except:
-            pass
-
-        return area
+            return None
 
     def is_active(self, pk=None):
         knowledge_area = None
@@ -50,7 +47,7 @@ class KnowledgeAreaManager(models.Manager):
         try:
             # teachers = self.filter(id=pk, auth_state='A').values_list('teachers', flat=True)
             teachers = self.filter(id=pk, auth_state='A').values(
-                'teachers__id',
+                'teachers',
                 'teachers__person__identification',
                 'teachers__person__name',
                 'teachers__person__last_name',

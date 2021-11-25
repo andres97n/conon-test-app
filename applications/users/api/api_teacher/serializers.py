@@ -88,25 +88,6 @@ class TeacherSerializer(serializers.ModelSerializer):
         }
 
 
-class TeacherByAreaListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Teacher
-        fields = [
-            'id',
-            'person',
-            'title',
-        ]
-
-    def to_representation(self, instance):
-        return {
-            'id': instance['teachers__id'],
-            'identification': instance['teachers__person__identification'],
-            'name': instance['teachers__person__name'],
-            'last_name': instance['teachers__person__last_name'],
-            'title': instance['teachers__title'],
-        }
-
-
 class CoordinatorSerializer(serializers.Serializer):
     id = serializers.IntegerField(
         read_only=True
@@ -141,8 +122,8 @@ class TeachersShortSerializer(serializers.ModelSerializer):
         return {
             'id': instance['id'],
             'identification': instance['person__identification'],
-            'name': instance['person__name'],
-            'last_name': instance['person__last_name'],
+            'name': f"{instance['person__name']} {instance['person__last_name']}",
+            # 'last_name': instance['person__last_name'],
             'title': instance['title']
         }
 

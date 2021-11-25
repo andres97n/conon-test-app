@@ -5,8 +5,11 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 
-from applications.school.api.api_classroom.serializers import ClassroomSerializer
 from applications.base.paginations import CononPagination
+from applications.users.models import Student
+from applications.school.api.api_classroom.serializers import ClassroomSerializer, \
+    StudentsForClassroomSerializer
+from applications.users.api.api_student.serializers import StudentShortListSerializer
 
 
 class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
@@ -144,6 +147,39 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    @action(detail=True, methods=['POST'], url_path='assign-students')
+    def save_students_for_classroom(self, request, pk=None):
+        classroom = self.get_queryset(pk)
+
+        if classroom is not None:
+            if request.data['students']:
+                for student in request.data['students']:
+                    classroom.students.add(student)
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se pudo encontrar a los Estudiante/s.'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Estudiante/s agregados correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No existe esta Área de Conocimiento.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
     @action(detail=False, methods=['DELETE'], url_path='destroy-classrooms')
     def destroy_many_classrooms(self, request):
         classrooms = self.get_serializer().Meta.model.objects.get_many_classrooms(
@@ -193,3 +229,32 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    @action(detail=True, methods=['GET'], url_path='new-students')
+    def get_new_students_for_classrooms(self, request, pk=None):
+        students = self.get_serializer().Meta.model.objects.get_students_by_classroom_id(pk=pk)
+        if students is not None:
+            student_serializer = StudentShortListSerializer(
+                Student.objects.get_student_short_data(), many=True
+            )
+            classroom_student_serializer = StudentsForClassroomSerializer(students, many=True)
+            valid_students = [
+                student for student in student_serializer.data
+                if student not in classroom_student_serializer.data
+            ]
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': valid_students
+                },
+                status=status.HTTP_200_OK
+            )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se pudo cargar los Estudiantes.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )

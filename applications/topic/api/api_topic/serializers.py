@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from applications.topic.models import Topic
 from applications.users.models import Student, User
-from applications.users.api.api_student.serializers import StudentListManyToMany
+# from applications.users.api.api_student.serializers import StudentShortListSerializer
 
 
 class TopicSerializer(serializers.ModelSerializer):
@@ -13,9 +13,11 @@ class TopicSerializer(serializers.ModelSerializer):
             'auth_state'
         ]
 
+    """
     def get_students(self, students=None):
         student_serializer = StudentListManyToMany(students, many=True)
         return student_serializer.data
+    """
 
     def validate_type(self, value):
         if value == 0 or value > 3:
@@ -77,6 +79,6 @@ class TopicSerializer(serializers.ModelSerializer):
                 'id': instance.owner.id,
                 'name': instance.owner.__str__()
             },
-            'students': self.get_students(instance.students),
+            # 'students': self.get_students(instance.students),
             'created_at': instance.created_at
         }

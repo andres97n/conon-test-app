@@ -122,6 +122,11 @@ class KnowledgeArea(BaseModel):
 
 class Classroom(BaseModel):
 
+    class CurseLevelStatus(models.IntegerChoices):
+        PRIMERO = 1
+        SEGUNDO = 2
+        TERCERO = 3
+
     class ClassroomStatus(models.IntegerChoices):
         CLOSE = 0
         OPEN = 1
@@ -131,9 +136,10 @@ class Classroom(BaseModel):
         null=False,
         blank=False
     )
-    curse_level = models.CharField(
-        max_length=50,
-        null=False,
+    curse_level = models.PositiveSmallIntegerField(
+        choices=CurseLevelStatus.choices,
+        default=1,
+        null=True,
         blank=False
     )
     capacity = models.PositiveIntegerField(

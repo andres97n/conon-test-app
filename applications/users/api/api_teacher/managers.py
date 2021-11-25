@@ -77,7 +77,4 @@ class TeacherManager(models.Manager):
             'person__name',
             'person__last_name',
             'title'
-        )
-
-    # def get_teacher_data_by_area(self, pk=None):
-
+        ).order_by('person__last_name')

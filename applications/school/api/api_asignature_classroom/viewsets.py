@@ -1,10 +1,11 @@
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 
-from .serializers import AsignatureClassroomSerializer
+from .serializers import AsignatureClassroomSerializer, AsignatureClassroomByAsignature
 from applications.base.paginations import CononPagination
 
 
@@ -29,7 +30,7 @@ class AsignatureClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        asignature_classroom_serializer = self.get_serializer(queryset, many=True)
+        asignature_classroom_serializer = self.get_serializer(asignature_classroom_queryset, many=True)
 
         return Response(
             {
@@ -49,6 +50,7 @@ class AsignatureClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': asignature_classroom_serializer.data['id'],
                     'message': 'Valores creados correctamente.'
                 },
                 status=status.HTTP_201_CREATED
@@ -121,6 +123,7 @@ class AsignatureClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
         # Get instance
         asignature_classroom = self.get_queryset(pk)
         if asignature_classroom:
+            asignature_classroom.state = 0
             asignature_classroom.auth_state = 'I'
             asignature_classroom.save()
 
@@ -139,3 +142,28 @@ class AsignatureClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    @action(detail=True, methods=['GET'], url_path='by-asignatures')
+    def get_asignatures_detail_by_asignature(self, request, pk=None):
+        asignatures_detail = self.get_serializer().Meta.model.objects.get_asignature_classroom_by_asignature(pk=pk)
+
+        if asignatures_detail is not None:
+            if len(asignatures_detail) > 0:
+                asignatures_detail_serializer = AsignatureClassroomByAsignature(asignatures_detail, many=True)
+                asignatures_detail_data = asignatures_detail_serializer.data
+            else:
+                asignatures_detail_data = []
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': asignatures_detail_data
+                }
+            )
+        else:
+
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No existen registros para esta asignatura.'
+                }
+            )

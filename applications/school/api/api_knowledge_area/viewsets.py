@@ -1,4 +1,3 @@
-
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import action
@@ -7,8 +6,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 
 from applications.school.api.api_knowledge_area.serializers import KnowledgeAreaSerializer, \
-    KnowledgeAreaByAsignature, KnowledgeAreaTeachersSerializer
-from applications.users.api.api_teacher.serializers import TeacherByAreaListSerializer
+    KnowledgeAreaByAsignature, KnowledgeAreaTeachersSerializer, TeacherByAreaListSerializer
 from applications.users.models import Teacher
 from applications.users.api.api_teacher.serializers import TeachersShortSerializer
 
@@ -120,7 +118,7 @@ class KnowledgeAreaViewSet(LoggingMixin, viewsets.ModelViewSet):
     def destroy(self, request, pk=None, *args, **kwargs):
         # Get instance
         knowledge_area = self.get_queryset(pk)
-        if knowledge_area:
+        if knowledge_area is not None:
             knowledge_area.auth_state = 'I'
             knowledge_area.save()
 
@@ -128,6 +126,39 @@ class KnowledgeAreaViewSet(LoggingMixin, viewsets.ModelViewSet):
                 {
                     'ok': True,
                     'message': 'Área de Conocimiento eliminada correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No existe esta Área de Conocimiento.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    @action(detail=True, methods=['POST'], url_path='assign-teachers')
+    def save_teachers_by_area(self, request, pk=None):
+        knowledge_area = self.get_queryset(pk)
+
+        if knowledge_area is not None:
+            if request.data['teachers']:
+                for teacher in request.data['teachers']:
+                    knowledge_area.teachers.add(teacher)
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se pudo encontrar a los Docente/s.'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Docente/s agregados correctamente.'
                 },
                 status=status.HTTP_200_OK
             )
@@ -246,11 +277,13 @@ class KnowledgeAreaViewSet(LoggingMixin, viewsets.ModelViewSet):
     def get_new_teachers_for_area(self, request, pk=None):
         teachers = self.get_serializer().Meta.model.objects.get_teachers_by_area_id(pk=pk)
         if teachers is not None:
-
-            teacher_serializer = TeachersShortSerializer(Teacher.objects.get_teachers_short_data(), many=True)
+            teacher_serializer = TeachersShortSerializer(
+                Teacher.objects.get_teachers_short_data(), many=True
+            )
             area_teacher_serializer = TeacherByAreaListSerializer(teachers, many=True)
             valid_teachers = [
-                teacher for teacher in teacher_serializer.data if teacher not in area_teacher_serializer.data
+                teacher for teacher in teacher_serializer.data
+                if teacher not in area_teacher_serializer.data
             ]
             return Response(
                 {

@@ -139,7 +139,7 @@ class StudentListSerializer(serializers.ModelSerializer):
 '''
 
 
-class StudentListManyToMany(serializers.ModelSerializer):
+class StudentShortListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = [
@@ -148,8 +148,8 @@ class StudentListManyToMany(serializers.ModelSerializer):
         ]
 
     def to_representation(self, instance):
-        return dict(
-            id=instance.id,
-            identification=instance.person.identification,
-            name=instance.__str__()
-        )
+        return {
+            'id': instance['id'],
+            'identification': instance['person__identification'],
+            'name': f"{instance['person__name']} {instance['person__last_name']}"
+        }

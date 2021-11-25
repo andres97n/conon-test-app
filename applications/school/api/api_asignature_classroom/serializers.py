@@ -15,12 +15,24 @@ class AsignatureClassroomSerializer(serializers.ModelSerializer):
 
     # Create a AsignatureClassroom Data
     def create(self, validated_data):
-        if not Classroom.objects.is_active(value.id):
-            raise serializers.ValidationError(f'Error, Aula [{value.id}] inexistente o inactiva.')
-        if not Asignature.objects.is_active(value.id):
-            raise serializers.ValidationError(f'Error, esta Asignatura [{value.id}] no existe.')
-        if not Teacher.objects.is_active(value.id):
-            raise serializers.ValidationError(f'Error, este Docente [{value.id}] no existe.')
+        if not Classroom.objects.is_active(validated_data['classroom'].id):
+            raise serializers.ValidationError(
+                {
+                    'classroom': 'Error, Aula inexistente o inactiva.'
+                }
+            )
+        if not Asignature.objects.is_active(validated_data['asignature'].id):
+            raise serializers.ValidationError(
+                {
+                    'asignature': 'Error, esta Asignatura no existe.'
+                }
+            )
+        if not Teacher.objects.is_active(validated_data['teacher'].id):
+            raise serializers.ValidationError(
+                {
+                    'teacher': 'Error, este Docente no existe.'
+                }
+            )
         asignature_classroom = AsignatureClassroom(**validated_data)
         asignature_classroom.save()
         return asignature_classroom
@@ -29,13 +41,22 @@ class AsignatureClassroomSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if instance.classroom != validated_data['classroom']:
             raise serializers.ValidationError(
-                'Error, una vez ingresado el Aula no se puede cambiar el mismo.')
+                {
+                    'classroom': 'Error, una vez ingresado el Aula no se puede cambiar el mismo.'
+                }
+            )
         if instance.asignature != validated_data['asignature']:
             raise serializers.ValidationError(
-                'Error, una vez ingresada la Asignatura no se puede cambiar el mismo.')
+                {
+                    'asignature': 'Error, una vez ingresada la Asignatura no se puede cambiar el mismo.'
+                }
+            )
         if instance.teacher != validated_data['teacher']:
             raise serializers.ValidationError(
-                'Error, una vez ingresado el Docente no se puede cambiar el mismo.')
+                {
+                    'teacher': 'Error, una vez ingresado el Docente no se puede cambiar el mismo.'
+                }
+            )
         update_asignature_classroom = super().update(instance, validated_data)
         update_asignature_classroom.save()
         return update_asignature_classroom
@@ -59,3 +80,28 @@ class AsignatureClassroomSerializer(serializers.ModelSerializer):
             ),
             observations=instance.observations
         )
+
+
+class AsignatureClassroomByAsignature(serializers.ModelSerializer):
+    class Meta:
+        model = AsignatureClassroom
+        include = [
+            'id',
+            'classroom',
+            'teacher',
+            'created_at'
+        ]
+
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'classroom': {
+                'id': instance.classroom.id,
+                'name': instance.classroom.name,
+            },
+            'teacher': {
+                'id': instance.teacher.id,
+                'name': instance.teacher.__str__()
+            },
+            'created_at': instance.created_at
+        }

@@ -37,4 +37,16 @@ class AsignatureManager(models.Manager):
         except:
             return None
 
+    def get_asignature_detail_by_pk(self, pk=None):
+        asignatures = None
+        try:
+            asignatures = self.filter(id=pk, state=1, auth_state='A').values(
+                'classrooms__asignatureclassroom__teacher_id'
+                # 'asignatureclassroom_id',
+                # 'asignatureclassroom__classroom_id',
+                # 'asignatureclassroom__teacher_id',
+            )
+        except :
+            pass
 
+        return asignatures
