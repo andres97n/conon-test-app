@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_tracking.mixins import LoggingMixin
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import GlossaryDetailSerializer
 from applications.base.permissions import IsTeacherOrIsStudent, IsTeacher
@@ -13,6 +14,8 @@ class GlossaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
     pagination_class = CononPagination
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['state']
 
     # Set Permissions
     def get_permissions(self):

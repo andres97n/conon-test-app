@@ -32,3 +32,11 @@ class GlossaryDetailManager(models.Manager):
             return True
 
         return False
+
+    def get_glossary_detail_by_glossary(self, pk=None):
+        try:
+            return self.select_related('glossary').filter(
+                glossary_id=pk, state=1, auth_state='A'
+            )
+        except:
+            return None

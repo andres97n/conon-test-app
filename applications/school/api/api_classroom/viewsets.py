@@ -8,7 +8,7 @@ from rest_framework_tracking.mixins import LoggingMixin
 from applications.base.paginations import CononPagination
 from applications.users.models import Student
 from applications.school.api.api_classroom.serializers import ClassroomSerializer, \
-    StudentsForClassroomSerializer
+    StudentsForClassroomSerializer, ClassroomShortSerializer
 from applications.users.api.api_student.serializers import StudentShortListSerializer
 
 
@@ -230,13 +230,19 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    @action(detail=True, methods=['GET'], url_path='new-students')
+# TODO: Cambiar el método de lista por uno correcto
+    @action(detail=True, methods=['POST'], url_path='new-students')
     def get_new_students_for_classrooms(self, request, pk=None):
         students = self.get_serializer().Meta.model.objects.get_students_by_classroom_id(pk=pk)
         if students is not None:
-            student_serializer = StudentShortListSerializer(
-                Student.objects.get_student_short_data(), many=True
-            )
+            if request.data:
+                student_serializer = StudentShortListSerializer(
+                    Student.objects.get_student_short_data(age=request.data['age']), many=True
+                )
+            else:
+                student_serializer = StudentShortListSerializer(
+                    Student.objects.get_student_short_data(), many=True
+                )
             classroom_student_serializer = StudentsForClassroomSerializer(students, many=True)
             valid_students = [
                 student for student in student_serializer.data
@@ -255,6 +261,29 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
                 {
                     'ok': False,
                     'detail': 'No se pudo cargar los Estudiantes.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    @action(detail=False, methods=['GET'], url_path='short')
+    def get_classrooms_short_data(self, request):
+        classrooms = self.get_serializer().Meta.model.objects.get_short_classroom()
+        if classrooms is not None:
+            classroom_serializer = ClassroomShortSerializer(classrooms, many=True)
+
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': classroom_serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se pudo cargar las Aulas.'
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )

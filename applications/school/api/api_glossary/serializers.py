@@ -18,7 +18,7 @@ class GlossarySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 detail='Error, no se encuentra relación con este valor; consulte con el Administrador.'
             )
-        glosary = Glosary(**validated_data)
+        glosary = Glossary(**validated_data)
         glosary.save()
         return glosary
 
@@ -51,7 +51,7 @@ class GlossarySerializer(serializers.ModelSerializer):
                     'name': instance.asignature_classroom.teacher.__str__()
                 }
             },
-            'state': instance.state,
+            'state': instance.get_state_display(),
             'observations': instance.observations,
             'created_at': instance.created_at
         }

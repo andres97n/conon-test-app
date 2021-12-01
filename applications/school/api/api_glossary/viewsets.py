@@ -2,10 +2,12 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_tracking.mixins import LoggingMixin
+from rest_framework.decorators import action
 
-from applications.base.permissions import IsTeacher
 from .serializers import GlossarySerializer
+from applications.base.permissions import IsTeacher
 from applications.base.paginations import CononPagination
+from applications.school.models import GlossaryDetail
 
 
 # The Teacher enable the Glosary for to add terms
@@ -51,6 +53,7 @@ class GlossaryViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': glossary_serializer.data['id'],
                     'message': 'Glosario creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED
@@ -127,13 +130,29 @@ class GlossaryViewSet(LoggingMixin, viewsets.ModelViewSet):
             glossary.auth_state = 'I'
             glossary.save()
 
-            return Response(
-                {
-                    'ok': True,
-                    'message': 'Glosario eliminado correctamente.'
-                },
-                status=status.HTTP_200_OK
-            )
+            glossary_details = GlossaryDetail.objects.get_glossary_detail_by_glossary(pk=pk)
+            if glossary_details is not None:
+
+                for glossary_detail in glossary_details:
+                    glossary_detail.state = 0
+                    glossary_detail.auth_state = 'I'
+                    glossary_detail.save()
+
+                return Response(
+                    {
+                        'ok': True,
+                        'message': 'Glosario eliminado correctamente.'
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se pudo eliminar por completo el detalle del glosario.'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
         return Response(
             {
@@ -142,3 +161,27 @@ class GlossaryViewSet(LoggingMixin, viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    @action(detail=True, methods=['PUT'], url_path='block')
+    def block_glossary(self, request, pk=None):
+
+        glossary = self.get_queryset(pk=pk)
+
+        if glossary is not None:
+            glossary.state = 0
+            glossary.save()
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Glosario bloqueado correctamente.'
+                }
+            )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se pudo bloquear el presente glosario.'
+                }
+            )

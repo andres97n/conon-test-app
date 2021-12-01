@@ -1,5 +1,4 @@
 from django.db import models
-from django.core.exceptions import ValidationError
 from django.contrib.auth.models import BaseUserManager
 
 
@@ -42,7 +41,8 @@ class UserManager(BaseUserManager, models.Manager):
         ).order_by('username')
 
     def get_user_data(self):
-        return self.select_related('person').filter(auth_state='A', is_active=True).order_by('username')
+        return self.select_related('person').\
+            filter(auth_state='A', is_active=True).order_by('username')
 
     def get_user_detail_data(self, pk=None):
         user = None
@@ -54,7 +54,6 @@ class UserManager(BaseUserManager, models.Manager):
             ).first()
         except None:
             pass
-
         return user
 
     def user_exists(self, pk=None):

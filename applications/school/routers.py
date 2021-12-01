@@ -36,14 +36,14 @@ router.register(
     basename='asignature_classroom'
 )
 router.register(
-    r'glosary',
+    r'glossary',
     GlossaryViewSet,
-    basename='glosary'
+    basename='glossary'
 )
 router.register(
-    r'glosary-detail',
+    r'glossary-detail',
     GlossaryDetailViewSet,
-    basename='glosary_detail'
+    basename='glossary_detail'
 )
 
 urlpatterns = router.urls

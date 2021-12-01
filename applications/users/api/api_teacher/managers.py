@@ -61,7 +61,7 @@ class TeacherManager(models.Manager):
         return result
 
     def get_coordinators_data(self):
-        teachers = self.select_related('person').filter(auth_state='A').\
+        teachers = self.select_related('person').filter(auth_state='A'). \
             values(
             'id',
             'person__name',
@@ -70,7 +70,7 @@ class TeacherManager(models.Manager):
         return teachers
 
     def get_teachers_short_data(self):
-        return self.select_related('person').filter(auth_state='A').\
+        return self.select_related('person').filter(auth_state='A'). \
             values(
             'id',
             'person__identification',
@@ -78,3 +78,11 @@ class TeacherManager(models.Manager):
             'person__last_name',
             'title'
         ).order_by('person__last_name')
+
+    def get_user_id_by_teacher(self, pk=None):
+        try:
+            return self.select_related('person').filter(auth_state='A').values(
+                'person__user'
+            ).get(id=pk)
+        except:
+            return None

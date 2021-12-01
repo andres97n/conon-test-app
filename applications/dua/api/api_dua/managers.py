@@ -16,3 +16,11 @@ class DuaManager(models.Manager):
         except None:
             pass
         return dua
+
+    def get_dua_by_topic(self, pk=None):
+        try:
+            return self.select_related('topic').filter(
+                state=1, auth_state='A'
+            ).get(topic_id=pk)
+        except:
+            return None

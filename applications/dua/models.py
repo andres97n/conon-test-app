@@ -13,6 +13,11 @@ from .api.api_answer.managers import AnswerManager
 
 
 class Dua(BaseModel):
+
+    class DuaStatus(models.IntegerChoices):
+        CLOSE = 0
+        OPEN = 1
+
     written_conceptualization = models.TextField(
         null=False,
         blank=False
@@ -48,6 +53,13 @@ class Dua(BaseModel):
         on_delete=models.CASCADE,
         null=False,
         blank=False
+    )
+    state = models.PositiveSmallIntegerField(
+        'estado',
+        choices=DuaStatus.choices,
+        default=1,
+        null=True,
+        blank=True,
     )
 
     objects = DuaManager()

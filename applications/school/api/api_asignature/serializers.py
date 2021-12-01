@@ -7,7 +7,6 @@ class AsignatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asignature
         exclude = [
-            'created_at',
             'updated_at',
             'auth_state'
         ]
@@ -47,6 +46,7 @@ class AsignatureSerializer(serializers.ModelSerializer):
                 'coordinator': instance.knowledge_area.get_coordinator()
             },
             'observations': instance.observations,
+            'created_at': instance.created_at
             # classrooms = instance.classrooms
         }
 

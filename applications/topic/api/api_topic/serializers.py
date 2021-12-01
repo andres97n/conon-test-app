@@ -19,6 +19,9 @@ class TopicSerializer(serializers.ModelSerializer):
         return student_serializer.data
     """
 
+    def get_user_name(self, pk=None):
+        return User.objects.get_user_detail_data(pk=pk)
+
     def validate_type(self, value):
         if value == 0 or value > 3:
             raise serializers.ValidationError(
@@ -65,6 +68,12 @@ class TopicSerializer(serializers.ModelSerializer):
         return update_topic
 
     def to_representation(self, instance):
+        nombre = self.get_user_name(pk=instance.owner.id).person
+        if nombre is None:
+            nombre = 'No existe'
+        else:
+            nombre = self.get_user_name(pk=instance.owner.id).__str__()
+
         return {
             'id': instance.id,
             'title': instance.title,
@@ -77,7 +86,7 @@ class TopicSerializer(serializers.ModelSerializer):
             'observations': instance.observations,
             'owner': {
                 'id': instance.owner.id,
-                'name': instance.owner.__str__()
+                'name': nombre
             },
             # 'students': self.get_students(instance.students),
             'created_at': instance.created_at

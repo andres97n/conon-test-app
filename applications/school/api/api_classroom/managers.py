@@ -32,6 +32,7 @@ class ClassroomManager(models.Manager):
 
     def get_many_classrooms(self, classrooms=None):
         try:
+            self.filter(auth_state='A').values('asignatureclassroom__asignature__knowledge_area_id ')
             if classrooms is not None:
                 return list(self.in_bulk(classrooms).values())
             return None
@@ -41,7 +42,7 @@ class ClassroomManager(models.Manager):
     def get_short_classroom(self):
         return self.filter(state=1, auth_state='A').values(
             'id',
-            'name'
+            'name',
             'curse_level'
         ).order_by('name')
 
@@ -51,7 +52,8 @@ class ClassroomManager(models.Manager):
                 'students',
                 'students__person__identification',
                 'students__person__name',
-                'students__person__last_name'
+                'students__person__last_name',
+                'students__person__age'
             )
         except:
             return None

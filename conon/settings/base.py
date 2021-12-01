@@ -51,7 +51,8 @@ THIRD_APPS = [
     'rest_framework',
     # 'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
-    'rest_framework_tracking'
+    'rest_framework_tracking',
+    'django_filters',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_APPS

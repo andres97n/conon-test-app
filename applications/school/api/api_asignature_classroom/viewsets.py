@@ -4,6 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import AsignatureClassroomSerializer, AsignatureClassroomByAsignature
 from applications.base.paginations import CononPagination
@@ -15,6 +16,8 @@ class AsignatureClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
     pagination_class = CononPagination
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['classroom', 'asignature', 'state']
 
     def get_queryset(self, pk=None):
         if pk is None:
@@ -143,6 +146,7 @@ class AsignatureClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    # PROVISIONAL
     @action(detail=True, methods=['GET'], url_path='by-asignatures')
     def get_asignatures_detail_by_asignature(self, request, pk=None):
         asignatures_detail = self.get_serializer().Meta.model.objects.get_asignature_classroom_by_asignature(pk=pk)

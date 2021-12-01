@@ -150,8 +150,9 @@ class StudentViewSet(LoggingMixin, viewsets.ModelViewSet):
     # Delete Many Students
     @action(detail=False, methods=(['DELETE']), url_path='destroy-students')
     def destroy_students(self, request):
-        students = self.get_serializer().Meta.model.objects.get_many_students(request.data['students'])
-        if students:
+        students = self.get_serializer().Meta.model.objects.get_many_topics(
+            request.data['students'])
+        if students is not None:
             for student in students:
                 student.auth_state = 'I'
 

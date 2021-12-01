@@ -151,5 +151,6 @@ class StudentShortListSerializer(serializers.ModelSerializer):
         return {
             'id': instance['id'],
             'identification': instance['person__identification'],
-            'name': f"{instance['person__name']} {instance['person__last_name']}"
+            'name': f"{instance['person__name']} {instance['person__last_name']}",
+            'age': instance['person__age']
         }

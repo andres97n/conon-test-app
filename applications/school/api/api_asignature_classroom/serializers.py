@@ -75,8 +75,7 @@ class AsignatureClassroomSerializer(serializers.ModelSerializer):
             ),
             teacher=dict(
                 id=instance.teacher.id,
-                name=instance.teacher.person.name,
-                last_name=instance.teacher.person.last_name
+                name=instance.teacher.__str__(),
             ),
             observations=instance.observations
         )

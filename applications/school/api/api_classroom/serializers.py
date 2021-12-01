@@ -110,4 +110,5 @@ class StudentsForClassroomSerializer(serializers.Serializer):
             'id': instance['students'],
             'identification': instance['students__person__identification'],
             'name': f"{instance['students__person__name']} {instance['students__person__last_name']}",
+            'age': instance['students__person__age']
         }
