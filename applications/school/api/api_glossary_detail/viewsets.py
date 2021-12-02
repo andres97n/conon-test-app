@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_tracking.mixins import LoggingMixin
+from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import GlossaryDetailSerializer
@@ -15,7 +16,7 @@ class GlossaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['state']
+    filterset_fields = ['glossary', 'state']
 
     # Set Permissions
     def get_permissions(self):
@@ -132,6 +133,7 @@ class GlossaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
         # Get instance
         term = self.get_queryset(pk)
         if term:
+            term.state = 0
             term.auth_state = 'I'
             term.save()
 
@@ -150,3 +152,42 @@ class GlossaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    @action(detail=False, methods=['DELETE'], url_path='destroy-terms')
+    def destroy_glossaries_detail(self, request):
+
+        if request.data:
+            terms = self.get_serializer().Meta.model.objects.get_many_glossaries_detail(
+                terms=request.data['terms']
+            )
+            if terms is not None:
+                for glossary_detail in terms:
+                    glossary_detail.state = 0
+                    glossary_detail.auth_state = 'I'
+
+                self.get_serializer().Meta.model.objects.bulk_update(
+                    terms, ['state', 'auth_state']
+                )
+
+                return Response(
+                    {
+                        'ok': True,
+                        'message': 'Términos elimnados correctamente.'
+                    },
+                    status=status.HTTP_200_OK
+                )
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se encontraron los términos a envíar.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se enviaron los términos a eliminar.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )

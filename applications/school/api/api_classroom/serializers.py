@@ -94,7 +94,7 @@ class ClassroomShortSerializer(serializers.ModelSerializer):
         }
 
 
-class StudentsForClassroomSerializer(serializers.Serializer):
+class StudentsForManyChoicesSerializer(serializers.Serializer):
     id = serializers.IntegerField(
         read_only=True
     )
@@ -105,10 +105,22 @@ class StudentsForClassroomSerializer(serializers.Serializer):
         read_only=True
     )
 
+    def get_email_by_user(self, pk):
+        if pk is None:
+            return None
+        return Student.objects.get_student_email_by_user_id(pk=pk)
+
     def to_representation(self, instance):
+        result = self.get_email_by_user(instance['students__person__user'])
+        if result is None:
+            email = None
+        else:
+            email = result['person__user__email']
+
         return {
             'id': instance['students'],
             'identification': instance['students__person__identification'],
             'name': f"{instance['students__person__name']} {instance['students__person__last_name']}",
-            'age': instance['students__person__age']
+            'age': instance['students__person__age'],
+            'email': email
         }

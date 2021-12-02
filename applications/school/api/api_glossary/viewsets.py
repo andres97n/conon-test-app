@@ -2,7 +2,6 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_tracking.mixins import LoggingMixin
-from rest_framework.decorators import action
 
 from .serializers import GlossarySerializer
 from applications.base.permissions import IsTeacher
@@ -161,27 +160,3 @@ class GlossaryViewSet(LoggingMixin, viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
-
-    @action(detail=True, methods=['PUT'], url_path='block')
-    def block_glossary(self, request, pk=None):
-
-        glossary = self.get_queryset(pk=pk)
-
-        if glossary is not None:
-            glossary.state = 0
-            glossary.save()
-
-            return Response(
-                {
-                    'ok': True,
-                    'message': 'Glosario bloqueado correctamente.'
-                }
-            )
-
-        else:
-            return Response(
-                {
-                    'ok': False,
-                    'detail': 'No se pudo bloquear el presente glosario.'
-                }
-            )

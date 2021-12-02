@@ -38,6 +38,7 @@ class GlossarySerializer(serializers.ModelSerializer):
         return {
             'id': instance.id,
             'asignature_classroom': {
+                'id': instance.asignature_classroom.id,
                 'classroom': {
                     'id': instance.asignature_classroom.classroom.id,
                     'name': instance.asignature_classroom.classroom.__str__()

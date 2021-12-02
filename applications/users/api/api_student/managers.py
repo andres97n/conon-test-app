@@ -84,3 +84,10 @@ class StudentManager(models.Manager):
         except:
             return None
 
+    def get_student_email_by_user_id(self, pk=None):
+        try:
+            return self.select_related('person').filter(person__user=pk, auth_state='A').values(
+                'person__user__email'
+            ).first()
+        except:
+            return None

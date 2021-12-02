@@ -315,6 +315,11 @@ class Glossary(BaseModel):
 
 
 class GlossaryDetail(BaseModel):
+
+    class GlossaryDetailStatus(models.IntegerChoices):
+        CLOSE = 0
+        OPEN = 1
+
     title = models.CharField(
         'Título',
         max_length=150,
@@ -342,9 +347,10 @@ class GlossaryDetail(BaseModel):
         null=True,
         blank=True
     )
-    state = models.BooleanField(
+    state = models.PositiveSmallIntegerField(
         'estado',
-        default=True,
+        choices=GlossaryDetailStatus.choices,
+        default=1,
         null=False,
         blank=True
     )

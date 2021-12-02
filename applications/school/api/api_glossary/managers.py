@@ -17,13 +17,24 @@ class GlossaryManager(models.Manager):
             return None
 
     def glosary_exists(self, pk=None):
-        glosary = None
+        glossary = None
         try:
-            glosary = self.filter(id=pk, auth_state='A').first()
+            glossary = self.filter(id=pk, auth_state='A').first()
         except None:
             pass
 
-        if glosary is None:
+        if glossary is None:
+            return False
+
+        return True
+
+    def get_glossary_state(self, pk=None):
+        glossary = None
+        try:
+            glossary = self.filter(state=1, auth_state='A').get(id=pk)
+        except:
+            pass
+        if glossary is None:
             return False
 
         return True

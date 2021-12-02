@@ -91,3 +91,4 @@ class TopicSerializer(serializers.ModelSerializer):
             # 'students': self.get_students(instance.students),
             'created_at': instance.created_at
         }
+

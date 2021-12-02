@@ -45,6 +45,7 @@ class AsignatureSerializer(serializers.ModelSerializer):
                 'name': instance.knowledge_area.name,
                 'coordinator': instance.knowledge_area.get_coordinator()
             },
+            'state': instance.get_state_display(),
             'observations': instance.observations,
             'created_at': instance.created_at
             # classrooms = instance.classrooms

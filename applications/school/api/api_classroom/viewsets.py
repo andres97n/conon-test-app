@@ -8,7 +8,7 @@ from rest_framework_tracking.mixins import LoggingMixin
 from applications.base.paginations import CononPagination
 from applications.users.models import Student
 from applications.school.api.api_classroom.serializers import ClassroomSerializer, \
-    StudentsForClassroomSerializer, ClassroomShortSerializer
+    StudentsForManyChoicesSerializer, ClassroomShortSerializer
 from applications.users.api.api_student.serializers import StudentShortListSerializer
 
 
@@ -243,7 +243,7 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
                 student_serializer = StudentShortListSerializer(
                     Student.objects.get_student_short_data(), many=True
                 )
-            classroom_student_serializer = StudentsForClassroomSerializer(students, many=True)
+            classroom_student_serializer = StudentsForManyChoicesSerializer(students, many=True)
             valid_students = [
                 student for student in student_serializer.data
                 if student not in classroom_student_serializer.data

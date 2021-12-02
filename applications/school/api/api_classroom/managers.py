@@ -53,7 +53,8 @@ class ClassroomManager(models.Manager):
                 'students__person__identification',
                 'students__person__name',
                 'students__person__last_name',
-                'students__person__age'
+                'students__person__age',
+                'students__person__user'
             )
         except:
             return None

@@ -10,6 +10,9 @@ from applications.base.permissions import IsOwnerAndTeacher
 from applications.base.paginations import CononShortPagination
 from applications.topic.filters import TopicFilterSet
 from applications.dua.models import Dua
+from applications.users.models import Student
+from applications.users.api.api_student.serializers import StudentShortListSerializer
+from applications.school.api.api_classroom.serializers import StudentsForManyChoicesSerializer
 
 
 class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
@@ -274,3 +277,72 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+# TODO: Encontrar la manera de crear el siguiente enlace vía GET
+
+    @action(detail=True, methods=['POST'], url_path='new-students')
+    def get_new_teachers_for_area(self, request, pk=None):
+        students = self.get_serializer().Meta.model.objects.get_students_by_topic_id(pk=pk)
+
+        if students is not None:
+            if request.data:
+                student_serializer = StudentShortListSerializer(
+                    Student.objects.get_student_short_data(age=request.data['age']), many=True
+                )
+            else:
+                student_serializer = StudentShortListSerializer(
+                    Student.objects.get_student_short_data(), many=True
+                )
+            topic_student_serializer = StudentsForManyChoicesSerializer(students, many=True)
+            valid_students = [
+                student for student in student_serializer.data
+                if student not in topic_student_serializer.data
+            ]
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': valid_students
+                },
+                status=status.HTTP_200_OK
+            )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se pudo cargar los Estudiantes.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    @action(detail=True, methods=['POST'], url_path='assign-students')
+    def save_students_to_topic(self, request, pk=None):
+        topic = self.get_queryset(pk)
+
+        if topic is not None:
+            if request.data['students']:
+                for student in request.data['students']:
+                    topic.students.add(student)
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se pudo encontrar a los Estudiante/s.'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Estudiante/s agregados correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No existe este Tema de Estudio.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
