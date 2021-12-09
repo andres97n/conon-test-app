@@ -2,15 +2,15 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 
+from applications.base.permissions import IsTeacher
 from applications.base.paginations import CononPagination
 from .serializers import PersonSerializer
 
 
 class PersonViewSet(LoggingMixin, viewsets.ModelViewSet):
-    permission_classes = ([IsAdminUser])
+    permission_classes = ([IsTeacher])
     serializer_class = PersonSerializer
     pagination_class = CononPagination
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']

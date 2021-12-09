@@ -6,23 +6,33 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .serializers import AsignatureClassroomSerializer, AsignatureClassroomByAsignature
 from applications.base.paginations import CononPagination
+from applications.base.permissions import IsTeacher
+from applications.users.models import Teacher
+from .serializers import AsignatureClassroomSerializer, AsignatureClassroomByAsignature
 
 
 class AsignatureClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
-    permission_classes = ([IsAdminUser])
+    # permission_classes = ([IsAdminUser])
     serializer_class = AsignatureClassroomSerializer
     pagination_class = CononPagination
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['classroom', 'asignature', 'state']
+    filterset_fields = ['classroom', 'asignature', 'teacher', 'state']
 
     def get_queryset(self, pk=None):
         if pk is None:
             return self.get_serializer().Meta.model.objects.get_asignature_classroom_list()
         return self.get_serializer().Meta.model.objects.get_asignature_classroom_by_id(pk)
+
+    def get_permissions(self):
+        if self.action == 'list' or 'get_asignature_classroom_list_by_classrooms_and_teacher':
+            self.permission_classes = [IsTeacher]
+        else:
+            self.permission_classes = [IsAdminUser]
+
+        return [permission() for permission in self.permission_classes]
 
     # Get Asignature Classroom List
     def list(self, request, *args, **kwargs):
@@ -169,5 +179,51 @@ class AsignatureClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
                 {
                     'ok': False,
                     'detail': 'No existen registros para esta asignatura.'
+                }
+            )
+
+    @action(detail=False, methods=['POST'], url_path='by-classroom-and-user')
+    def get_asignature_classroom_list_by_classrooms_and_teacher(self, request):
+
+        if request.data:
+            teacher_id = Teacher.objects.get_teacher_by_user(pk=request.data['user'])
+
+            if teacher_id is not None:
+                asignature_classroom = self.get_serializer().Meta.model.objects.get_asignature_classroom_by_classroom_and_teacher(
+                    classroom_id=request.data['classroom'],
+                    teacher_id=teacher_id['id']
+                )
+
+                if asignature_classroom is not None:
+                    asignatures_detail_serializer = self.get_serializer(asignature_classroom, many=True)
+
+                    return Response(
+                        {
+                            'ok': True,
+                            'conon_data': asignatures_detail_serializer.data
+                        },
+                        status=status.HTTP_200_OK
+                    )
+                else:
+                    return Response(
+                        {
+                            'ok': False,
+                            'detail': 'No se encontró ningún registro.'
+                        }
+                    )
+
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se encontró ningún Docente.'
+                    }
+                )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se encuentró los atributos necesarios para el filtro.'
                 }
             )

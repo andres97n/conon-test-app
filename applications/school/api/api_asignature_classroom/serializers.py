@@ -63,22 +63,23 @@ class AsignatureClassroomSerializer(serializers.ModelSerializer):
 
     # Return Data
     def to_representation(self, instance):
-        return dict(
-            id=instance.id,
-            classroom=dict(
-                id=instance.classroom.id,
-                name=instance.classroom.name,
-            ),
-            asignature=dict(
-                id=instance.asignature.id,
-                name=instance.asignature.name,
-            ),
-            teacher=dict(
-                id=instance.teacher.id,
-                name=instance.teacher.__str__(),
-            ),
-            observations=instance.observations
-        )
+        return {
+            'id': instance.id,
+            'classroom': {
+                'id': instance.classroom.id,
+                'name': instance.classroom.name,
+            },
+            'asignature': {
+                'id': instance.asignature.id,
+                'name': instance.asignature.name,
+                'type': instance.asignature.get_area_type()
+            },
+            'teacher': {
+                'id': instance.teacher.id,
+                'name': instance.teacher.__str__(),
+            },
+            'observations': instance.observations
+        }
 
 
 class AsignatureClassroomByAsignature(serializers.ModelSerializer):

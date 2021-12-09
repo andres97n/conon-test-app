@@ -6,7 +6,6 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 
 from applications.base.paginations import CononPagination
-from applications.school.models import KnowledgeArea
 from .serializers import TeacherSerializer, TeachersShortSerializer, \
     CoordinatorSerializer
 
@@ -215,4 +214,3 @@ class TeacherViewSet(LoggingMixin, viewsets.ModelViewSet):
                 },
                 status=status.HTTP_200_OK
             )
-

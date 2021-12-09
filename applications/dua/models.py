@@ -30,14 +30,13 @@ class Dua(BaseModel):
         null=False,
         blank=False
     )
-    video = models.URLField(
-        max_length=250,
-        null=False,
-        blank=False
+    video = models.JSONField(
+        null=True,
+        blank=True
     )
     images = models.JSONField(
         null=False,
-        blank=False
+        blank=True
     )
     extra_information = models.URLField(
         null=True,
@@ -47,19 +46,19 @@ class Dua(BaseModel):
         null=True,
         blank=True
     )
-
-    topic = models.OneToOneField(
-        Topic,
-        on_delete=models.CASCADE,
-        null=False,
-        blank=False
-    )
     state = models.PositiveSmallIntegerField(
         'estado',
         choices=DuaStatus.choices,
         default=1,
         null=True,
         blank=True,
+    )
+
+    topic = models.OneToOneField(
+        Topic,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
     )
 
     objects = DuaManager()

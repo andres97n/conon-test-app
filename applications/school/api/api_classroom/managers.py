@@ -58,3 +58,13 @@ class ClassroomManager(models.Manager):
             )
         except:
             return None
+
+    def get_classrooms_by_teacher(self, pk=None):
+        try:
+            return self.select_related('school_period').filter(
+                asignatureclassroom__teacher_id=pk,
+                state=1,
+                auth_state='A'
+            ).order_by('name')
+        except:
+            return None

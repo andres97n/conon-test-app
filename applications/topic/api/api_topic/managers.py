@@ -42,15 +42,33 @@ class TopicManager(models.Manager):
         except:
             return None
 
-    def get_students_by_topic_id(self, pk=None):
+    def get_students_by_topic_id(self, pk=None, active=None):
         try:
-            return self.filter(id=pk, active=True, auth_state='A').values(
-                'students',
-                'students__person__identification',
-                'students__person__name',
-                'students__person__last_name',
-                'students__person__age',
-                'students__person__user'
+            if active is not None:
+                return self.filter(id=pk, active=True, auth_state='A').values(
+                    'students',
+                    'students__person__identification',
+                    'students__person__name',
+                    'students__person__last_name',
+                    'students__person__age',
+                    'students__person__user'
+                )
+            else:
+                return self.filter(id=pk, auth_state='A').values(
+                    'students',
+                    'students__person__identification',
+                    'students__person__name',
+                    'students__person__last_name',
+                    'students__person__age',
+                    'students__person__user'
+                )
+        except:
+            return None
+
+    def get_topics_by_owner(self, user=None):
+        try:
+            return self.select_related('owner').filter(
+                owner_id=user, active=True, auth_state='A'
             )
         except:
             return None

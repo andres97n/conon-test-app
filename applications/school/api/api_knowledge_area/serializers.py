@@ -27,6 +27,19 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
             'teachers'
         ]
 
+# TODO: Confirmar la funcionalidad de la siguiente validación
+
+    # Validate Area Type
+    def validate_type(self, value):
+        print(value)
+        if value:
+            if KnowledgeArea.objects.is_type_exits(type=value):
+                raise serializers.ValidationError(
+                    {
+                        'type': ['Error, es tipo de área ya fue seleccionada.']
+                    }
+                )
+
     # Validate Teachers
     def validate_teachers(self, value):
         if value:
@@ -70,6 +83,12 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
                         'name': 'Error, no se puede cambiar de Área de Conocimiento.'
                     }
                 )
+        if instance.type != validated_data['type']:
+            raise serializers.ValidationError(
+                {
+                    'type': ['Error, no se puede cambiar el tipo de área.']
+                }
+            )
         if validated_data['teachers']:
             raise serializers.ValidationError(
                 {
@@ -97,6 +116,7 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
                 'name': instance.sub_coordinator.person.full_name()
             },
             'objective': instance.objective,
+            'type': instance.get_type_display(),
             'observations': instance.observations,
             'created_at': instance.created_at
         }

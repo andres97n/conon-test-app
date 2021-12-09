@@ -60,3 +60,11 @@ class AsignatureClassroomManager(models.Manager):
                 filter(asignature_id=pk, state=1, auth_state='A').order_by('created_at')
         except:
             return None
+
+    def get_asignature_classroom_by_classroom_and_teacher(self, classroom_id=None, teacher_id=None):
+        try:
+            return self.select_related('classroom', 'teacher').filter(
+                classroom_id=classroom_id, teacher_id=teacher_id, state=1, auth_state='A'
+            )
+        except:
+            return None

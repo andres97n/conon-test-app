@@ -70,6 +70,13 @@ class SchoolPeriod(BaseModel):
     
 
 class KnowledgeArea(BaseModel):
+
+    class KnowledgeAreaType(models.IntegerChoices):
+        CIENCIAS = 1
+        MATEMATICAS = 2
+        INTERDISCIPLINAR = 3
+        OTRO = 4
+
     name = models.CharField(
         max_length=50,
         null=False,
@@ -93,6 +100,13 @@ class KnowledgeArea(BaseModel):
         related_name='sub_coordinator',
         null=False,
         blank=False
+    )
+    type = models.PositiveSmallIntegerField(
+        'tipo',
+        choices=KnowledgeAreaType.choices,
+        default=1,
+        null=True,
+        blank=True,
     )
     observations = models.TextField(
         'observaciones',
@@ -227,6 +241,9 @@ class Asignature(BaseModel):
 
     def __str__(self):
         return f'{self.name}'
+
+    def get_area_type(self):
+        return self.knowledge_area.get_type_display()
 
 
 class AsignatureClassroom(BaseModel):

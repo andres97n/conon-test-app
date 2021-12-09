@@ -86,3 +86,11 @@ class TeacherManager(models.Manager):
             ).get(id=pk)
         except:
             return None
+
+    def get_teacher_by_user(self, pk=None):
+        try:
+            return self.select_related('person').filter(person__user=pk).values(
+                'id'
+            ).get()
+        except:
+            return None

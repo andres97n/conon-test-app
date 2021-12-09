@@ -13,12 +13,16 @@ from applications.users.models import User
 # TODO: Resolver el duplicado al momento de
 #   hacer el logout y el token pase al Blackilist table
 
-# TODO: Crea un serializador para el envío de la contraseña al correo
+# TODO: Crear un serializador para el envío de la contraseña al correo
 #   de cada usuario.
 
+# TODO: Validar el usuario que no tenga datos de persona en los serializadores
 
 class LoginSerializer(serializers.ModelSerializer):
     uid = serializers.IntegerField(
+        read_only=True
+    )
+    name = serializers.CharField(
         read_only=True
     )
     username = serializers.CharField(
@@ -43,6 +47,7 @@ class LoginSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'uid',
+            'name',
             'username',
             'email',
             'type',
@@ -94,6 +99,7 @@ class LoginSerializer(serializers.ModelSerializer):
 
         return {
             'uid': user.id,
+            'name': user.__str__(),
             'username': user.username,
             'email': user.email,
             'type': user.type,
@@ -132,6 +138,7 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
         user = User.objects.filter(id=user_uid).first()
         data.update({
             'uid': user_uid,
+            'name': user.__str__(),
             'username': user.username,
             'email': user.email,
             'type': user.type
@@ -143,6 +150,7 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
     def to_representation(self, instance):
         return {
             'uid': instance['uid'],
+            'name': instance['name'],
             'username': instance['username'],
             'email': instance['email'],
             'type': instance['type'],

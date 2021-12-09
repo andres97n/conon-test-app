@@ -8,9 +8,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import TopicSerializer
 from applications.base.permissions import IsOwnerAndTeacher
 from applications.base.paginations import CononShortPagination
-from applications.topic.filters import TopicFilterSet
+# from applications.topic.filters import TopicFilterSet
 from applications.dua.models import Dua
-from applications.users.models import Student
+from applications.users.models import Student, Teacher
 from applications.users.api.api_student.serializers import StudentShortListSerializer
 from applications.school.api.api_classroom.serializers import StudentsForManyChoicesSerializer
 
@@ -22,8 +22,9 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}
     filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['type']
-    filter_class = TopicFilterSet
+    filterset_fields = ['owner', 'type', 'active']
+
+    # filter_class = TopicFilterSet
 
     # Return Topic Data
     def get_queryset(self, pk=None):
@@ -133,38 +134,39 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
         if topic is not None:
             topic.active = False
             topic.auth_state = 'I'
-            topic.save()
 
-            topic_dua = Dua.objects.get_dua_by_topic(pk)
-            # TODO: Eliminar cuando se tenga todas las metodologías
-            if topic_dua is not None:
+            if topic.type == 1:
+                topic_dua = Dua.objects.get_dua_by_topic(pk)
+                # TODO: Eliminar cuando se tenga todas las metodologías
+                if topic_dua is not None:
 
-                topic_dua.state = 0
-                topic_dua.auth_state = 'I'
-                topic_dua.save()
+                    topic_dua.state = 0
+                    topic_dua.auth_state = 'I'
+                    topic_dua.save()
+                    topic.save()
 
-                return Response(
-                    {
-                        'ok': True,
-                        'message': 'Tema eliminado correctamente.'
-                    },
-                    status=status.HTTP_200_OK
-                )
-            else:
-                return Response(
-                    {
-                        'ok': False,
-                        'detail': 'No se pudo eliminar la metodología DUA.'
-                    },
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                    return Response(
+                        {
+                            'ok': True,
+                            'message': 'Tema eliminado correctamente.'
+                        },
+                        status=status.HTTP_200_OK
+                    )
+                else:
+                    return Response(
+                        {
+                            'ok': False,
+                            'detail': 'No se pudo eliminar la metodología DUA.'
+                        },
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
 
         return Response(
             {
                 'ok': False,
                 'detail': 'No existe este Tema de Estudio.'
             },
-            status=status.HTTP_400_BAD_REQUEST
+            status=status.HTTP_404_NOT_FOUND
         )
 
     # TODO: Investigate how form url path with django-filters
@@ -277,11 +279,11 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-# TODO: Encontrar la manera de crear el siguiente enlace vía GET
+    # TODO: Encontrar la manera de crear el siguiente enlace vía GET
 
     @action(detail=True, methods=['POST'], url_path='new-students')
     def get_new_teachers_for_area(self, request, pk=None):
-        students = self.get_serializer().Meta.model.objects.get_students_by_topic_id(pk=pk)
+        students = self.get_serializer().Meta.model.objects.get_students_by_topic_id(pk=pk, active=True)
 
         if students is not None:
             if request.data:
@@ -346,3 +348,73 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    # TODO: Encontrar la manera crear rutas con argumentos que no son campos de una modelos
+
+    @action(detail=True, methods=['GET'], url_path='by-teacher')
+    def get_topics_by_teacher_id(self, request, pk=None):
+        user = Teacher.objects.get_user_id_by_teacher(pk=pk)
+        if user is not None:
+            if user['person__user']:
+                user_id = user['person__user']
+                topics = self.get_serializer().Meta.model.objects.get_topics_by_owner(user=user_id)
+
+                if topics is not None:
+                    topic_serializer = self.get_serializer(topics, many=True)
+
+                    return Response(
+                        {
+                            'ok': True,
+                            'conon_data': topic_serializer.data
+                        },
+                        status=status.HTTP_200_OK
+                    )
+                else:
+                    return Response(
+                        {
+                            'ok': False,
+                            'detail': 'No se encontraron Temas de Estudio.'
+                        },
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se encuentra el Usuario.'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se encontró el Docente.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    @action(detail=True, methods=['GET'], url_path='students')
+    def get_students_list_by_topic(self, request, pk=None):
+        students = self.get_serializer().Meta.model.objects.get_students_by_topic_id(pk=pk)
+
+        if students is not None:
+            topic_student_serializer = StudentsForManyChoicesSerializer(students, many=True)
+
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': topic_student_serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se pudo cargar los Estudiantes.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )

@@ -14,7 +14,7 @@ from applications.base.paginations import CononPagination
 
 
 class StudentViewSet(LoggingMixin, viewsets.ModelViewSet):
-    permission_classes = ([IsTeacher])
+    permission_classes = [IsTeacher]
     pagination_class = CononPagination
     serializer_class = StudentSerializer
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
