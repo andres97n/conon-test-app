@@ -66,7 +66,6 @@ class Dua(BaseModel):
     class Meta:
         db_table = 'dua'
         verbose_name = 'DUA'
-        verbose_name_plural = "DUA's"
 
     def __str__(self):
         return self.topic.title
@@ -80,6 +79,13 @@ class Activity(BaseModel):
     objective = models.TextField(
         null=True,
         blank=True
+    )
+    final_grade = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        default=10,
+        null=False,
+        blank=False
     )
 
     topic = models.ForeignKey(
@@ -119,7 +125,9 @@ class Question(BaseModel):
         null=False,
         blank=False
     )
-    value = models.FloatField(
+    value = models.DecimalField(
+        decimal_places=2,
+        max_digits=4,
         default=0,
         null=False,
         blank=False
@@ -198,7 +206,9 @@ class Answer(BaseModel):
         null=False,
         blank=False
     )
-    value = models.FloatField(
+    value = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
         default=0,
         null=False,
         blank=False

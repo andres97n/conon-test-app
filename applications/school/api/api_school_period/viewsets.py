@@ -4,21 +4,34 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
+from django_filters.rest_framework import DjangoFilterBackend
 
+
+from applications.base.permissions import IsTeacher
 from .serializers import SchoolPeriodSerializer, SchoolPeriodForAutocompleteSerializer
 
 
 class SchoolPeriodViewSet(LoggingMixin, viewsets.ModelViewSet):
-    permission_classes = ([IsAdminUser])
+    # permission_classes = ([IsAdminUser])
     serializer_class = SchoolPeriodSerializer
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['state']
 
     # Get School Period Data
     def get_queryset(self, pk=None):
         if pk is None:
             return self.get_serializer().Meta.model.objects.get_period_list()
         return self.get_serializer().Meta.model.objects.get_period_by_pk(pk)
+
+    def get_permissions(self):
+        if self.action == 'list':
+            self.permission_classes = [IsTeacher]
+        else:
+            self.permission_classes = [IsAdminUser]
+
+        return [permission() for permission in self.permission_classes]
 
     # Get SchoolPeriod List
     def list(self, request, *args, **kwargs):

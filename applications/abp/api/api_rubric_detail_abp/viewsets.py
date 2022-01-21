@@ -1,44 +1,43 @@
-from rest_framework import viewsets
-from rest_framework import status
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from .serializers import DuaSerializer
+from .serializers import RubricDetailAbpSerializer
 from applications.base.permissions import IsOwnerAndTeacher
 
 
-class DuaViewSet(viewsets.ModelViewSet):
-    serializer_class = DuaSerializer
-    permission_classes = ([IsOwnerAndTeacher])
+class RubricDetailAbpViewSet(viewsets.ModelViewSet):
+    serializer_class = RubricDetailAbpSerializer
+    permission_classes = [IsOwnerAndTeacher]
 
-    # Return DUA Data
+    # Return Rubric Detail ABP
     def get_queryset(self, pk=None):
         if pk is None:
-            return self.get_serializer().Meta.model.objects.get_dua_list()
-        return self.get_serializer().Meta.model.objects.get_dua_by_id(pk)
+            return self.get_serializer().Meta.model.objects.get_rubric_detail_abp_list()
+        return self.get_serializer().Meta.model.objects.get_rubric_detail_abp_by_id(pk)
 
-    # Get DUA List
+    # Get Rubric Detail ABP List
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        dua_serializer = self.get_serializer(queryset, many=True)
+        rubric_detail_abp_serializer = self.get_serializer(queryset, many=True)
 
         return Response(
             {
                 'ok': True,
-                'conon_data': dua_serializer.data
+                'conon_data': rubric_detail_abp_serializer.data
             },
             status=status.HTTP_200_OK
         )
 
-    # Create DUA
+    # Create Rubric Detail ABP
     def create(self, request, *args, **kwargs):
-        dua_serializer = self.get_serializer(data=request.data)
-        if dua_serializer.is_valid():
-            dua_serializer.save()
+        rubric_detail_abp_serializer = self.get_serializer(data=request.data)
+        if rubric_detail_abp_serializer.is_valid():
+            rubric_detail_abp_serializer.save()
 
             return Response(
                 {
                     'ok': True,
-                    'message': 'Tema creado correctamente.'
+                    'message': 'Sección creada correctamente.'
                 },
                 status=status.HTTP_201_CREATED
             )
@@ -46,24 +45,24 @@ class DuaViewSet(viewsets.ModelViewSet):
         return Response(
             {
                 'ok': False,
-                'detail': dua_serializer.errors,
+                'detail': rubric_detail_abp_serializer.errors,
             },
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Update DUA
+    # Update Rubric Detail ABP
     def update(self, request, pk=None, *args, **kwargs):
-        dua = self.get_queryset(pk)
-        if dua:
+        rubric_detail_abp = self.get_queryset(pk)
+        if rubric_detail_abp:
             # Send information to serializer referencing the instance
-            dua_serializer = self.get_serializer(dua, data=request.data)
-            if dua_serializer.is_valid():
-                dua_serializer.save()
+            rubric_detail_abp_serializer = self.get_serializer(rubric_detail_abp, data=request.data)
+            if rubric_detail_abp_serializer.is_valid():
+                rubric_detail_abp_serializer.save()
 
                 return Response(
                     {
                         'ok': True,
-                        'conon_data': dua_serializer.data,
+                        'conon_data': rubric_detail_abp_serializer.data,
                     },
                     status=status.HTTP_200_OK
                 )
@@ -71,7 +70,7 @@ class DuaViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': False,
-                    'detail': dua_serializer.errors,
+                    'detail': rubric_detail_abp_serializer.errors,
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
@@ -79,20 +78,20 @@ class DuaViewSet(viewsets.ModelViewSet):
         return Response(
             {
                 'ok': False,
-                'detail': 'No existe este Tema de Estudio.'
+                'detail': 'No existe esta Sección.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Detail DUA
+    # Detail Rubric Detail ABP
     def retrieve(self, request, pk=None, *args, **kwargs):
         if self.get_queryset(pk):
-            dua_serializer = self.get_serializer(self.get_queryset(pk))
+            rubric_detail_abp_serializer = self.get_serializer(self.get_queryset(pk))
 
             return Response(
                 {
                     'ok': True,
-                    'conon_data': dua_serializer.data,
+                    'conon_data': rubric_detail_abp_serializer.data,
                 },
                 status=status.HTTP_200_OK
             )
@@ -100,24 +99,24 @@ class DuaViewSet(viewsets.ModelViewSet):
         return Response(
             {
                 'ok': False,
-                'detail': 'No existe este Tema de Estudio.'
+                'detail': 'No existe esta Sección.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Delete DUA
+    # Delete Rubric Detail ABP
     def destroy(self, request, pk=None, *args, **kwargs):
         # Get instance
-        dua = self.get_queryset(pk)
-        if dua:
-            dua.auth_state = 'I'
-            dua.state = 0
-            dua.save()
+        rubric_detail_abp = self.get_queryset(pk)
+        if rubric_detail_abp:
+            rubric_detail_abp.auth_state = 'I'
+            rubric_detail_abp.active = False
+            rubric_detail_abp.save()
 
             return Response(
                 {
                     'ok': True,
-                    'message': 'Tema eliminado correctamente.'
+                    'message': 'Sección eliminada correctamente.'
                 },
                 status=status.HTTP_200_OK
             )
@@ -125,7 +124,8 @@ class DuaViewSet(viewsets.ModelViewSet):
         return Response(
             {
                 'ok': False,
-                'detail': 'No existe este Tema de Estudio.'
+                'detail': 'No existe esta Sección.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+

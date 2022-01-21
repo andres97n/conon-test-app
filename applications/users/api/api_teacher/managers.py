@@ -19,7 +19,7 @@ class TeacherManager(models.Manager):
         teacher = None
         try:
             teacher = self.select_related('person').filter(id=pk, auth_state='A').first()
-        except None:
+        except:
             pass
         return teacher
 
@@ -33,7 +33,7 @@ class TeacherManager(models.Manager):
         teacher = None
         try:
             teacher = self.filter(id=pk, auth_state='A').first()
-        except None:
+        except:
             pass
         if teacher is None:
             return False

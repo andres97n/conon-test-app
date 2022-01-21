@@ -14,6 +14,7 @@ cryptography==3.4.8
 distlib==0.3.2
 Django==3.2.7
 django-cors-headers==3.8.0
+django-filter==21.1
 djangorestframework==3.12.4
 djangorestframework-simplejwt==4.8.0
 drf-api-tracking==1.8.0

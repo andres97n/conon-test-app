@@ -1,44 +1,43 @@
-from rest_framework import viewsets
-from rest_framework import status
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from .serializers import DuaSerializer
+from .serializers import TeamDetailAbpSerializer
 from applications.base.permissions import IsOwnerAndTeacher
 
 
-class DuaViewSet(viewsets.ModelViewSet):
-    serializer_class = DuaSerializer
-    permission_classes = ([IsOwnerAndTeacher])
+class TeamDetailAbpViewSet(viewsets.ModelViewSet):
+    serializer_class = TeamDetailAbpSerializer
+    permission_classes = [IsOwnerAndTeacher]
 
-    # Return DUA Data
+    # Return Team Detail ABP
     def get_queryset(self, pk=None):
         if pk is None:
-            return self.get_serializer().Meta.model.objects.get_dua_list()
-        return self.get_serializer().Meta.model.objects.get_dua_by_id(pk)
+            return self.get_serializer().Meta.model.objects.get_team_detail_abp_list()
+        return self.get_serializer().Meta.model.objects.get_team_detail_abp_by_id(pk)
 
-    # Get DUA List
+    # Get Team Detail ABP List
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        dua_serializer = self.get_serializer(queryset, many=True)
+        team_detail_abp_serializer = self.get_serializer(queryset, many=True)
 
         return Response(
             {
                 'ok': True,
-                'conon_data': dua_serializer.data
+                'conon_data': team_detail_abp_serializer.data
             },
             status=status.HTTP_200_OK
         )
 
-    # Create DUA
+    # Create Team Detail ABP
     def create(self, request, *args, **kwargs):
-        dua_serializer = self.get_serializer(data=request.data)
-        if dua_serializer.is_valid():
-            dua_serializer.save()
+        team_detail_abp_serializer = self.get_serializer(data=request.data)
+        if team_detail_abp_serializer.is_valid():
+            team_detail_abp_serializer.save()
 
             return Response(
                 {
                     'ok': True,
-                    'message': 'Tema creado correctamente.'
+                    'message': 'Estudiante agregado correctamente.'
                 },
                 status=status.HTTP_201_CREATED
             )
@@ -46,24 +45,24 @@ class DuaViewSet(viewsets.ModelViewSet):
         return Response(
             {
                 'ok': False,
-                'detail': dua_serializer.errors,
+                'detail': team_detail_abp_serializer.errors,
             },
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Update DUA
+    # Update Team Detail ABP
     def update(self, request, pk=None, *args, **kwargs):
-        dua = self.get_queryset(pk)
-        if dua:
+        team_detail_abp = self.get_queryset(pk)
+        if team_detail_abp:
             # Send information to serializer referencing the instance
-            dua_serializer = self.get_serializer(dua, data=request.data)
-            if dua_serializer.is_valid():
-                dua_serializer.save()
+            team_detail_abp_serializer = self.get_serializer(team_detail_abp, data=request.data)
+            if team_detail_abp_serializer.is_valid():
+                team_detail_abp_serializer.save()
 
                 return Response(
                     {
                         'ok': True,
-                        'conon_data': dua_serializer.data,
+                        'conon_data': team_detail_abp_serializer.data,
                     },
                     status=status.HTTP_200_OK
                 )
@@ -71,7 +70,7 @@ class DuaViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': False,
-                    'detail': dua_serializer.errors,
+                    'detail': team_detail_abp_serializer.errors,
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
@@ -79,20 +78,20 @@ class DuaViewSet(viewsets.ModelViewSet):
         return Response(
             {
                 'ok': False,
-                'detail': 'No existe este Tema de Estudio.'
+                'detail': 'No se encontró al estudiante.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Detail DUA
+    # Detail Team Detail ABP
     def retrieve(self, request, pk=None, *args, **kwargs):
         if self.get_queryset(pk):
-            dua_serializer = self.get_serializer(self.get_queryset(pk))
+            team_detail_abp_serializer = self.get_serializer(self.get_queryset(pk))
 
             return Response(
                 {
                     'ok': True,
-                    'conon_data': dua_serializer.data,
+                    'conon_data': team_detail_abp_serializer.data,
                 },
                 status=status.HTTP_200_OK
             )
@@ -100,24 +99,24 @@ class DuaViewSet(viewsets.ModelViewSet):
         return Response(
             {
                 'ok': False,
-                'detail': 'No existe este Tema de Estudio.'
+                'detail': 'No existe este estudiante.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Delete DUA
+    # Delete Team Detail ABP
     def destroy(self, request, pk=None, *args, **kwargs):
         # Get instance
-        dua = self.get_queryset(pk)
-        if dua:
-            dua.auth_state = 'I'
-            dua.state = 0
-            dua.save()
+        team_detail_abp = self.get_queryset(pk)
+        if team_detail_abp:
+            team_detail_abp.auth_state = 'I'
+            team_detail_abp.active = False
+            team_detail_abp.save()
 
             return Response(
                 {
                     'ok': True,
-                    'message': 'Tema eliminado correctamente.'
+                    'message': 'Estudiante eliminado con éxito.'
                 },
                 status=status.HTTP_200_OK
             )
@@ -125,7 +124,7 @@ class DuaViewSet(viewsets.ModelViewSet):
         return Response(
             {
                 'ok': False,
-                'detail': 'No existe este Tema de Estudio.'
+                'detail': 'No existe este estudiante.'
             },
             status=status.HTTP_400_BAD_REQUEST
         )

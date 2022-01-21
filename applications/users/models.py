@@ -210,7 +210,10 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         )
 
     def __str__(self):
-        return f'{self.person.name} {self.person.last_name}'
+        try:
+            return f'{self.person.name} {self.person.last_name}'
+        except:
+            return None
 
     def get_username(self):
         return self.username
