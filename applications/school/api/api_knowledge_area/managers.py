@@ -97,3 +97,12 @@ class KnowledgeAreaManager(models.Manager):
             return False
 
         return True
+
+    def get_teachers_ids_by_area(self, area=None):
+        try:
+            return self.filter(id=area, auth_state='A').values(
+                'teachers__id'
+            )
+        except:
+            return None
+

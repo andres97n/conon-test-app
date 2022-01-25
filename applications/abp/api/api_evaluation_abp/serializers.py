@@ -72,8 +72,8 @@ class EvaluationAbpSerializer(serializers.ModelSerializer):
                 },
             },
             'user': {
-                'id': instance.moderator.id,
-                'name': instance.moderator.__str__()
+                'id': instance.user.id,
+                'name': instance.user.__str__()
             },
             'description': instance.description,
             'final_grade': instance.final_grade,

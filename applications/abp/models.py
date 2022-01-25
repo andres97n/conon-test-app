@@ -9,6 +9,7 @@ from applications.abp.api.api_team_detail_abp.managers import TeamDetailAbpManag
 from applications.abp.api.api_rubric_abp.managers import RubricAbpManager
 from applications.abp.api.api_rubric_detail_abp.managers import RubricDetailAbpManager
 from applications.abp.api.api_evaluation_abp.managers import EvaluationAbpManager
+from applications.abp.api.api_evaluation_detail_abp.managers import EvaluationDetailAbpManager
 
 
 class Abp(BaseModel):
@@ -304,6 +305,8 @@ class EvaluationDetailAbp(BaseModel):
         null=False,
         blank=False
     )
+
+    objects = EvaluationDetailAbpManager()
 
     class Meta:
         db_table = 'evaluation_detail_abp'

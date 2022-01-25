@@ -8,9 +8,10 @@ from rest_framework_tracking.mixins import LoggingMixin
 from .serializers import AsignatureSerializer, AsignatureDetailSerializer
 from applications.base.paginations import CononPagination
 from applications.users.models import Teacher
-from applications.school.models import Classroom, AsignatureClassroom
+from applications.school.models import Classroom, AsignatureClassroom, KnowledgeArea
 from applications.users.api.api_teacher.serializers import TeachersShortSerializer
 from applications.school.api.api_classroom.serializers import ClassroomShortSerializer
+from applications.school.api.api_knowledge_area.serializers import TeacherByAreaListSerializer
 
 
 class AsignatureViewSet(LoggingMixin, viewsets.ModelViewSet):
@@ -197,6 +198,8 @@ class AsignatureViewSet(LoggingMixin, viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+# TODO: Si es que se diposne de tiempo, se debería agregar nivel de asignatura para el filtro de las aulas
+
     @action(detail=True, methods=['GET'], url_path='classrooms')
     def get_asignatures_detail_classrooms(self, request, pk=None):
         asignatures = AsignatureClassroom.objects.get_asignature_classroom_by_asignature_short(pk=pk)
@@ -234,10 +237,17 @@ class AsignatureViewSet(LoggingMixin, viewsets.ModelViewSet):
     def get_asignatures_detail_teachers(self, request, pk=None):
         asignatures = AsignatureClassroom.objects.get_asignature_classroom_by_asignature_short(pk=pk)
         if asignatures is not None:
-            asignature_serializer = AsignatureDetailSerializer(asignatures, many=True)
+            # asignature_serializer = AsignatureDetailSerializer(asignatures, many=True)
+            area_id = self.get_queryset(pk)
+            teacher_serializer = TeacherByAreaListSerializer(
+                KnowledgeArea.objects.get_teachers_by_area_id(area_id.knowledge_area.id),
+                many=True
+            )
+            """
             teacher_serializer = TeachersShortSerializer(
                 Teacher.objects.get_teachers_short_data(), many=True
             )
+            
             asignature_keys = {asignature['teacher'] for asignature in asignature_serializer.data}
             if len(asignatures) != 0:
                 valid_teachers = [
@@ -246,6 +256,8 @@ class AsignatureViewSet(LoggingMixin, viewsets.ModelViewSet):
                 ]
             else:
                 valid_teachers = teacher_serializer.data
+            """
+            valid_teachers = teacher_serializer.data
 
             return Response(
                 {

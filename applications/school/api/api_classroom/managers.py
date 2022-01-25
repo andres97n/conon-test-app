@@ -65,6 +65,6 @@ class ClassroomManager(models.Manager):
                 asignatureclassroom__teacher_id=pk,
                 state=1,
                 auth_state='A'
-            ).order_by('name')
+            ).distinct('id')
         except:
             return None

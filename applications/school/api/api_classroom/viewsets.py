@@ -310,12 +310,12 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
 
         if request.data:
             teacher = Teacher.objects.get_teacher_by_user(pk=request.data['user'])
-
             if teacher is not None:
                 classrooms = self.get_serializer().Meta.model.objects. \
                     get_classrooms_by_teacher(pk=teacher['id'])
 
                 if classrooms is not None:
+
                     classroom_serializer = self.get_serializer(classrooms, many=True)
 
                     return Response(

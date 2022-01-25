@@ -64,7 +64,7 @@ class AsignatureClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
                 {
                     'ok': True,
                     'id': asignature_classroom_serializer.data['id'],
-                    'message': 'Valores creados correctamente.'
+                    'message': 'Asignación creada correctamente.'
                 },
                 status=status.HTTP_201_CREATED
             )
@@ -227,3 +227,27 @@ class AsignatureClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
                     'detail': 'No se encuentró los atributos necesarios para el filtro.'
                 }
             )
+
+    @action(detail=True, methods=['DELETE'], url_path='block-asignature-classroom')
+    def block_asignature_classroom(self, request, pk=None):
+        asignature_classroom = self.get_queryset(pk)
+        if asignature_classroom:
+            asignature_classroom.state = 0
+            asignature_classroom.save()
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Asignación bloqueada correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No existe este Registro.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+

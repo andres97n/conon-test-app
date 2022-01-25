@@ -185,3 +185,4 @@ class TeacherByAreaListSerializer(serializers.ModelSerializer):
             'name': f"{instance['teachers__person__name']} {instance['teachers__person__last_name']}",
             'title': instance['teachers__title'],
         }
+

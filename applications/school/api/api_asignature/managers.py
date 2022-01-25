@@ -25,7 +25,7 @@ class AsignatureManager(models.Manager):
     def get_asignature_by_id(self, pk=None):
         try:
             return self.select_related('knowledge_area').\
-                filter(id=pk, auth_state='A', state=1).first()
+                filter(auth_state='A', state=1).get(id=pk)
         except:
             return None
 
