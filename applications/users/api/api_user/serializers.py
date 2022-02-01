@@ -5,6 +5,8 @@ from applications.base.functions import save_auth_user
 
 
 # TODO: Realizar un serializer para el cambio de contraseña
+# TODO: Comprobar que el OneToOneField no tenga problemas con el campo Person,
+#   ya que si el usuario elimina la person es posible que esa id no se pueda utilizar
 
 
 # Serializer for Create and Update a normal User
@@ -81,14 +83,30 @@ class UserSerializer(serializers.ModelSerializer):
     '''
 
     def to_representation(self, instance):
+        if instance.person is None:
+            return {
+                'id': instance.id,
+                'person': {
+                    'id': None,
+                    'identification': '',
+                    'name': '',
+                    'last_name': '',
+                },
+                'username': instance.username,
+                'email': instance.email,
+                'type': instance.type,
+                'created_at': instance.created_at
+            }
+
         return {
             'id': instance.id,
-            'username': instance.username,
             'person': {
-                'id': instance.person.id,
-                'name': instance.person.name,
-                'last_name': instance.person.last_name,
+              'id': instance.person.id,
+              'identification': instance.person.identification,
+              'name': instance.person.name,
+              'last_name': instance.person.last_name,
             },
+            'username': instance.username,
             'email': instance.email,
             'type': instance.type,
             'created_at': instance.created_at

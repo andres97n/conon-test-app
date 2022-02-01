@@ -1,7 +1,8 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
-from .serializers import TeamAbpSerializer
+from .serializers import TeamAbpSerializer, StudentsInTeamAbpSerializer
 from applications.base.permissions import IsOwnerAndTeacher
 from applications.base.paginations import CononPagination
 
@@ -136,3 +137,26 @@ class TeamAbpViewSet(viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    # Get Users Detail in Team ABP
+    @action(detail=True, methods=['GET'], url_path='detail')
+    def get_detail_by_team_abp(self, request, pk=None):
+        detail_team_abp = self.get_serializer().Meta.model.objects.get_detail_by_team_abp(pk)
+
+        if detail_team_abp:
+            team_abp_serializer = StudentsInTeamAbpSerializer(detail_team_abp, many=True)
+            return Response(
+                {
+                    'ok': True,
+                    'detail': team_abp_serializer.data
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se encontró este Grupo.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )

@@ -11,5 +11,5 @@ class RubricDetailAbpManager(models.Manager):
 
     def get_rubric_detail_abp_list(self):
         return self.select_related('rubric_abp').\
-            filter(auth_state='A', active=True).order_by('--created_at')
+            filter(auth_state='A', active=True).order_by('-created_at')
 

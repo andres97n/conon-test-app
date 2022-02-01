@@ -248,6 +248,7 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
         )
 
     # TODO: Cambiar el método de lista por uno correcto
+    #   así como dar salida cuando una lista esté vacía y dar salida con la lista grande
     @action(detail=True, methods=['POST'], url_path='new-students')
     def get_new_students_for_classrooms(self, request, pk=None):
         students = self.get_serializer().Meta.model.objects.get_students_by_classroom_id(pk=pk)
@@ -373,6 +374,14 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
                 }
             )
 
+    """
+    @action(detail=True, methods=['GET'], url_path='students-to-group')
+    def get_students_by_classroom_for_to_group(self,pk=None):
+        students = self.get_serializer().Meta.model.objects.get_students_by_classroom_id(pk=pk)
+
+        if students is None:
+    """
+
     @action(detail=True, methods=['DELETE'], url_path='block-students')
     def block_students_by_classroom(self, request, pk=None):
 
@@ -380,8 +389,6 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
             students = self.get_serializer().Meta.model.objects.get_students_by_classroom_id(pk=pk)
             classroom = self.get_queryset(pk=pk)
             validate_students = True
-            print(students)
-            print(request.data['students'])
             for student in students:
                 if student['students'] not in request.data['students']:
                     validate_students = False

@@ -11,7 +11,7 @@ class EvaluationAbpManager(models.Manager):
 
     def get_evaluation_abp_list(self):
         return self.select_related('abp', 'user').\
-            filter(auth_state='A', state=1).order_by('--created_at')
+            filter(auth_state='A', state=1).order_by('-created_at')
 
     def evaluation_abp_exists(self, pk=None):
         try:

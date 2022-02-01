@@ -7,11 +7,10 @@ from rest_framework_tracking.mixins import LoggingMixin
 
 from .serializers import AsignatureSerializer, AsignatureDetailSerializer
 from applications.base.paginations import CononPagination
-from applications.users.models import Teacher
 from applications.school.models import Classroom, AsignatureClassroom, KnowledgeArea
-from applications.users.api.api_teacher.serializers import TeachersShortSerializer
 from applications.school.api.api_classroom.serializers import ClassroomShortSerializer
 from applications.school.api.api_knowledge_area.serializers import TeacherByAreaListSerializer
+# from applications.users.api.api_teacher.serializers import TeachersShortSerializer
 
 
 class AsignatureViewSet(LoggingMixin, viewsets.ModelViewSet):
@@ -198,7 +197,7 @@ class AsignatureViewSet(LoggingMixin, viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-# TODO: Si es que se diposne de tiempo, se debería agregar nivel de asignatura para el filtro de las aulas
+# TODO: Si es que se dispone de tiempo, se debería agregar nivel de asignatura para el filtro de las aulas
 
     @action(detail=True, methods=['GET'], url_path='classrooms')
     def get_asignatures_detail_classrooms(self, request, pk=None):

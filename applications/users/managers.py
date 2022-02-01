@@ -68,6 +68,15 @@ class UserManager(BaseUserManager, models.Manager):
 
         return False
 
+    def student_user_exists(self, pk=None):
+        try:
+            if self.filter(id=pk, type=2, is_active=True, auth_state='A').exists():
+                return True
+            else:
+                return False
+        except:
+            return False
+
     def validate_user_type(self, pk=None, type=None):
         users = None
         is_admin, is_teacher, is_student, is_valid = False, False, False, True

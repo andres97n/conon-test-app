@@ -9,7 +9,7 @@ from applications.base.paginations import CononPagination
 
 class AbpViewSet(LoggingMixin, viewsets.ModelViewSet):
     serializer_class = AbpSerializer
-    permission_classes = ([IsOwnerAndTeacher])
+    permission_classes = [IsOwnerAndTeacher]
     pagination_class = CononPagination
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}

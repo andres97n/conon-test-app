@@ -58,6 +58,7 @@ class RubricAbpSerializer(serializers.ModelSerializer):
                 },
             },
             'description_rubric': instance.description_rubric,
+            'abp_final_value': instance.abp_final_value,
             'observations': instance.observations,
             'state': instance.state,
             'created_at': instance.created_at

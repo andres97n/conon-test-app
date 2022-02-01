@@ -12,6 +12,16 @@ class AbpSerializer(serializers.ModelSerializer):
             'auth_state'
         ]
 
+    # Topic Validation
+    def validate_topic(self, value):
+        if value.type != 2:
+            raise serializers.ValidationError(
+                {
+                    'topic': 'No se puede crear este ABP, por favor revise el tipo seleccionado.'
+                }
+            )
+        return value
+
     # State Validation
     def validate_state(self, value):
         if value < 0 or value > 1:

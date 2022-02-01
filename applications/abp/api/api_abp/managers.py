@@ -12,7 +12,7 @@ class AbpManager(models.Manager):
         return abp
 
     def get_abp_list(self):
-        return self.select_related('topic').filter(auth_state='A', state=1).order_by('--created_at')
+        return self.select_related('topic').filter(auth_state='A', state=1).order_by('-created_at')
 
     def abp_exists(self, pk=None):
         try:

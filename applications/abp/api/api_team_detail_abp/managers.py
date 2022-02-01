@@ -11,4 +11,4 @@ class TeamDetailAbpManager(models.Manager):
 
     def get_team_detail_abp_list(self):
         return self.select_related('team_abp', 'user').\
-            filter(auth_state='A', active=True).order_by('--created_at')
+            filter(auth_state='A', active=True).order_by('-created_at')

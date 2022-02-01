@@ -155,3 +155,14 @@ class StudentShortListSerializer(serializers.ModelSerializer):
             'age': instance['person__age'],
             'email': instance['person__user__email']
         }
+
+class StudentListByUserSerializer(serializers.Serializer):
+
+    def to_representation(self, instance):
+        return {
+            'id': instance['id'],
+            'user': instance['person__user__id'],
+            'identification': instance['person__identification'],
+            'name': f"{instance['person__name']} {instance['person__last_name']}",
+            'email': instance['person__user__email']
+        }

@@ -5,22 +5,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/applications/abp/api/api_evaluation_detail_abp/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/abp/api/api_evaluation_detail_abp/managers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/abp/api/api_evaluation_detail_abp/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/applications/abp/api/api_evaluation_detail_abp/viewsets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/abp/api/api_team_abp/api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/abp/routers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/applications/abp/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_evaluation_abp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_evaluation_abp/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_abp/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_abp/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_abp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_abp/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_abp/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_abp/viewsets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_evaluation_abp/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_evaluation_abp/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_evaluation_detail_abp/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_evaluation_detail_abp/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_rubric_abp/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_rubric_abp/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_rubric_abp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_rubric_abp/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_rubric_detail_abp/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_rubric_detail_abp/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_team_abp/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_team_abp/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_team_abp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_team_abp/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_team_abp/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_team_abp/viewsets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_team_detail_abp/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_team_detail_abp/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_team_detail_abp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_team_detail_abp/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/abp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_asignature/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_asignature/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/base/permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/base/permissions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/school/api/api_asignature/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_asignature/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_asignature_classroom/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_asignature_classroom/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_asignature_classroom/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_asignature_classroom/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_asignature_classroom/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_asignature_classroom/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_classroom/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_classroom/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/api/api_classroom/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_classroom/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/school/api/api_classroom/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_classroom/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_knowledge_area/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/topic/api/api_topic/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/topic/api/api_topic/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/topic/api/api_topic/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/topic/api/api_topic/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/topic/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/topic/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_student/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_student/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_student/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_student/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conon/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,11 +85,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/applications/abp/api/api_team_abp" />
       <recent name="$PROJECT_DIR$/applications/abp" />
       <recent name="$PROJECT_DIR$/applications/topic/api" />
       <recent name="$PROJECT_DIR$/applications/school/api" />
       <recent name="$PROJECT_DIR$/applications/users" />
-      <recent name="$PROJECT_DIR$/applications/base" />
     </key>
   </component>
   <component name="RunManager">
@@ -378,6 +392,22 @@
       <workItem from="1643047948739" duration="1642000" />
       <workItem from="1643054891473" duration="3574000" />
       <workItem from="1643069339662" duration="1424000" />
+      <workItem from="1643115882598" duration="1873000" />
+      <workItem from="1643134443838" duration="868000" />
+      <workItem from="1643142860985" duration="6754000" />
+      <workItem from="1643158634078" duration="889000" />
+      <workItem from="1643202296583" duration="1938000" />
+      <workItem from="1643220921227" duration="976000" />
+      <workItem from="1643229825289" duration="7646000" />
+      <workItem from="1643375149358" duration="7863000" />
+      <workItem from="1643393264641" duration="3048000" />
+      <workItem from="1643419482266" duration="22000" />
+      <workItem from="1643493231043" duration="10115000" />
+      <workItem from="1643557441464" duration="4225000" />
+      <workItem from="1643575651000" duration="502000" />
+      <workItem from="1643640583501" duration="607000" />
+      <workItem from="1643643320198" duration="3206000" />
+      <workItem from="1643653373164" duration="6320000" />
     </task>
     <servers />
   </component>
@@ -402,16 +432,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/applications/school/api/api_classroom/managers.py</url>
-          <line>42</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

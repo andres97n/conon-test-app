@@ -11,5 +11,5 @@ class EvaluationDetailAbpManager(models.Manager):
 
     def get_evaluation_detail_abp_list(self):
         return self.select_related('evaluation_abp').\
-            filter(auth_state='A', active=True).order_by('--created_at')
+            filter(auth_state='A', active=True).order_by('-created_at')
 

@@ -29,12 +29,14 @@ class TeamAbpSerializer(serializers.ModelSerializer):
                     'abp': 'Error, la metodología ABP ingresada no es válida; consulte con el Administrador.'
                 }
             )
+        """
         if not User.objects.user_exists(validated_data['moderator'].id):
             raise serializers.ValidationError(
                 {
                     'moderator': 'Error, el moderador ingresado no es válido; consulte con el Administrador.'
                 }
             )
+        """
         team_abp = TeamAbp(**validated_data)
         team_abp.save()
         return team_abp
@@ -47,6 +49,7 @@ class TeamAbpSerializer(serializers.ModelSerializer):
                     'abp': 'Error, no se puede cambiar de pertenencia; por favor consulte con el Administrador.'
                 }
             )
+        """
         if instance.moderator != validated_data['moderator']:
             if not User.objects.user_exists(validated_data['moderator'].id):
                 raise serializers.ValidationError(
@@ -54,6 +57,7 @@ class TeamAbpSerializer(serializers.ModelSerializer):
                         'moderator': 'Error, el moderador ingresado no es válido; consulte con el Administrador.'
                     }
                 )
+        """
         update_team_abp = super().update(instance, validated_data)
         update_team_abp.save()
         return update_team_abp
@@ -70,11 +74,19 @@ class TeamAbpSerializer(serializers.ModelSerializer):
                     'title': instance.abp.topic.title
                 },
             },
-            'moderator': {
-                'id': instance.moderator.id,
-                'name': instance.moderator.__str__()
-            },
             'observations': instance.observations,
             'state': instance.state,
             'created_at': instance.created_at
         }
+
+
+class StudentsInTeamAbpSerializer(serializers.Serializer):
+
+    def to_representation(self, instance):
+        return {
+            'id': instance['id'],
+            'team_detail_id': instance['teamdetailabp__id'],
+            'user': instance['teamdetailabp__user_id'],
+            'is_moderator': instance['teamdetailabp__is_moderator']
+        }
+

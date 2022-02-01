@@ -72,3 +72,13 @@ class TopicManager(models.Manager):
             )
         except:
             return None
+
+    def get_topic_by_id_active(self, pk=None):
+        try:
+            return self.select_related('owner').filter(
+                id=pk,
+                auth_state='A',
+                active=True
+            ).first()
+        except None:
+            return None

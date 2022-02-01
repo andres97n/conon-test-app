@@ -4,6 +4,8 @@ from applications.topic.models import Topic
 from applications.users.models import Student, User
 # from applications.users.api.api_student.serializers import StudentShortListSerializer
 
+# TODO: Crear un método que valide si existen los usuario y a la vez si son docentes
+
 
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:

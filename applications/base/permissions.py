@@ -75,6 +75,7 @@ class IsOwnerAndTeacher(permissions.BasePermission):
     message = 'Este usuario no tiene permiso para realizar esta acción.'
 
     def has_permission(self, request, view):
+        print(request)
         if request.user.is_authenticated:
             return True
 

@@ -44,7 +44,7 @@ class Abp(BaseModel):
         choices=AbpStatus.choices,
         default=1,
         null=False,
-        blank=False
+        blank=True
     )
 
     topic = models.OneToOneField(
@@ -76,7 +76,7 @@ class TeamAbp(BaseModel):
     state = models.PositiveSmallIntegerField(
         choices=TeamAbpStatus.choices,
         default=1,
-        null=True,
+        null=False,
         blank=True
     )
 
@@ -86,12 +86,14 @@ class TeamAbp(BaseModel):
         null=False,
         blank=False
     )
+    """
     moderator = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         null=False,
         blank=False
     )
+    """
 
     objects = TeamAbpManager()
 
@@ -101,14 +103,19 @@ class TeamAbp(BaseModel):
         verbose_name_plural = 'TeamsAbp'
 
     def __str__(self):
-        return self.moderator.person.__str__()
+        return self.abp.problem
 
 
 class TeamDetailAbp(BaseModel):
+    is_moderator = models.BooleanField(
+        default=False,
+        null=False,
+        blank=False
+    )
     active = models.BooleanField(
         default=True,
         null=False,
-        blank=False
+        blank=True
     )
 
     team_abp = models.ForeignKey(
@@ -144,6 +151,13 @@ class RubricAbp(BaseModel):
         null=True,
         blank=True
     )
+    abp_final_value = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        default=0,
+        null=False,
+        blank=False
+    )
     observations = models.TextField(
         null=True,
         blank=True
@@ -151,7 +165,7 @@ class RubricAbp(BaseModel):
     state = models.PositiveSmallIntegerField(
         choices=RubricAbpStatus.choices,
         default=1,
-        null=True,
+        null=False,
         blank=True
     )
 

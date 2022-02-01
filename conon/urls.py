@@ -19,11 +19,7 @@ from django.urls import path, include, re_path
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView
-)
+from rest_framework_simplejwt.views import TokenVerifyView
 
 from applications.users.views import LoginView, LogoutView, RefreshView
 
@@ -58,5 +54,7 @@ urlpatterns = [
     path('school/api/', include('applications.school.routers')),
     path('topic/api/', include('applications.topic.routers')),
     path('dua/api/', include('applications.dua.routers')),
+    path('abp/api/', include('applications.abp.routers')),
+    path('abp/api/team-abp/', include('applications.abp.urls')),
 ]
 

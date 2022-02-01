@@ -6,6 +6,8 @@ from applications.topic.api.api_topic.managers import TopicManager
 from applications.topic.api.api_comment.managers import CommentManager
 from applications.topic.api.api_reply.managers import ReplyManager
 
+# TODO: Add two relations more to Topic: classroom and asignature
+
 
 class Topic(BaseModel):
     class MethodologiesChoices(models.IntegerChoices):
