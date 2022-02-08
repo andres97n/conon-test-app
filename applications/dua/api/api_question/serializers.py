@@ -12,9 +12,11 @@ class QuestionSerializer(serializers.ModelSerializer):
         ]
 
     def validate_value(self, value):
-        if value < 0:
+        if value <= 0:
             raise serializers.ValidationError(
-                detail='Error, la siguiente pregunta no puede tener un valor negativo.'
+                {
+                    'value': 'Error, la siguiente pregunta no puede tener un valor negativo.'
+                }
             )
         return value
 
@@ -23,7 +25,10 @@ class QuestionSerializer(serializers.ModelSerializer):
         if not Activity.objects. \
                 activity_exists(validated_data['activity'].id):
             raise serializers.ValidationError(
-                detail='Error, no se puede crear esta Pregunta; por favor consulte con el Administrador.'
+                {
+                    'activity': 'Error, no se puede crear esta Pregunta; por favor '
+                                'consulte con el Administrador.'
+                }
             )
         question = Question(**validated_data)
         question.save()
@@ -33,8 +38,10 @@ class QuestionSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if instance.activity != validated_data['activity']:
             raise serializers.ValidationError(
-                detail='Error, no se puede editar esta Pregunta; '
-                       'por favor consulte con el Administrador '
+                {
+                    'activity': 'Error, no se puede editar esta Pregunta; '
+                                'por favor consulte con el Administrador.'
+                }
             )
         update_question = super().update(instance, validated_data)
         update_question.save()

@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework_tracking.mixins import LoggingMixin
+from rest_framework.decorators import action
 
-from .serializers import ActivitySerializer
+from .serializers import ActivitySerializer, ActivityDetailSerializer
 from applications.base.permissions import IsOwnerAndTeacher
 
 
@@ -41,6 +41,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': activity_serializer.data['id'],
                     'message': 'Actividad creada correctamente.'
                 },
                 status=status.HTTP_201_CREATED
@@ -131,3 +132,36 @@ class ActivityViewSet(viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    # TODO: Probar url
+    @action(detail=True, methods=['GET'], url_path='questions')
+    def get_activity_detail(self, pk=None):
+        if pk:
+            questions = self.get_serializer().Meta.model.objects.get_questions_by_activity(pk)
+            if questions:
+                question_serializer = ActivityDetailSerializer(questions, many=True)
+                return Response(
+                    {
+                        'ok': False,
+                        'conon_data': question_serializer.data
+                    },
+                    status=status.HTTP_200_OK
+                )
+
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se encontraron preguntas sobre esta Actividad.'
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se encontró la Actividad.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )

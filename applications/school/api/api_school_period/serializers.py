@@ -15,7 +15,9 @@ class SchoolPeriodSerializer(serializers.ModelSerializer):
     def validate_state(self, value):
         if value > 1:
             raise serializers.ValidationError(
-                'Error, no se puede asignar este Estado a un Período Lectivo.'
+                {
+                    'state': 'Error, no se puede asignar este Estado a un Período Lectivo.'
+                }
             )
         return value
 
@@ -42,11 +44,12 @@ class SchoolPeriodSerializer(serializers.ModelSerializer):
     # Update School Period
     def update(self, instance, validated_data):
         if instance.name != validated_data['name']:
-            raise serializers.ValidationError(
-                {
-                    'name': 'Error, no se puede cambiar el nombre del Período Lectivo.'
-                }
-            )
+            if SchoolPeriod.objects.is_name_exists(validated_data['name']):
+                raise serializers.ValidationError(
+                    {
+                        'name': 'Error, no se puede cambiar el nombre del Período Lectivo.'
+                    }
+                )
         update_school_period = super().update(instance, validated_data)
         update_school_period.save()
         return update_school_period

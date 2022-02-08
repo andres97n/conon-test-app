@@ -1,9 +1,11 @@
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
-from .serializers import DuaSerializer
+from .serializers import DuaSerializer, DuaStudentsSerializer
 from applications.base.permissions import IsOwnerAndTeacher
+from applications.users.models import Person, Student
 
 
 class DuaViewSet(viewsets.ModelViewSet):
@@ -38,7 +40,8 @@ class DuaViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
-                    'message': 'Tema creado correctamente.'
+                    'id': dua_serializer.data['id'],
+                    'message': 'Tema de Estudio creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED
             )
@@ -117,7 +120,7 @@ class DuaViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
-                    'message': 'Tema eliminado correctamente.'
+                    'message': 'Tema de Estudio eliminado correctamente.'
                 },
                 status=status.HTTP_200_OK
             )
@@ -127,5 +130,56 @@ class DuaViewSet(viewsets.ModelViewSet):
                 'ok': False,
                 'detail': 'No existe este Tema de Estudio.'
             },
-            status=status.HTTP_400_BAD_REQUEST
+            status=status.HTTP_404_NOT_FOUND
         )
+
+# TODO: Revisar si funciona, si es que no se utiliza este action debería ir en TopicViewSet
+    @action(detail=True, methods=['GET'], url_path='students')
+    def get_students_list_by_dua(self, pk=None):
+        if pk:
+            students = self.get_serializer().Meta.model.objects.get_students_by_dua(pk=pk)
+
+            if students:
+                students_data = []
+                for student in students:
+                    person = Person.objects.get_person_detail_data(
+                        student['topic__students__person_id']
+                    )
+                    if person:
+                        user = Student.objects.get_user(student['students'])
+                        if user:
+                            students_data.append({
+                                student['students'],
+                                person,
+                                {
+                                    user['person__user__id'],
+                                    user['person__user__email']
+                                }
+                            })
+                students_serializer = DuaStudentsSerializer(students_data, many=True)
+
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': students_serializer.data
+                    },
+                    status=status.HTTP_200_OK
+                )
+
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No existe este Tema de Estudio.'
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se envío ninguna referencia acerca del DUA.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )

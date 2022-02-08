@@ -73,7 +73,7 @@ def get_students_by_classroom_for_to_group(request, classroom, abp):
         return Response(
             {
                 'ok': False,
-                'detail': 'Método no permitido'
+                'detail': 'Método no permitido.'
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )

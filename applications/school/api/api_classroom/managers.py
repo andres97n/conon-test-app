@@ -68,3 +68,7 @@ class ClassroomManager(models.Manager):
             ).distinct('id')
         except:
             return None
+
+# TODO: Comprobar si funciona
+    def exists_classroom(self, classroom=None):
+        return self.filter(id=classroom, state=1, auth_state='A').exists()

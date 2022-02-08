@@ -38,7 +38,8 @@ class QuestionViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
-                    'message': 'Pregunta creada correctamente.'
+                    'id': question_serializer.data['id'],
+                    'message': 'Pregunta agregada correctamente.'
                 },
                 status=status.HTTP_201_CREATED
             )

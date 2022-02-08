@@ -40,14 +40,7 @@ class SchoolPeriodManager(models.Manager):
             return False
 
     def is_name_exists(self, name=None):
-        school_period = None
-        try:
-            school_period = self.filter(name=name, auth_state='A').first()
-        except None:
-            pass
-        if school_period is None:
-            return False
-        return True
+        return self.filter(name=name, auth_state='A').exists()
 
     def get_many_school_periods(self, periods=None):
         try:
@@ -62,3 +55,5 @@ class SchoolPeriodManager(models.Manager):
             'id', 'name'
         )
 
+    def get_period_active(self):
+        return self.filter(state=1, auth_state='A').first()

@@ -50,3 +50,7 @@ class AsignatureManager(models.Manager):
             pass
 
         return asignatures
+
+    # TODO: Comprobar si funciona
+    def exists_asignature(self, asignature=None):
+        return self.filter(id=asignature, state=1, auth_state='A').exists()

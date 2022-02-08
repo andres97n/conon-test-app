@@ -12,11 +12,33 @@ class DuaSerializer(serializers.ModelSerializer):
             'auth_state'
         ]
 
+    # Validate Images
+    def validate_images(self, value):
+        if len(value) != 2:
+            raise serializers.ValidationError(
+                {
+                    'images': 'Error, se deben mandar dos imágenes; consulte con el Administrador.'
+                }
+            )
+        return value
+
+    # Validate State
+    def validate_state(self, value):
+        if value > 1:
+            raise serializers.ValidationError(
+                {
+                    'state': 'Error, no se puede asignar este Estado a este metodología.'
+                }
+            )
+        return value
+
     # Create DUA
     def create(self, validated_data):
         if not Topic.objects.topic_exists(validated_data['topic'].id):
             raise serializers.ValidationError(
-                detail='Error, no se puede crear este Tema; consulte con el Administrador.'
+                {
+                    'topic': 'Error, no se puede crear este Tema; consulte con el Administrador.'
+                }
             )
         dua = Dua(**validated_data)
         dua.save()
@@ -25,8 +47,12 @@ class DuaSerializer(serializers.ModelSerializer):
     # Update DUA
     def update(self, instance, validated_data):
         if instance.topic != validated_data['topic']:
-            raise serializers.ValidationError('Error, no es posible editar este Tema; '
-                                              'por favor consulte con el Administrador.')
+            raise serializers.ValidationError(
+                {
+                    'topic': 'Error, no es posible editar este Tema; '
+                             'por favor consulte con el Administrador.'
+                }
+            )
         update_dua = super().update(instance, validated_data)
         update_dua.save()
         return update_dua
@@ -48,3 +74,20 @@ class DuaSerializer(serializers.ModelSerializer):
             'observations': instance.observations,
             'created_at': instance.created_at
         }
+
+
+class DuaStudentsSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        print(instance)
+        return {
+            'id': instance['students'],
+            'person': {
+                'identification': instance.person.identification,
+                'name': f'{instance.person.name} {instance.person.last_name}',
+            },
+            'user': {
+                'id': instance['person__user__id'],
+                'email': instance['person__user__email']
+            }
+        }
+

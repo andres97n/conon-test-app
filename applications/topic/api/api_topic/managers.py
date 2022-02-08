@@ -4,12 +4,12 @@ from django.db import models
 class TopicManager(models.Manager):
 
     def get_topic_list(self):
-        return self.select_related('owner').filter(auth_state='A').\
+        return self.select_related('owner', 'classroom', 'asignature').filter(auth_state='A'). \
             order_by('-created_at', 'active')
 
     def get_topic_by_id(self, pk=None):
         try:
-            return self.select_related('owner').filter(
+            return self.select_related('owner', 'classroom', 'asignature').filter(
                 id=pk,
                 auth_state='A'
             ).first()
@@ -17,19 +17,22 @@ class TopicManager(models.Manager):
             return None
 
     def topic_exists(self, pk=None):
-        result = None
         try:
             result = self.filter(id=pk, active=True, auth_state='A').first()
+            if result:
+                return True
+            else:
+                return False
         except None:
-            pass
-        return result
+            return False
 
     def get_topics_by_type(self, type=None):
         try:
             self.filter()
-            return self.select_related('owner', 'owner__person').filter(
-                type=type, auth_state='A'
-            ).order_by('-created_at', 'active')
+            return self.select_related('owner', 'owner__person', 'classroom', 'asignature'). \
+                filter(
+                    type=type, auth_state='A'
+                ).order_by('-created_at', 'active')
         except:
             return None
 
@@ -67,7 +70,7 @@ class TopicManager(models.Manager):
 
     def get_topics_by_owner(self, user=None):
         try:
-            return self.select_related('owner').filter(
+            return self.select_related('owner', 'classroom', 'asignature').filter(
                 owner_id=user, active=True, auth_state='A'
             )
         except:
@@ -75,10 +78,17 @@ class TopicManager(models.Manager):
 
     def get_topic_by_id_active(self, pk=None):
         try:
-            return self.select_related('owner').filter(
+            return self.select_related('owner', 'classroom', 'asignature').filter(
                 id=pk,
                 auth_state='A',
                 active=True
             ).first()
         except None:
+            return None
+
+    def get_topics_by_students(self, student_id=None, period_id=None):
+        try:
+            return self.select_related('owner', 'classroom', 'asignature').\
+                filter(students=student_id, classroom__school_period=period_id, auth_state='A')
+        except:
             return None

@@ -30,13 +30,10 @@ class PersonManager(models.Manager):
         return self.filter(auth_state='A').order_by('last_name')
 
     def get_person_detail_data(self, pk=None):
-        person = None
         try:
-            person = self.filter(id=pk, auth_state='A').first()
+            return self.filter(id=pk, auth_state='A').first()
         except:
-            pass
-
-        return person
+            return None
 
     def get_many_persons(self, persons=None):
         result = None
@@ -46,3 +43,10 @@ class PersonManager(models.Manager):
         except:
             pass
         return result
+
+    def get_person_by_user(self, user_id=None):
+        try:
+            return self.select_related('student', 'teacher').\
+                filter(user=user_id, auth_state='A').first()
+        except:
+            return None

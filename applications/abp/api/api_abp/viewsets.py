@@ -1,6 +1,8 @@
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework_tracking.mixins import LoggingMixin
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 from .serializers import AbpSerializer
 from applications.base.permissions import IsOwnerAndTeacher
@@ -13,6 +15,8 @@ class AbpViewSet(LoggingMixin, viewsets.ModelViewSet):
     pagination_class = CononPagination
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['topic', 'state']
 
     # Return ABP Data
     def get_queryset(self, pk=None):
@@ -48,6 +52,7 @@ class AbpViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': abp_serializer.data['id'],
                     'message': 'Tema de Estudio creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED

@@ -50,7 +50,7 @@ class Dua(BaseModel):
         'estado',
         choices=DuaStatus.choices,
         default=1,
-        null=True,
+        null=False,
         blank=True,
     )
 
@@ -72,6 +72,11 @@ class Dua(BaseModel):
 
 
 class Activity(BaseModel):
+
+    class ActivityStatus(models.IntegerChoices):
+        CLOSE = 0
+        OPEN = 1
+
     description = models.TextField(
         null=False,
         blank=False
@@ -87,9 +92,16 @@ class Activity(BaseModel):
         null=False,
         blank=False
     )
+    state = models.PositiveSmallIntegerField(
+        'estado',
+        choices=ActivityStatus.choices,
+        default=1,
+        null=False,
+        blank=True,
+    )
 
-    topic = models.ForeignKey(
-        Topic,
+    dua = models.ForeignKey(
+        Dua,
         on_delete=models.CASCADE,
         null=False,
         blank=False

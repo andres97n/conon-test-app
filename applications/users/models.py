@@ -213,7 +213,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         try:
             return f'{self.person.name} {self.person.last_name}'
         except:
-            return None
+            return 'No dispone de nombre'
 
     def get_username(self):
         return self.username

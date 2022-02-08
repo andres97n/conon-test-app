@@ -2,11 +2,12 @@ from django.db import models
 
 from applications.base.models import BaseModel
 from applications.users.models import Student, User
+from applications.school.models import Classroom, Asignature
 from applications.topic.api.api_topic.managers import TopicManager
 from applications.topic.api.api_comment.managers import CommentManager
 from applications.topic.api.api_reply.managers import ReplyManager
 
-# TODO: Add two relations more to Topic: classroom and asignature
+# TODO: Revisar porque en algunos raise errors en serializers se muestra como array y en otros no
 
 
 class Topic(BaseModel):
@@ -54,6 +55,18 @@ class Topic(BaseModel):
 
     owner = models.ForeignKey(
         User,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+    classroom = models.ForeignKey(
+        Classroom,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+    asignature = models.ForeignKey(
+        Asignature,
         on_delete=models.CASCADE,
         null=False,
         blank=False

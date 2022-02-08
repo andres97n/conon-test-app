@@ -27,14 +27,7 @@ class TeamDetailAbpSerializer(serializers.ModelSerializer):
                     'team_abp': 'Error, el grupo ingresado no es válido; consulte con el Administrador.'
                 }
             )
-        elif TeamAbp.objects.get_count_of_users_in_team_abp(attrs['team_abp'].id) == 4:
-                raise serializers.ValidationError(
-                    {
-                        'team_abp': 'Error, según la aplicación de ABP por CONON se requiere un '
-                                    'máximo de 4 estudiantes por grupo.'
-                    }
-                )
-        if not User.objects.student_user_exists(attrs['user'].id):
+        if not User.objects.type_user_exists(attrs['user'].id, 2):
             raise serializers.ValidationError(
                 {
                     'user': 'Error, el estudiante ingresado no es válido; consulte con el Administrador.'
@@ -51,6 +44,13 @@ class TeamDetailAbpSerializer(serializers.ModelSerializer):
 
     # Create Team Detail ABP
     def create(self, validated_data):
+        if TeamAbp.objects.get_count_of_users_in_team_abp(validated_data['team_abp'].id) == 4:
+            raise serializers.ValidationError(
+                {
+                    'team_abp': 'Error, según la aplicación de ABP por CONON se requiere un '
+                                'máximo de 4 estudiantes por grupo.'
+                }
+            )
         team_detail_abp = TeamDetailAbp(**validated_data)
         team_detail_abp.save()
         return team_detail_abp

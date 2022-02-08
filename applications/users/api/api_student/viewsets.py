@@ -7,6 +7,8 @@ from rest_framework_tracking.mixins import LoggingMixin
 from .serializers import StudentSerializer
 from applications.base.permissions import IsTeacher
 from applications.base.paginations import CononPagination
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 # TODO: Crear un método que elimine de la base de datos la información de person,
 #   student y user si es que los métodos de guardar y eliminar fallan
@@ -19,6 +21,8 @@ class StudentViewSet(LoggingMixin, viewsets.ModelViewSet):
     serializer_class = StudentSerializer
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['person']
 
     # Return Student data
     def get_queryset(self, pk=None):

@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from applications.dua.models import Activity
-from applications.topic.models import Topic
+from applications.dua.models import Dua, Activity
 
 
 class ActivitySerializer(serializers.ModelSerializer):
@@ -13,11 +12,23 @@ class ActivitySerializer(serializers.ModelSerializer):
             'auth_state'
         ]
 
+    # Validate State
+    def validate_state(self, value):
+        if value > 1:
+            raise serializers.ValidationError(
+                {
+                    'state': 'Error, no se puede asignar este Estado a este metodología.'
+                }
+            )
+        return value
+
     # Create Activity
     def create(self, validated_data):
-        if not Topic.objects.topic_exists(validated_data['topic'].id):
+        if not Dua.objects.exists_dua(validated_data['dua'].id):
             raise serializers.ValidationError(
-                detail='Error, no se puede crear esta Actividad; consulte con el Administrador.'
+                {
+                    'dua': 'Error, no se puede crear esta Actividad; consulte con el Administrador.'
+                }
             )
         activity = Dua(**validated_data)
         activity.save()
@@ -25,9 +36,13 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     # Update Activity
     def update(self, instance, validated_data):
-        if instance.topic != validated_data['topic']:
-            raise serializers.ValidationError('Error, no es posible editar esta Actividad; '
-                                              'por favor consulte con el Administrador.')
+        if instance.dua != validated_data['dua']:
+            raise serializers.ValidationError(
+                {
+                    'dua': 'Error, no es posible editar esta Actividad; por favor '
+                           'consulte con el Administrador.'
+                }
+            )
         update_activity = super().update(instance, validated_data)
         update_activity.save()
         return update_activity
@@ -36,11 +51,26 @@ class ActivitySerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return {
             'id': instance.id,
-            'topic': {
-                'id': instance.topic.id,
-                'title': instance.topic.title
+            'dua': {
+                'id': instance.dua.id,
+                'title': instance.dua.observations,
+                'topic': {
+                    'id': instance.dua.topic.id,
+                    'title': instance.dua.topic.title
+                }
             },
             'description': instance.description,
             'objective': instance.objective,
             'created_at': instance.created_at
+        }
+
+
+class ActivityDetailSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        print(instance)
+        return {
+            'id': instance['question'],
+            'title': instance['question__title'],
+            'answers': instance['question__answers'],
+            'value': instance['question__value']
         }
