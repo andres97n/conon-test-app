@@ -86,14 +86,6 @@ class TeamAbp(BaseModel):
         null=False,
         blank=False
     )
-    """
-    moderator = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        null=False,
-        blank=False
-    )
-    """
 
     objects = TeamAbpManager()
 
@@ -151,9 +143,7 @@ class RubricAbp(BaseModel):
         null=True,
         blank=True
     )
-    abp_final_value = models.DecimalField(
-        max_digits=4,
-        decimal_places=2,
+    abp_final_value = models.FloatField(
         default=0,
         null=False,
         blank=False
@@ -197,14 +187,11 @@ class RubricDetailAbp(BaseModel):
         null=True,
         blank=True
     )
-    grade_percentage = models.CharField(
-        max_length=5,
+    grade_percentage = models.FloatField(
         null=False,
         blank=False
     )
-    rating_value = models.DecimalField(
-        max_digits=4,
-        decimal_places=2,
+    rating_value = models.FloatField(
         default=0,
         null=False,
         blank=False
@@ -229,7 +216,7 @@ class RubricDetailAbp(BaseModel):
     objects = RubricDetailAbpManager()
 
     class Meta:
-        db_table = 'rubric__detail_abp'
+        db_table = 'rubric_detail_abp'
         verbose_name = 'RubricDetailAbp'
         verbose_name_plural = 'RubricDetailsAbp'
 
@@ -246,9 +233,7 @@ class EvaluationAbp(BaseModel):
         null=True,
         blank=True
     )
-    final_grade = models.DecimalField(
-        max_digits=4,
-        decimal_places=2,
+    final_grade = models.FloatField(
         default=0,
         null=False,
         blank=False
@@ -289,9 +274,7 @@ class EvaluationAbp(BaseModel):
 
 
 class EvaluationDetailAbp(BaseModel):
-    grade_percentage = models.DecimalField(
-        max_digits=4,
-        decimal_places=2,
+    grade_percentage = models.FloatField(
         default=0,
         null=False,
         blank=False
@@ -300,9 +283,7 @@ class EvaluationDetailAbp(BaseModel):
         null=True,
         blank=True
     )
-    rating_value = models.DecimalField(
-        max_digits=4,
-        decimal_places=2,
+    rating_value = models.FloatField(
         default=0,
         null=False,
         blank=False

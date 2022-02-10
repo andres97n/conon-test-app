@@ -43,13 +43,13 @@ class TeamAbpManager(models.Manager):
                 id=pk,
                 state=1,
                 auth_state='A',
-                teamdetailabp__active=True,
                 teamdetailabp__auth_state='A'
             ).values(
                 'id',
                 'teamdetailabp__id',
                 'teamdetailabp__user_id',
-                'teamdetailabp__is_moderator'
+                'teamdetailabp__is_moderator',
+                'teamdetailabp__active'
             )
         except:
             return None
@@ -75,9 +75,10 @@ class TeamAbpManager(models.Manager):
             return None
 
     def exists_moderator_in_team_abp(self, pk=None):
-        print(pk)
         try:
-            if self.filter(id=pk, auth_state='A', state=1, teamdetailabp__is_moderator=True).exists():
+            if self.filter(
+                id=pk, auth_state='A', state=1, teamdetailabp__is_moderator=True
+            ).exists():
                 return True
             else:
                 return False
@@ -85,14 +86,24 @@ class TeamAbpManager(models.Manager):
             return False
 
     def exists_user_in_team_abp(self, pk=None, user_id=None):
-        print(pk)
-        print(user_id)
         try:
-            if self.filter(id=pk, auth_state='A', state=1, teamdetailabp__user_id=user_id).exists():
+            if self.filter(
+                id=pk, auth_state='A', state=1, teamdetailabp__user_id=user_id
+            ).exists():
                 return True
             else:
                 return False
         except:
             return False
+
+    def get_team_by_user_and_abp(self, abp=None, user=None):
+        try:
+            return self.select_related('abp').\
+                filter(abp_id=abp, teamdetailabp__user_id=user, auth_state='A').values(
+                'id',
+            ).first()
+        except:
+            return None
+
 
 

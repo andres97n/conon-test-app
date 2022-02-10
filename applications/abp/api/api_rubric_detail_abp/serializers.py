@@ -16,7 +16,8 @@ class RubricDetailAbpSerializer(serializers.ModelSerializer):
         if not RubricAbp.objects.rubric_exists(validated_data['rubric_abp'].id):
             raise serializers.ValidationError(
                 {
-                    'rubric_abp': 'Error, la rúbrica ingresada no es válida; consulte con el Administrador.'
+                    'rubric_abp': 'Error, la rúbrica ingresada no es válida; '
+                                  'consulte con el Administrador.'
                 }
             )
         rubric_detail_abp = RubricDetailAbp(**validated_data)
@@ -28,7 +29,8 @@ class RubricDetailAbpSerializer(serializers.ModelSerializer):
         if instance.rubric_abp != validated_data['rubric_abp']:
             raise serializers.ValidationError(
                 {
-                    'rubric_abp': 'Error, no se puede cambiar de rúbrica; por favor consulte con el Administrador.'
+                    'rubric_abp': 'Error, no se puede cambiar de rúbrica; '
+                                  'por favor consulte con el Administrador.'
                 }
             )
         update_rubric_detail_abp = super().update(instance, validated_data)

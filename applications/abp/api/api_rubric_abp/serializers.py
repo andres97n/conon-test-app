@@ -63,3 +63,19 @@ class RubricAbpSerializer(serializers.ModelSerializer):
             'state': instance.state,
             'created_at': instance.created_at
         }
+
+
+class RubricDetailSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance['id'],
+            'abp_final_value': instance['abp_final_value'],
+            'rubric_detail_abp': {
+                'id': instance['rubricdetailabp'],
+                'title': instance['rubricdetailabp__title_detail'],
+                'description': instance['rubricdetailabp__description_detail'],
+                'grade_percentage': instance['rubricdetailabp__grade_percentage'],
+                'rating_value': instance['rubricdetailabp__rating_value'],
+                'active': instance['rubricdetailabp__active']
+            }
+        }

@@ -23,3 +23,40 @@ class RubricAbpManager(models.Manager):
         except:
             return False
 
+    def get_rubric_detail_by_pk(self, pk=None):
+        try:
+            return self.filter(
+                id=pk, auth_state='A'
+            ).values(
+                'id',
+                'abp_final_value',
+                'rubricdetailabp',
+                'rubricdetailabp__title_detail',
+                'rubricdetailabp__description_detail',
+                'rubricdetailabp__grade_percentage',
+                'rubricdetailabp__rating_value',
+                'rubricdetailabp__active'
+            )
+        except:
+            return None
+
+    def get_rubric_detail_by_abp(self, abp=None):
+        try:
+            return self.filter(
+                abp=abp, auth_state='A'
+            ).values(
+                'id',
+                'abp_final_value',
+                'rubricdetailabp',
+                'rubricdetailabp__title_detail',
+                'rubricdetailabp__description_detail',
+                'rubricdetailabp__grade_percentage',
+                'rubricdetailabp__rating_value',
+                'rubricdetailabp__active'
+            )
+        except:
+            return None
+
+    def get_rubric_abp_by_abp(self, abp=None):
+        return self.select_related('abp').\
+            filter(abp=abp, auth_state='A')

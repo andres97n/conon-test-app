@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from applications.abp.models import TeamAbp, Abp
-from applications.users.models import User
+from applications.users.models import Student
 
 
 class TeamAbpSerializer(serializers.ModelSerializer):
@@ -26,17 +26,10 @@ class TeamAbpSerializer(serializers.ModelSerializer):
         if not Abp.objects.abp_exists(validated_data['abp'].id):
             raise serializers.ValidationError(
                 {
-                    'abp': 'Error, la metodología ABP ingresada no es válida; consulte con el Administrador.'
+                    'abp': 'Error, la metodología ABP ingresada no es válida; '
+                           'consulte con el Administrador.'
                 }
             )
-        """
-        if not User.objects.user_exists(validated_data['moderator'].id):
-            raise serializers.ValidationError(
-                {
-                    'moderator': 'Error, el moderador ingresado no es válido; consulte con el Administrador.'
-                }
-            )
-        """
         team_abp = TeamAbp(**validated_data)
         team_abp.save()
         return team_abp
@@ -46,18 +39,10 @@ class TeamAbpSerializer(serializers.ModelSerializer):
         if instance.abp != validated_data['abp']:
             raise serializers.ValidationError(
                 {
-                    'abp': 'Error, no se puede cambiar de pertenencia; por favor consulte con el Administrador.'
+                    'abp': 'Error, no se puede cambiar de pertenencia; por favor '
+                           'consulte con el Administrador.'
                 }
             )
-        """
-        if instance.moderator != validated_data['moderator']:
-            if not User.objects.user_exists(validated_data['moderator'].id):
-                raise serializers.ValidationError(
-                    {
-                        'moderator': 'Error, el moderador ingresado no es válido; consulte con el Administrador.'
-                    }
-                )
-        """
         update_team_abp = super().update(instance, validated_data)
         update_team_abp.save()
         return update_team_abp
@@ -81,12 +66,18 @@ class TeamAbpSerializer(serializers.ModelSerializer):
 
 
 class StudentsInTeamAbpSerializer(serializers.Serializer):
-
     def to_representation(self, instance):
+        student = Student.objects.get_student_by_user_object(instance['teamdetailabp__user_id'])
+        if not student:
+            student = 'Sin nombre'
         return {
             'id': instance['id'],
             'team_detail_id': instance['teamdetailabp__id'],
-            'user': instance['teamdetailabp__user_id'],
-            'is_moderator': instance['teamdetailabp__is_moderator']
+            'user': {
+                'id': instance['teamdetailabp__user_id'],
+                'name': student.__str__() or student
+            },
+            'is_moderator': instance['teamdetailabp__is_moderator'],
+            'active': instance['teamdetailabp__active']
         }
 

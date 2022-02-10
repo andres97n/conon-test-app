@@ -1,15 +1,19 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
-from .serializers import RubricAbpSerializer
 from applications.base.permissions import IsOwnerAndTeacher
 from applications.base.paginations import CononPagination
+from .serializers import RubricAbpSerializer, RubricDetailSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class RubricAbpViewSet(viewsets.ModelViewSet):
     serializer_class = RubricAbpSerializer
     permission_classes = [IsOwnerAndTeacher]
     pagination_class = CononPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['abp']
 
     # Return Rubric ABP
     def get_queryset(self, pk=None):
@@ -137,3 +141,33 @@ class RubricAbpViewSet(viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    # Get Rubric Details in ABP
+    @action(detail=True, methods=['GET'], url_path='detail')
+    def get_rubric_detail_by_abp(self, request, pk=None):
+        if pk:
+            rubric_abp = self.get_serializer().Meta.model.objects.get_rubric_detail_by_pk(pk)
+            if rubric_abp:
+                rubric_serializer = RubricDetailSerializer(rubric_abp, many=True)
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': rubric_serializer.data
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se encontró esta Rúbrica.'
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se envío la metodología.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
