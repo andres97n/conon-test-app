@@ -95,15 +95,15 @@ class StudentManager(models.Manager):
 
     def get_student_by_user(self, user=None):
         try:
-            return self.select_related('person').filter(person__user=user, auth_state='A').\
+            return self.select_related('person').filter(person__user=user, auth_state='A'). \
                 values(
-                    'id',
-                    'person__id',
-                    'person__user__id',
-                    'person__identification',
-                    'person__name',
-                    'person__last_name',
-                    'person__user__email'
+                'id',
+                'person__id',
+                'person__user__id',
+                'person__identification',
+                'person__name',
+                'person__last_name',
+                'person__user__email'
             ).first()
         except:
             return None

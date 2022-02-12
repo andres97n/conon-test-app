@@ -99,7 +99,7 @@ class UserManager(BaseUserManager, models.Manager):
             if is_student and type == 1:
                 is_valid = False
 
-            # The admin or the teacher cannot be an student
+            # The admin or the teacher cannot be a student
             if is_admin and type == 2:
                 is_valid = False
             if is_teacher and type == 2:
@@ -115,3 +115,12 @@ class UserManager(BaseUserManager, models.Manager):
         except:
             pass
         return result
+
+    def get_name_by_user_id(self, pk=None):
+        try:
+            return self.select_related('person').filter(id=pk, auth_state='A').values(
+                'person__name',
+                'person__last_name'
+            )
+        except:
+            return None

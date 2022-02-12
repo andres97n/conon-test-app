@@ -75,15 +75,9 @@ class TeamAbpManager(models.Manager):
             return None
 
     def exists_moderator_in_team_abp(self, pk=None):
-        try:
-            if self.filter(
+        return self.filter(
                 id=pk, auth_state='A', state=1, teamdetailabp__is_moderator=True
-            ).exists():
-                return True
-            else:
-                return False
-        except:
-            return False
+        ).exists()
 
     def exists_user_in_team_abp(self, pk=None, user_id=None):
         try:

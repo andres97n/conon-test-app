@@ -50,7 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, attrs):
-        if not User.objects.validate_user_type(attrs['person'].id, attrs['type']):
+        if not User.objects.validate_user_type(attrs['person'].id):
             raise serializers.ValidationError(
                 {
                     'type': 'Error, este Usuario no puede ser de este tipo.'

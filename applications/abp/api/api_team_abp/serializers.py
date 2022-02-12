@@ -72,7 +72,7 @@ class StudentsInTeamAbpSerializer(serializers.Serializer):
             student = 'Sin nombre'
         return {
             'id': instance['id'],
-            'team_detail_id': instance['teamdetailabp__id'],
+            'team_detail_abp': instance['teamdetailabp__id'],
             'user': {
                 'id': instance['teamdetailabp__user_id'],
                 'name': student.__str__() or student

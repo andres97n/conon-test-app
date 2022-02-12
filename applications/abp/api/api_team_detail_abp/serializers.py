@@ -3,6 +3,9 @@ from rest_framework import serializers
 from applications.abp.models import TeamDetailAbp, TeamAbp
 from applications.users.models import User
 
+# TODO: Revisar los errores que se muestran en el viewset de cada modelo por parte del serializer
+#  ya que no se muestran como el objeto que se supone retorna el error del viewset
+
 
 class TeamDetailAbpSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,13 +17,6 @@ class TeamDetailAbpSerializer(serializers.ModelSerializer):
 
     # General Validate
     def validate(self, attrs):
-        if attrs['is_moderator'] is True:
-            if TeamAbp.objects.exists_moderator_in_team_abp(attrs['team_abp'].id):
-                raise serializers.ValidationError(
-                    {
-                        'is_moderator': 'Error, ya existe un Moderador en el grupo.'
-                    }
-                )
         if not TeamAbp.objects.team_abp_exists(attrs['team_abp'].id):
             raise serializers.ValidationError(
                 {
@@ -51,12 +47,28 @@ class TeamDetailAbpSerializer(serializers.ModelSerializer):
                                 'máximo de 4 estudiantes por grupo.'
                 }
             )
+        if validated_data['is_moderator'] is True:
+            if TeamAbp.objects.exists_moderator_in_team_abp(validated_data['team_abp'].id):
+                raise serializers.ValidationError(
+                    {
+                        'is_moderator': 'Error, ya existe un Moderador en el grupo.'
+                    }
+                )
         team_detail_abp = TeamDetailAbp(**validated_data)
         team_detail_abp.save()
         return team_detail_abp
 
     # Update Team Detail ABP
     def update(self, instance, validated_data):
+        if instance.user != validated_data['user']:
+            if TeamDetailAbp.objects.is_user_moderator(instance.user.id, instance.team_abp.id):
+                if not validated_data['is_moderator']:
+                    raise serializers.ValidationError(
+                        {
+                            'is_moderator': 'Error, el usuario que se está editando '
+                                            'debería ser moderador.'
+                        }
+                    )
         update_team_detail_abp = super().update(instance, validated_data)
         update_team_detail_abp.save()
         return update_team_detail_abp

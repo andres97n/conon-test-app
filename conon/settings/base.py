@@ -42,7 +42,8 @@ LOCAL_APPS = [
     'applications.school',
     'applications.topic',
     'applications.dua',
-    'applications.abp'
+    'applications.abp',
+    'applications.abp_steps'
 ]
 
 # Authtoken Deprecated
