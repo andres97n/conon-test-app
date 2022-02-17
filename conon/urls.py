@@ -22,6 +22,7 @@ from rest_framework import permissions
 from rest_framework_simplejwt.views import TokenVerifyView
 
 from applications.users.views import LoginView, LogoutView, RefreshView
+from applications.users.api.api_user.api import is_username_valid
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -48,6 +49,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('auth/username/<str:username>/', is_username_valid, name='exists_username'),
     path('token/refresh/', RefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('user/api/', include('applications.users.routers')),

@@ -40,7 +40,8 @@ class QuestionStepOneAbpViewSet(viewsets.ModelViewSet):
     # Create Question ABP
     def create(self, request, *args, **kwargs):
         # Send information to serializer
-        question_abp_serializer = self.get_serializer(data=request.data)
+        is_many = True if isinstance(request.data, list) else False
+        question_abp_serializer = self.get_serializer(data=request.data, many=is_many)
         if question_abp_serializer.is_valid():
             question_abp_serializer.save()
             return Response(
@@ -157,3 +158,5 @@ class QuestionStepOneAbpViewSet(viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+

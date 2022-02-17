@@ -18,13 +18,36 @@ class OpinionStepOneAbpManager(models.Manager):
     def get_interactions_step_one_abp_by_opinion(self, opinion=None):
         try:
             return self.filter(
-                id=opinion, auth_state='A'
+                id=opinion,
+                interactionsteponeabp__active=True,
+                interactionsteponeabp__auth_state='A',
+                auth_state='A'
             ).values(
                 'interactionsteponeabp',
                 'interactionsteponeabp__user',
                 'interactionsteponeabp__opinion_interaction',
                 'interactionsteponeabp__active',
                 'interactionsteponeabp__created_at'
+            )
+        except:
+            return None
+
+    def get_opinion_count_by_team_detail(self, team_detail):
+        try:
+            return self.select_related('team_detail_abp').\
+                filter(team_detail_abp=team_detail, active=True, auth_state='A').count()
+        except:
+            return None
+
+    def get_interactions_ids_step_one_abp_by_opinion(self, opinion=None):
+        try:
+            return self.filter(
+                id=opinion,
+                interactionsteponeabp__active=True,
+                interactionsteponeabp__auth_state='A',
+                auth_state='A'
+            ).values(
+                'interactionsteponeabp',
             )
         except:
             return None

@@ -7,5 +7,5 @@ urlpatterns = [
         r"student/user/<int:user>/",
         get_student_by_user,
         name="student_by_user"
-    )
+    ),
 ]

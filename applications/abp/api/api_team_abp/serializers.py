@@ -59,6 +59,7 @@ class TeamAbpSerializer(serializers.ModelSerializer):
                     'title': instance.abp.topic.title
                 },
             },
+            'step': instance.get_step_display(),
             'observations': instance.observations,
             'state': instance.state,
             'created_at': instance.created_at
@@ -70,12 +71,15 @@ class StudentsInTeamAbpSerializer(serializers.Serializer):
         student = Student.objects.get_student_by_user_object(instance['teamdetailabp__user_id'])
         if not student:
             student = 'Sin nombre'
+        else:
+            student.__str__()
         return {
             'id': instance['id'],
+            'step': instance['step'],
             'team_detail_abp': instance['teamdetailabp__id'],
             'user': {
                 'id': instance['teamdetailabp__user_id'],
-                'name': student.__str__() or student
+                'name': student
             },
             'is_moderator': instance['teamdetailabp__is_moderator'],
             'active': instance['teamdetailabp__active']

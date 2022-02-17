@@ -22,10 +22,14 @@ class TeamDetailAbpManager(models.Manager):
     def exists_team_detail_abp(self, pk=None):
         return self.filter(id=pk, auth_state='A').exists()
 
-    def get_opinions_step_one_by_user(self, team=None, user=None):
+    # Get active opinions for the current user
+    def get_opinions_step_one_by_user(self, team=None):
         try:
             return self.select_related('user', 'team_abp').filter(
-                team_abp=team, user=user, auth_state='A'
+                id=team,
+                opinionsteponeabp__active=True,
+                opinionsteponeabp__auth_state='A',
+                auth_state='A'
             ).values(
                 'opinionsteponeabp',
                 'opinionsteponeabp__opinion',
@@ -33,13 +37,16 @@ class TeamDetailAbpManager(models.Manager):
                 'opinionsteponeabp__created_at'
             )
         except:
-            print('entro')
             return None
 
+    # Get active opinions for the team
     def get_opinions_step_one_exclude_user(self, team=None, user=None):
         try:
             return self.select_related('user', 'team_abp').filter(
-                team_abp=team, auth_state='A'
+                team_abp=team,
+                opinionsteponeabp__active=True,
+                opinionsteponeabp__auth_state='A',
+                auth_state='A'
             ).exclude(user=user).values(
                 'opinionsteponeabp',
                 'opinionsteponeabp__opinion',

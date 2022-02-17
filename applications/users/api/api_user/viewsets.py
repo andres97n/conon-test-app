@@ -169,3 +169,4 @@ class UserViewSet(LoggingMixin, viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+

@@ -121,6 +121,9 @@ class UserManager(BaseUserManager, models.Manager):
             return self.select_related('person').filter(id=pk, auth_state='A').values(
                 'person__name',
                 'person__last_name'
-            )
+            ).first()
         except:
             return None
+
+    def exists_username(self, username=None):
+        return self.filter(username=username, is_active=True, auth_state='A').exists()

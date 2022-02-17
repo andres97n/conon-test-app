@@ -69,6 +69,22 @@ class TeamAbp(BaseModel):
         CLOSE = 0
         OPEN = 1
 
+    class StepTeamAbpStatus(models.IntegerChoices):
+        STEP_ONE = 1
+        STEP_TWO = 2
+        STEP_THREE = 3
+        STEP_FOUR = 4
+        STEP_FIVE = 5
+        STEP_SIX = 6
+        STEP_SEVEN = 7
+        STEP_EIGHT = 8
+
+    step = models.PositiveIntegerField(
+        choices=StepTeamAbpStatus.choices,
+        default=1,
+        null=False,
+        blank=False
+    )
     observations = models.TextField(
         null=True,
         blank=True

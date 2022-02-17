@@ -14,6 +14,7 @@ from rest_framework_tracking.mixins import LoggingMixin
 
 from applications.users.auth.serializers import LoginSerializer, LogoutSerializer, \
     CustomTokenRefreshSerializer
+from applications.users.models import User
 
 '''
 class UserToken(APIView):

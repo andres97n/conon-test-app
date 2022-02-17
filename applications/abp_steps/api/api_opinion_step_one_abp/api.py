@@ -14,15 +14,16 @@ from applications.abp_steps.api.api_interaction_step_one_abp.serializers import 
 
 @api_view(['GET'])
 @permission_classes([IsStudent])
-def get_opinions_by_team_and_user(request, team, user):
+def get_opinions_by_team(request, team):
     if request.method == 'GET':
-        if team and user:
-            opinions = TeamDetailAbp.objects.get_opinions_step_one_by_user(team, user)
+        if team:
+            opinions = TeamDetailAbp.objects.get_opinions_step_one_by_user(team)
+            print(team)
             if opinions is not None:
                 opinion_serializer = OpinionAbpByTeamAbpSerializer(opinions, many=True)
                 return Response(
                     {
-                        'ok': False,
+                        'ok': True,
                         'conon_data': opinion_serializer.data
                     },
                     status=status.HTTP_200_OK
@@ -58,21 +59,24 @@ def get_opinions_by_team_and_user(request, team, user):
 def get_opinions_and_interactions_by_team_and_user(request, team, user):
     if request.method == 'GET':
         if team and user:
-            opinions = TeamDetailAbp.objects.get_opinions_step_one_exclude_user(team, user)
+            opinions = TeamDetailAbp.objects.\
+                get_opinions_step_one_exclude_user(team, user)
             if opinions is not None:
                 opinions_data = []
                 opinion_serializer = OpinionAbpByTeamAbpSerializer(opinions, many=True)
                 for opinion in opinion_serializer.data:
                     interactions = OpinionStepOneAbp.objects.\
-                        get_interactions_step_one_abp_by_opinion(opinion.id)
+                        get_interactions_step_one_abp_by_opinion(opinion['id'])
                     if interactions:
                         interaction_serializer = InteractionStepOneByOpinionSerializer(
                             interactions, many=True
                         )
-                        opinions_data.append({interaction_serializer.data, opinion})
+                        opinions_data.append(
+                            {'opinion': opinion, 'interactions': interaction_serializer.data}
+                        )
                 return Response(
                     {
-                        'ok': False,
+                        'ok': True,
                         'conon_data': opinions_data
                     },
                     status=status.HTTP_200_OK
@@ -82,6 +86,46 @@ def get_opinions_and_interactions_by_team_and_user(request, team, user):
                     {
                         'ok': False,
                         'detail': 'No se encontró ningún valor.'
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se enviaron los valores necesarios para la consulta.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    else:
+        return Response(
+            {
+                'ok': False,
+                'detail': 'Método no permitido.'
+            },
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsStudent])
+def get_opinions_step_one_count(request, team):
+    if request.method == 'GET':
+        if team:
+            opinions_count = OpinionStepOneAbp.objects.get_opinion_count_by_team_detail(team)
+            if opinions_count is not None:
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': opinions_count
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se encontró el estudiante enviado.'
                     },
                     status=status.HTTP_404_NOT_FOUND
                 )

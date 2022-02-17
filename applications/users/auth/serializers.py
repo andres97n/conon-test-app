@@ -16,8 +16,6 @@ from applications.users.models import User
 # TODO: Crear un serializador para el envío de la contraseña al correo
 #   de cada usuario.
 
-# TODO: Validar el usuario que no tenga datos de persona en los serializadores
-
 class LoginSerializer(serializers.ModelSerializer):
     uid = serializers.IntegerField(
         read_only=True
@@ -81,7 +79,6 @@ class LoginSerializer(serializers.ModelSerializer):
                 detail='Por favor ingrese un nombre de usuario válido.'
             )
         '''
-
         if not user:
             raise AuthenticationFailed(
                 detail='Credenciales inválidas, por favor ingrese de nuevo los datos de usuario.'
@@ -90,7 +87,6 @@ class LoginSerializer(serializers.ModelSerializer):
             raise AuthenticationFailed(
                 detail='Cuenta deshabilitada, contacte con el administrador.'
             )
-
         if user is not None:
             auth.login(
                 self.context.get('request'),

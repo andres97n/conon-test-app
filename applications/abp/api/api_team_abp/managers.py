@@ -11,7 +11,7 @@ class TeamAbpManager(models.Manager):
 
     def get_team_abp_list(self):
         return self.select_related('abp'). \
-            filter(auth_state='A', state=1).order_by('-created_at')
+            filter(auth_state='A').order_by('-created_at')
 
     def team_abp_exists(self, pk=None):
         try:
@@ -46,6 +46,7 @@ class TeamAbpManager(models.Manager):
                 teamdetailabp__auth_state='A'
             ).values(
                 'id',
+                'step',
                 'teamdetailabp__id',
                 'teamdetailabp__user_id',
                 'teamdetailabp__is_moderator',
@@ -99,5 +100,33 @@ class TeamAbpManager(models.Manager):
         except:
             return None
 
+    def get_ids_team_detail_abp_by_team_abp_exclude_active(self, pk=None):
+        try:
+            return self.filter(
+                id=pk,
+                state=1,
+                teamdetailabp__auth_state='A',
+                auth_state='A',
+            ).values(
+                'teamdetailabp__user',
+            )
+        except:
+            return None
 
-
+    def get_questions_and_answers_step_one_by_team(self, pk=None):
+        try:
+            return self.filter(
+                id=pk,
+                questionsteponeabp__active=True,
+                questionsteponeabp__answersteponeabp__active=True,
+                state=1,
+                auth_state='A'
+            ).values(
+                'questionsteponeabp',
+                'questionsteponeabp__moderator_question',
+                'questionsteponeabp__answersteponeabp',
+                'questionsteponeabp__answersteponeabp__user_id',
+                'questionsteponeabp__answersteponeabp__teacher_answer'
+            )
+        except:
+            return None
