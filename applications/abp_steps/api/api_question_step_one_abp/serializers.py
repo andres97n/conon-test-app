@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from applications.abp_steps.models import QuestionStepOneAbp
 from applications.abp.models import TeamAbp
-from applications.users.models import User
 
 # TODO: Validar que el usuario sea moderador
 
@@ -18,7 +17,7 @@ class QuestionStepOneAbpSerializer(serializers.ModelSerializer):
 
     # Create Question ABP
     def create(self, validated_data):
-        if TeamAbp.objects.team_abp_exists(validated_data['team_abp'].id):
+        if not TeamAbp.objects.team_abp_exists(validated_data['team_abp'].id):
             raise serializers.ValidationError(
                 {
                     'team_abp': 'Error, el grupo enviado no existe, consulte con el Administrador.'
@@ -46,7 +45,7 @@ class QuestionStepOneAbpSerializer(serializers.ModelSerializer):
             'id': instance.id,
             'team_abp': {
                 'id': instance.team_abp.id,
-                'state': instance.get_state_display()
+                'state': instance.team_abp.get_state_display()
             },
             'moderator_question': instance.moderator_question,
             'active': instance.active,
@@ -54,27 +53,11 @@ class QuestionStepOneAbpSerializer(serializers.ModelSerializer):
         }
 
 
-class QuestionsAndAnswersByTeamAbpSerializer(serializers.Serializer):
+class QuestionsByTeamAbpSerializer(serializers.Serializer):
     def to_representation(self, instance):
-        name = User.objects.get_name_by_user_id(
-            instance['questionsteponeabp__answersteponeabp__user_id']
-        )
-        if not name:
-            name = 'No se encontró nombre'
-        else:
-            name = f"{name['person__name']} {name['person__last_name']}"
-
         return {
-            'question_step_one_abp': {
-              'id': instance['questionsteponeabp'],
-              'moderator_question': instance['moderator_question'],
-            },
-            'answer_step_one_abp': {
-              'id': instance['questionsteponeabp__answersteponeabp'],
-              'teacher_answer': instance['teacher_answer'],
-              'user': {
-                'id': instance['questionsteponeabp__answersteponeabp__user_id'],
-                'name': name
-              },
-            },
+            'id': instance['questionsteponeabp'],
+            'moderator_question': instance['questionsteponeabp__moderator_question'],
+            'active': instance['questionsteponeabp__active'],
+            'created_at': instance['questionsteponeabp__created_at']
         }

@@ -80,18 +80,13 @@ class InteractionStepOneAbpSerializer(serializers.ModelSerializer):
 
 class InteractionStepOneByOpinionSerializer(serializers.Serializer):
     def to_representation(self, instance):
-        user_name = User.objects.get_name_by_user_id(instance['interactionsteponeabp__user'])
-        if user_name is None:
-            user_name = 'Sin nombre'
-        else:
-            user_name = user_name['person__name'] + ' ' + user_name['person__last_name']
         return {
-            'id': instance['interactionsteponeabp'],
+            'id': instance.id,
             'user': {
-                'id': instance['interactionsteponeabp__user'],
-                'name': user_name
+                'id': instance.user.id,
+                'name': instance.user.__str__()
             },
-            'opinion_interaction': instance['interactionsteponeabp__opinion_interaction'],
-            'active': instance['interactionsteponeabp__active'],
-            'created_at': instance['interactionsteponeabp__created_at']
+            'opinion_interaction': instance.opinion_interaction,
+            'active': instance.active,
+            'created_at': instance.created_at
         }

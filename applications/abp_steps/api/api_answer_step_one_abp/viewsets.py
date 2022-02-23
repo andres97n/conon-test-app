@@ -8,6 +8,8 @@ from applications.base.permissions import IsTeacher
 from applications.abp_steps.api.api_answer_step_one_abp.serializers import \
     AnswerStepOneAbpSerializer
 
+# TODO: Reformar este viewset a uno que no sea model viewset
+
 
 class AnswerStepOneAbpViewSet(viewsets.ModelViewSet):
     serializer_class = AnswerStepOneAbpSerializer

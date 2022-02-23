@@ -7,9 +7,10 @@ from applications.base.paginations import CononPagination
 from applications.base.permissions import IsStudent
 from applications.abp_steps.api.api_opinion_step_one_abp.serializers import \
     OpinionStepOneAbpSerializer
-from applications.abp_steps.models import InteractionStepOneAbp
 
 # TODO: Reformar este viewset a uno que no sea model viewset
+
+
 class OpinionStepOneAbpViewSet(viewsets.ModelViewSet):
     serializer_class = OpinionStepOneAbpSerializer
     permission_classes = [IsStudent]
@@ -139,49 +140,18 @@ class OpinionStepOneAbpViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=(['DELETE']), url_path='block')
     def block_opinion_abp(self, request, pk=None):
         opinion_abp = self.get_queryset(pk)
-        if opinion_abp:
-            interactions = self.get_serializer().Meta.model.objects.\
-                get_interactions_ids_step_one_abp_by_opinion(opinion_abp.id)
-            if interactions is not None:
-                interactions_ids = [
-                    interaction['interactionsteponeabp'] for interaction in interactions
-                ]
-                interactionsObjects = InteractionStepOneAbp.objects.\
-                    get_many_interactions(interactions_ids)
-                print(interactions)
-                print(interactions_ids)
-                if interactionsObjects is not None:
-                    for interaction in interactionsObjects:
-                        interaction.active = False
-                    InteractionStepOneAbp.objects.\
-                        bulk_update(interactionsObjects, ['active'])
-                    opinion_abp.active = False
-                    opinion_abp.save()
+        if opinion_abp is not None:
+            opinion_abp.active = False
+            opinion_abp.save()
 
-                    return Response(
-                        {
-                            'ok': True,
-                            'message': 'Opinión bloqueada correctamente.'
-                        },
-                        status=status.HTTP_200_OK
-                    )
-                else:
-                    return Response(
-                        {
-                            'ok': False,
-                            'detail': 'No se pudo bloquear la Opinión.'
-                        },
-                        status=status.HTTP_404_NOT_FOUND
-                    )
-            else:
-                return Response(
-                    {
-                        'ok': False,
-                        'detail': 'No se encontraron las interacciones de esta opinión, '
-                                  'consulte con el Administrador.'
-                    },
-                    status=status.HTTP_404_NOT_FOUND
-                )
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Opinión bloqueada correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+
         else:
             return Response(
                 {

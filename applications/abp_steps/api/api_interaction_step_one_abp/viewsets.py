@@ -2,6 +2,8 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 from applications.base.paginations import CononPagination
 from applications.base.permissions import IsStudent
@@ -13,6 +15,8 @@ class InteractionStepOneAbpViewSet(viewsets.ModelViewSet):
     serializer_class = InteractionStepOneAbpSerializer
     permission_classes = [IsStudent]
     pagination_class = CononPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['opinion_step_one_abp', 'active']
 
     # Get Interaction ABP Data
     def get_queryset(self, pk=None):

@@ -4,7 +4,6 @@ from applications.users.models import User
 from applications.abp_steps.models import AnswerStepOneAbp, QuestionStepOneAbp
 
 
-# TODO: Reformar este viewset a uno que no sea model viewset
 class AnswerStepOneAbpSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -26,13 +25,15 @@ class AnswerStepOneAbpSerializer(serializers.ModelSerializer):
 
     # Create Answer ABP
     def create(self, validated_data):
-        if QuestionStepOneAbp.objects.exists_question_abp(validated_data['question_step_one_abp'].id):
+        if not QuestionStepOneAbp.objects.exists_question_abp(
+                validated_data['question_step_one_abp'].id
+        ):
             raise serializers.ValidationError(
                 {
                     'question_step_one_abp': 'Error, la pregunta enviada no existe.'
                 }
             )
-        if User.objects.user_exists(validated_data['user'].id):
+        if not User.objects.user_exists(validated_data['user'].id):
             raise serializers.ValidationError(
                 {
                     'user': 'Error, el usuario envíado no existe, consulte con el Administrador.'
@@ -78,3 +79,16 @@ class AnswerStepOneAbpSerializer(serializers.ModelSerializer):
             'created_at': instance.created_at
         }
 
+
+class AnswersAbpByQuestionSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'user': {
+                'id': instance.user.id,
+                'name': instance.user.__str__()
+            },
+            'teacher_answer': instance.teacher_answer,
+            'active': instance.active,
+            'created_at': instance.created_at
+        }

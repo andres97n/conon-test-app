@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from applications.base.permissions import IsStudent
 from applications.abp.models import TeamDetailAbp
-from applications.abp_steps.models import OpinionStepOneAbp
+from applications.abp_steps.models import OpinionStepOneAbp, InteractionStepOneAbp
 from applications.abp_steps.api.api_opinion_step_one_abp.serializers import \
     OpinionAbpByTeamAbpSerializer
 from applications.abp_steps.api.api_interaction_step_one_abp.serializers import \
@@ -14,11 +14,10 @@ from applications.abp_steps.api.api_interaction_step_one_abp.serializers import 
 
 @api_view(['GET'])
 @permission_classes([IsStudent])
-def get_opinions_by_team(request, team):
+def get_opinions_by_team_detail(request, team_detail):
     if request.method == 'GET':
-        if team:
-            opinions = TeamDetailAbp.objects.get_opinions_step_one_by_user(team)
-            print(team)
+        if team_detail:
+            opinions = TeamDetailAbp.objects.get_opinions_step_one_by_user(team_detail)
             if opinions is not None:
                 opinion_serializer = OpinionAbpByTeamAbpSerializer(opinions, many=True)
                 return Response(
@@ -65,14 +64,18 @@ def get_opinions_and_interactions_by_team_and_user(request, team, user):
                 opinions_data = []
                 opinion_serializer = OpinionAbpByTeamAbpSerializer(opinions, many=True)
                 for opinion in opinion_serializer.data:
-                    interactions = OpinionStepOneAbp.objects.\
-                        get_interactions_step_one_abp_by_opinion(opinion['id'])
-                    if interactions:
+                    interactions = InteractionStepOneAbp.objects.\
+                        get_interaction_by_opinion(opinion['id'])
+                    if interactions is not None:
                         interaction_serializer = InteractionStepOneByOpinionSerializer(
                             interactions, many=True
                         )
                         opinions_data.append(
                             {'opinion': opinion, 'interactions': interaction_serializer.data}
+                        )
+                    else:
+                        opinions_data.append(
+                            {'opinion': opinion, 'interactions': []}
                         )
                 return Response(
                     {
@@ -145,3 +148,6 @@ def get_opinions_step_one_count(request, team):
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
+
+
+

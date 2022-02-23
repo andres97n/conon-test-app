@@ -57,16 +57,7 @@ class UserManager(BaseUserManager, models.Manager):
         return user
 
     def user_exists(self, pk=None):
-        result = None
-        try:
-            result = self.filter(id=pk, is_active=True, auth_state='A').first()
-        except None:
-            pass
-
-        if result is not None:
-            return True
-
-        return False
+        return self.filter(id=pk, is_active=True, auth_state='A').exists()
 
     def type_user_exists(self, pk=None, prototype=None):
         return self.filter(id=pk, type=prototype, is_active=True, auth_state='A').exists()

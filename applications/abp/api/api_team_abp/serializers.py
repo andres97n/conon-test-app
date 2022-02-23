@@ -69,10 +69,10 @@ class TeamAbpSerializer(serializers.ModelSerializer):
 class StudentsInTeamAbpSerializer(serializers.Serializer):
     def to_representation(self, instance):
         student = Student.objects.get_student_by_user_object(instance['teamdetailabp__user_id'])
-        if not student:
+        if student is None:
             student = 'Sin nombre'
         else:
-            student.__str__()
+            student = student.__str__()
         return {
             'id': instance['id'],
             'step': instance['step'],

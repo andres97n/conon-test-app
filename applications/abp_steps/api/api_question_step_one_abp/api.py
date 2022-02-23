@@ -4,9 +4,12 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from applications.base.permissions import IsStudent
-from applications.abp_steps.models import QuestionStepOneAbp
+from applications.abp_steps.models import QuestionStepOneAbp, AnswerStepOneAbp
 from applications.abp.models import TeamAbp
-from .serializers import QuestionsAndAnswersByTeamAbpSerializer
+from .serializers import QuestionsByTeamAbpSerializer
+from applications.abp_steps.api.api_answer_step_one_abp.serializers import \
+    AnswersAbpByQuestionSerializer
+
 
 @api_view(['GET'])
 @permission_classes([IsStudent])
@@ -53,17 +56,32 @@ def get_questions_step_one_count(request, team):
 def get_questions_and_answers_step_by_team(request, team):
     if request.method == 'GET':
         if team:
-            questions_and_answers = TeamAbp.objects.\
-                get_questions_and_answers_step_one_by_team(team)
-            if questions_and_answers is not None:
-                questions_and_answers_serializer = QuestionsAndAnswersByTeamAbpSerializer(
-                    questions_and_answers,
+            questions = TeamAbp.objects.\
+                get_questions_step_one_by_team(team)
+            if questions is not None:
+                questions_and_answers = []
+                questions_serializer = QuestionsByTeamAbpSerializer(
+                    questions,
                     many=True
                 )
+                for question in questions_serializer.data:
+                    answer = AnswerStepOneAbp.objects.\
+                        get_answers_step_one_by_question(question['id'])
+                    if answer is not None:
+                        answer_serializer = AnswersAbpByQuestionSerializer(answer, many=True)
+                        questions_and_answers.append({
+                            'question': question,
+                            'answer': answer_serializer.data
+                        })
+                    else:
+                        questions_and_answers.append({
+                            'question': question,
+                            'answer': []
+                        })
                 return Response(
                     {
                         'ok': True,
-                        'conon_data': questions_and_answers_serializer.data
+                        'conon_data': questions_and_answers
                     },
                     status=status.HTTP_200_OK
                 )

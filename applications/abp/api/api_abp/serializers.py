@@ -63,9 +63,6 @@ class AbpSerializer(serializers.ModelSerializer):
             'topic': {
                 'id': instance.topic.id,
                 'title': instance.topic.title,
-                'description': instance.topic.description,
-                'objective': instance.topic.objective,
-                'observations': instance.topic.observations
             },
             'problem': instance.problem,
             'oral_explication': instance.oral_explication,

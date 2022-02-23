@@ -13,3 +13,13 @@ class AnswerStepOneAbpManager(models.Manager):
                 filter(auth_state='A').get(id=pk)
         except:
             return None
+
+    def get_answers_step_one_by_question(self, question=None):
+        try:
+            return self.filter(
+                question_step_one_abp=question,
+                active=True,
+                auth_state='A'
+            )
+        except:
+            return None

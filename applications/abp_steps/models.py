@@ -3,11 +3,16 @@ from django.db import models
 from applications.base.models import BaseModel, BaseModelActive
 from applications.users.models import User
 from applications.abp.models import TeamAbp, TeamDetailAbp
-from applications.abp_steps.api.api_opinion_step_one_abp.managers import OpinionStepOneAbpManager
-from applications.abp_steps.api.api_interaction_step_one_abp.managers import \
-    InteractionStepOneAbpManager
-from applications.abp_steps.api.api_question_step_one_abp.managers import QuestionStepOneAbpManager
-from applications.abp_steps.api.api_answer_step_one_abp.managers import AnswerStepOneAbpManager
+
+from .api.api_opinion_step_one_abp.managers import OpinionStepOneAbpManager
+from .api.api_interaction_step_one_abp.managers import InteractionStepOneAbpManager
+from .api.api_question_step_one_abp.managers import QuestionStepOneAbpManager
+from .api.api_answer_step_one_abp.managers import AnswerStepOneAbpManager
+from .api.api_student_idea_step_two_abp.managers import StudentIdeaStepTwoAbpManager
+from .api.api_rate_student_idea_step_two_abp.managers import RateStudentIdeaStepTwoAbpManager
+from .api.api_learned_concept_step_three_abp.managers import LearnedConceptStepThreeAbpManager
+from .api.api_learned_concept_reference_step_three_abp.managers import \
+    LearnedConceptReferenceStepThreeAbpManager
 
 
 class OpinionStepOneAbp(BaseModel):
@@ -72,7 +77,7 @@ class InteractionStepOneAbp(BaseModel):
     )
 
     def __str__(self):
-        return self.opinion_interaction
+        return self.get_opinion_interaction_display()
 
     class Meta:
         db_table = 'interaction_step_one_abp'
@@ -152,6 +157,8 @@ class StudentIdeaStepTwoAbp(BaseModelActive):
         blank=False
     )
 
+    objects = StudentIdeaStepTwoAbpManager()
+
     def __str__(self):
         return self.student_idea
 
@@ -161,7 +168,7 @@ class StudentIdeaStepTwoAbp(BaseModelActive):
 
 
 class RateStudentIdeaStepTwoAbp(BaseModelActive):
-    rate_student_idea = models.IntegerField(
+    rate_student_idea = models.PositiveSmallIntegerField(
         default=0,
         null=False,
         blank=False
@@ -180,8 +187,10 @@ class RateStudentIdeaStepTwoAbp(BaseModelActive):
         blank=False
     )
 
+    objects = RateStudentIdeaStepTwoAbpManager()
+
     def __str__(self):
-        return self.rate_student_idea
+        return f'{self.rate_student_idea}'
 
     class Meta:
         db_table = 'rating_student_idea_step_one_abp'
@@ -197,6 +206,8 @@ class LearnedConceptStepThreeAbp(BaseModelActive):
         null=False,
         blank=False
     )
+
+    objects = LearnedConceptStepThreeAbpManager()
 
     def __str__(self):
         return self.learned_concept
@@ -221,6 +232,8 @@ class LearnedConceptReferenceStepThreeAbp(BaseModelActive):
         null=False,
         blank=False
     )
+
+    objects = LearnedConceptReferenceStepThreeAbpManager()
 
     def __str__(self):
         return self.url_reference
@@ -380,5 +393,3 @@ class ProblemResolutionStepEightAbp(BaseModelActive):
     class Meta:
         db_table = 'problem_resolution_step_eight_abp'
         verbose_name = 'ProblemResolutionStepEightAbp'
-
-

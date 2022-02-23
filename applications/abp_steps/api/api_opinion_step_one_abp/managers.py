@@ -51,3 +51,36 @@ class OpinionStepOneAbpManager(models.Manager):
             )
         except:
             return None
+
+    def get_opinions_step_one_exclude_user_by_team(self, team=None, user=None):
+        try:
+            return self.select_related('user', 'team_abp').filter(
+                team_abp=team,
+                opinionsteponeabp__active=True,
+                opinionsteponeabp__auth_state='A',
+                auth_state='A'
+            ).exclude(user=user).values(
+                'opinionsteponeabp',
+                'opinionsteponeabp__opinion',
+                'opinionsteponeabp__active',
+                'opinionsteponeabp__created_at'
+            )
+        except:
+            return None
+
+    def get_popular_interactions_step_one_abp_by_opinion(self, opinion=None):
+        try:
+            return self.filter(
+                id=opinion,
+                interactionsteponeabp__active=True,
+                interactionsteponeabp__auth_state='A',
+                active=True,
+                auth_state='A',
+                interactionsteponeabp__opinion_interaction=2
+            ).aggregate(
+                popular_interactions=models.Count(
+                    'interactionsteponeabp'
+                )
+            )
+        except:
+            return None

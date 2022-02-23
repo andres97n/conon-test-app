@@ -19,3 +19,14 @@ class InteractionStepOneAbpManager(models.Manager):
             return list(self.in_bulk(interactions).values())
         except:
             return None
+
+    def get_interaction_by_opinion(self, opinion=None):
+        try:
+            return self.select_related('opinion_step_one_abp', 'user').filter(
+                opinion_step_one_abp=opinion,
+                opinion_step_one_abp__auth_state='A',
+                active=True,
+                auth_state='A'
+            ).order_by('id')
+        except:
+            return None
