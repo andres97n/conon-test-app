@@ -1,15 +1,16 @@
+
 from django.db import models
 
 
-class LearnedConceptStepThreeAbpManager(models.Manager):
+class UnknownConceptStepFourAbpManager(models.Manager):
 
-    def get_learned_concept_list(self):
+    def get_unknown_concept_abp_list(self):
         return self.select_related('team_abp').filter(auth_state='A').order_by('-created_at')
 
-    def learned_concept_exists(self, pk=None):
-        return self.filter(id=pk, active=True, auth_state='A').exists()
+    def unknown_concept_exists(self, concept=None):
+        return self.filter(id=concept, active=True, auth_state='A')
 
-    def get_learned_concepts_by_team(self, team=None):
+    def get_unknown_concepts_by_team(self, team=None):
         try:
             return self.select_related('team_abp').filter(
                 team_abp=team,
@@ -20,3 +21,4 @@ class LearnedConceptStepThreeAbpManager(models.Manager):
             )
         except:
             return None
+

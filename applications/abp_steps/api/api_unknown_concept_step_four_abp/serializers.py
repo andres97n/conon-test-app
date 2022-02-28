@@ -1,18 +1,19 @@
+
 from rest_framework import serializers
 
-from applications.abp_steps.models import LearnedConceptStepThreeAbp
-from applications.abp.models import TeamAbp, TeamDetailAbp
+from applications.abp_steps.models import UnknownConceptStepFourAbp
+from applications.abp.models import TeamAbp
 
 
-class LearnedConceptStepThreeAbpSerializer(serializers.ModelSerializer):
+class UnknownConceptStepFourAbpSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LearnedConceptStepThreeAbp
+        model = UnknownConceptStepFourAbp
         exclude = [
             'updated_at',
             'auth_state'
         ]
 
-    # Create Learned Concept ABP
+    # Create Unknown Concept ABP
     def create(self, validated_data):
         if not TeamAbp.objects.team_abp_exists(validated_data['team_abp'].id):
             raise serializers.ValidationError(
@@ -21,11 +22,11 @@ class LearnedConceptStepThreeAbpSerializer(serializers.ModelSerializer):
                                 'consulte con el Administrador.'
                 }
             )
-        learned_concept_abp = LearnedConceptStepThreeAbp(**validated_data)
-        learned_concept_abp.save()
-        return learned_concept_abp
+        unknown_concept_abp = UnknownConceptStepFourAbp(**validated_data)
+        unknown_concept_abp.save()
+        return unknown_concept_abp
 
-    # Update Learned Concept ABP
+    # Update Unknown Concept ABP
     def update(self, instance, validated_data):
         if instance.team_abp != validated_data['team_abp']:
             raise serializers.ValidationError(
@@ -34,16 +35,14 @@ class LearnedConceptStepThreeAbpSerializer(serializers.ModelSerializer):
                                 'consulte con el administrador.'
                 }
             )
-        update_learned_concept_abp = super().update(instance, validated_data)
-        update_learned_concept_abp.save()
-        return update_learned_concept_abp
+        update_unknown_concept_abp = super().update(instance, validated_data)
+        update_unknown_concept_abp.save()
+        return update_unknown_concept_abp
 
 
-# Return Learned Concept Data
-class LearnedConceptListStepThreeAbpSerializer(serializers.ModelSerializer):
-
+class UnknownConceptStepFourAbpListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LearnedConceptStepThreeAbp
+        model = UnknownConceptStepFourAbp
         exclude = [
             'updated_at',
             'auth_state'
@@ -52,21 +51,21 @@ class LearnedConceptListStepThreeAbpSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return {
             'id': instance.id,
-            'team_abp': {
-                'id': instance.team_abp.id,
-                'step': instance.team_abp.step
+            'team': {
+              'id': instance.team_abp.id,
+              'step': instance.team_abp.step
             },
-            'learned_concept': instance.learned_concept,
+            'unknown_concept': instance.unknown_concept,
             'active': instance.active,
             'created_at': instance.created_at
         }
 
 
-class SmallLearnedConceptAbpDataSerializer(serializers.Serializer):
+class SmallUnknownConceptStepFourAbpListSerializer(serializers.Serializer):
     def to_representation(self, instance):
         return {
             'id': instance.id,
-            'learned_concept': instance.learned_concept,
+            'unknown_concept': instance.unknown_concept,
             'active': instance.active,
             'created_at': instance.created_at
         }

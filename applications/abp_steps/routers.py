@@ -9,6 +9,9 @@ from .api.api_rate_student_idea_step_two_abp.viewsets import RateStudentIdeaStep
 from .api.api_learned_concept_step_three_abp.viewsets import LearnedConceptStepThreeAbpViewSet
 from .api.api_learned_concept_reference_step_three_abp.viewsets import \
     LearnedConceptReferenceStepThreeAbpViewSet
+from .api.api_unknown_concept_step_four_abp.viewsets import UnknownConceptStepFourAbpViewSet
+from .api.api_unknown_concept_reference_step_four_abp.viewsets import \
+    UnknownConceptReferenceStepFourAbpViewSet
 
 router = routers.DefaultRouter()
 
@@ -51,6 +54,16 @@ router.register(
     r'step-three/learned-concept-reference',
     LearnedConceptReferenceStepThreeAbpViewSet,
     basename='learned_concept_reference_step_three_abp'
+)
+router.register(
+    r'step-four/unknown-concept',
+    UnknownConceptStepFourAbpViewSet,
+    basename='unknown_concept_step_four_abp'
+)
+router.register(
+    r'step-four/unknown-concept-reference',
+    UnknownConceptReferenceStepFourAbpViewSet,
+    basename='unknown_concept_reference_step_four_abp'
 )
 
 urlpatterns = router.urls

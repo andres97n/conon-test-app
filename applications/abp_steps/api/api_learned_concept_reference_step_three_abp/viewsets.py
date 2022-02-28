@@ -23,7 +23,7 @@ class LearnedConceptReferenceStepThreeAbpViewSet(viewsets.GenericViewSet):
         return get_object_or_404(self.serializer_class.Meta.model, id=pk)
 
     def get_queryset(self):
-        return self.list_serializer_class().Meta.model.objects. \
+        return self.list_serializer_class().Meta.model.objects.\
             get_learned_concept_reference_list()
 
     # Get Learned Concept Reference List
@@ -45,22 +45,26 @@ class LearnedConceptReferenceStepThreeAbpViewSet(viewsets.GenericViewSet):
             status=status.HTTP_200_OK
         )
 
-    # Update Learned Concept Reference ABP
-    def update(self, request, pk=None):
-        learned_concept_reference_abp = self.get_object(pk)
-        # Send information to serializer referencing the instance
-        learned_concept_reference_serializer = self.serializer_class(
-            learned_concept_reference_abp,
-            data=request.data
-        )
+    # Create Learned Concept Reference ABP
+    def create(self, request, *args, **kwargs):
+        # Send information to serializer
+        is_many = True if isinstance(request.data, list) else False
+        learned_concept_reference_serializer = self.get_serializer(data=request.data, many=is_many)
         if learned_concept_reference_serializer.is_valid():
             learned_concept_reference_serializer.save()
             return Response(
                 {
                     'ok': True,
-                    'conon_data': learned_concept_reference_serializer.data,
+                    'reference':
+                        learned_concept_reference_serializer.data
+                        if isinstance(learned_concept_reference_serializer.data, list)
+                        else learned_concept_reference_serializer.data['id'],
+                    'message':
+                        'Referencias creadas correctamente'
+                        if isinstance(learned_concept_reference_serializer.data, list)
+                        else 'Referencia creada correctamente'
                 },
-                status=status.HTTP_200_OK
+                status=status.HTTP_201_CREATED
             )
         return Response(
             {
@@ -71,7 +75,7 @@ class LearnedConceptReferenceStepThreeAbpViewSet(viewsets.GenericViewSet):
         )
 
     # Block Learned Concept Reference ABP
-    @action(detail=True, methods=['DELETE'], url_path='block')
+    @action(detail=True, methods=(['DELETE']), url_path='block')
     def block_learned_concept_reference_abp(self, request, pk=None):
         learned_concept_reference_abp = self.get_object(pk)
         learned_concept_reference_abp.active = False

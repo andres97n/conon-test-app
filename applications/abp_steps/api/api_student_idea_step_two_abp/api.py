@@ -19,7 +19,6 @@ def get_student_ideas_by_team_detail(request, team_detail):
         if team_detail:
             student_ideas = StudentIdeaStepTwoAbp.objects.\
                 get_student_ideas_abp_by_team_detail(team_detail)
-            print(team_detail)
             if student_ideas is not None:
                 student_idea_serializer = StudentIdeaStepTwoAbpByTeamDetailSerializer(
                     student_ideas, many=True

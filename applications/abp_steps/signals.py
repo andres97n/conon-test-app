@@ -1,8 +1,9 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models import OpinionStepOneAbp, InteractionStepOneAbp, \
-    StudentIdeaStepTwoAbp, RateStudentIdeaStepTwoAbp
+from .models import (OpinionStepOneAbp, InteractionStepOneAbp,
+                     StudentIdeaStepTwoAbp, RateStudentIdeaStepTwoAbp,
+                     LearnedConceptStepThreeAbp, LearnedConceptReferenceStepThreeAbp)
 from applications.abp.models import TeamAbp, TeamDetailAbp
 from applications.users.models import User
 

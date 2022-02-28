@@ -13,7 +13,9 @@ from .api.api_rate_student_idea_step_two_abp.managers import RateStudentIdeaStep
 from .api.api_learned_concept_step_three_abp.managers import LearnedConceptStepThreeAbpManager
 from .api.api_learned_concept_reference_step_three_abp.managers import \
     LearnedConceptReferenceStepThreeAbpManager
-
+from .api.api_unknown_concept_step_four_abp.managers import UnknownConceptStepFourAbpManager
+from .api.api_unknown_concept_reference_step_four_abp.managers import \
+    UnknownConceptReferenceStepFourAbpManager
 
 class OpinionStepOneAbp(BaseModel):
     opinion = models.TextField(
@@ -253,6 +255,8 @@ class UnknownConceptStepFourAbp(BaseModelActive):
         blank=False
     )
 
+    objects = UnknownConceptStepFourAbpManager()
+
     def __str__(self):
         return self.unknown_concept
 
@@ -276,6 +280,8 @@ class UnknownConceptReferenceStepFourAbp(BaseModelActive):
         null=False,
         blank=False
     )
+
+    objects = UnknownConceptReferenceStepFourAbpManager()
 
     def __str__(self):
         return self.url_reference

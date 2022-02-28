@@ -3,11 +3,13 @@ from rest_framework.response import Response
 
 from .serializers import TeamDetailAbpSerializer
 from applications.base.permissions import IsOwnerAndTeacher
+from applications.base.paginations import CononPagination
 
 
 class TeamDetailAbpViewSet(viewsets.ModelViewSet):
     serializer_class = TeamDetailAbpSerializer
     permission_classes = [IsOwnerAndTeacher]
+    pagination_class = CononPagination
 
     # Return Team Detail ABP
     def get_queryset(self, pk=None):
@@ -18,6 +20,10 @@ class TeamDetailAbpViewSet(viewsets.ModelViewSet):
     # Get Team Detail ABP List
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
         team_detail_abp_serializer = self.get_serializer(queryset, many=True)
 
         return Response(

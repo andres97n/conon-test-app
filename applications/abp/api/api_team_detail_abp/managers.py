@@ -133,3 +133,13 @@ class TeamDetailAbpManager(models.Manager):
             ).exclude(user=user)
         except:
             return None
+
+    def get_team_detail_by_team(self, team=None):
+        try:
+            return self.select_related('team_abp', 'user').filter(
+                team_abp=team,
+                team_abp__abp__auth_state='A',
+                auth_state='A'
+            )
+        except:
+            return None
