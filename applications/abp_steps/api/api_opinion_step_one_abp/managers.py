@@ -84,3 +84,20 @@ class OpinionStepOneAbpManager(models.Manager):
             )
         except:
             return None
+
+    def get_team_opinions_abp_list(self, team=None):
+        try:
+            return self.select_related(
+                'team_detail_abp',
+                'team_detail_abp__team_abp'
+            ).filter(
+                team_detail_abp__team_abp=team,
+                team_detail_abp__team_abp__state=1,
+                team_detail_abp__team_abp__auth_state='A',
+                team_detail_abp__active=True,
+                team_detail_abp__auth_state='A',
+                active=True,
+                auth_state='A'
+            ).order_by('team_detail_abp')
+        except:
+            return None

@@ -12,6 +12,8 @@ from .api.api_learned_concept_reference_step_three_abp.viewsets import \
 from .api.api_unknown_concept_step_four_abp.viewsets import UnknownConceptStepFourAbpViewSet
 from .api.api_unknown_concept_reference_step_four_abp.viewsets import \
     UnknownConceptReferenceStepFourAbpViewSet
+from .api.api_perform_action_step_five_abp.viewsets import PerformActionStepFiveAbpViewSet
+from .api.api_rate_perform_action_step_five_abp.viewsets import RatePerformActionStepFiveAbpViewSet
 
 router = routers.DefaultRouter()
 
@@ -65,5 +67,16 @@ router.register(
     UnknownConceptReferenceStepFourAbpViewSet,
     basename='unknown_concept_reference_step_four_abp'
 )
+router.register(
+    r'step-five/perform-action',
+    PerformActionStepFiveAbpViewSet,
+    basename='perform_action_step_five_abp'
+)
+router.register(
+    r'step-five/rate-perform-action',
+    RatePerformActionStepFiveAbpViewSet,
+    basename='rate_perform_action_step_five_abp'
+)
 
 urlpatterns = router.urls
+

@@ -16,6 +16,9 @@ from .api.api_learned_concept_reference_step_three_abp.managers import \
 from .api.api_unknown_concept_step_four_abp.managers import UnknownConceptStepFourAbpManager
 from .api.api_unknown_concept_reference_step_four_abp.managers import \
     UnknownConceptReferenceStepFourAbpManager
+from .api.api_perform_action_step_five_abp.managers import PerformActionStepFiveAbpManager
+from .api.api_rate_perform_action_step_five_abp.managers import RatePerformActionStepFiveAbpManager
+
 
 class OpinionStepOneAbp(BaseModel):
     opinion = models.TextField(
@@ -301,6 +304,8 @@ class PerformActionStepFiveAbp(BaseModelActive):
         blank=False
     )
 
+    objects = PerformActionStepFiveAbpManager()
+
     def __str__(self):
         return self.action
 
@@ -310,13 +315,8 @@ class PerformActionStepFiveAbp(BaseModelActive):
 
 
 class RatePerformActionStepFiveAbp(BaseModelActive):
-    class RatePerformActionStepFiveAbpStatus(models.IntegerChoices):
-        NOTHING = 0
-        DISAGREE = 1
-        AGREE = 2
-
     rate_perform_action = models.PositiveSmallIntegerField(
-        choices=RatePerformActionStepFiveAbpStatus.choices,
+        default=0,
         null=False,
         blank=False
     )
@@ -334,8 +334,10 @@ class RatePerformActionStepFiveAbp(BaseModelActive):
         blank=False
     )
 
+    objects = RatePerformActionStepFiveAbpManager()
+
     def __str__(self):
-        return self.rate_perform_action
+        return f'{self.rate_perform_action}'
 
     class Meta:
         db_table = 'rate_perform_action_step_five_abp'
@@ -346,8 +348,8 @@ class ProblemDefinitionStepSixAbp(BaseModelActive):
     problem_definition = models.TextField(null=False, blank=False)
     observations = models.TextField(null=False, blank=False)
 
-    team_detail_abp = models.ForeignKey(
-        TeamDetailAbp,
+    team_abp = models.ForeignKey(
+        TeamAbp,
         on_delete=models.CASCADE,
         null=False,
         blank=False

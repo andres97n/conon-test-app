@@ -3,7 +3,7 @@ from django.dispatch import receiver
 
 from .models import (OpinionStepOneAbp, InteractionStepOneAbp,
                      StudentIdeaStepTwoAbp, RateStudentIdeaStepTwoAbp,
-                     LearnedConceptStepThreeAbp, LearnedConceptReferenceStepThreeAbp)
+                     PerformActionStepFiveAbp, RatePerformActionStepFiveAbp)
 from applications.abp.models import TeamAbp, TeamDetailAbp
 from applications.users.models import User
 
@@ -63,5 +63,21 @@ def post_save_student_idea_step_two_abp(sender, instance, created, *args, **kwar
                     rating.save()
 
 
+def post_save_perform_action_step_five_abp(sender, instance, created, *args, **kwargs):
+    if created:
+        team_details = TeamDetailAbp.objects.get_team_detail_list_by_team_exclude_user(
+            instance.team_detail_abp.team_abp.id, instance.team_detail_abp.user.id
+        )
+        if team_details is not None:
+            for student in team_details:
+                new_rate_perform_action = RatePerformActionStepFiveAbp()
+                new_rate_perform_action.perform_action_step_five_abp = instance
+                new_rate_perform_action.user = student.user
+                new_rate_perform_action.rate_perform_action = 0
+                new_rate_perform_action.active = True
+                new_rate_perform_action.save()
+
+
 post_save.connect(post_save_student_idea_step_two_abp, sender=StudentIdeaStepTwoAbp)
+post_save.connect(post_save_perform_action_step_five_abp, sender=PerformActionStepFiveAbp)
 

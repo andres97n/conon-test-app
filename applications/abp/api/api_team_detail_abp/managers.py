@@ -143,3 +143,4 @@ class TeamDetailAbpManager(models.Manager):
             )
         except:
             return None
+

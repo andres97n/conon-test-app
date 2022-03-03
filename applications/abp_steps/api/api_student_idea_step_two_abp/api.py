@@ -6,8 +6,9 @@ from rest_framework.response import Response
 from applications.base.permissions import IsStudent
 from applications.abp.models import TeamDetailAbp
 from applications.abp_steps.models import StudentIdeaStepTwoAbp, RateStudentIdeaStepTwoAbp
-from .serializers import StudentIdeaStepTwoAbpByTeamDetailSerializer, \
-    TeamStudentIdeasStepTwoAbpSerializer
+from .serializers import (StudentIdeaStepTwoAbpByTeamDetailSerializer,
+                          TeamStudentIdeasStepTwoAbpSerializer,
+                          StudentIdeaStepTwoAbpSerializer)
 from applications.abp_steps.api.api_rate_student_idea_step_two_abp.serializers import \
     RateStudentIdeaByIdeaSerializer
 
@@ -105,6 +106,64 @@ def get_student_ideas_and_rates_by_team_and_user(request, team, user):
                 {
                     'ok': False,
                     'detail': 'No se enviaron los valores necesarios para la consulta.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    else:
+        return Response(
+            {
+                'ok': False,
+                'detail': 'Método no permitido.'
+            },
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsStudent])
+def get_ideas_and_rates_by_team(request, team):
+    if request.method == 'GET':
+        if team:
+            team_ideas = StudentIdeaStepTwoAbp.objects.get_student_ideas_by_team(team)
+            if team_ideas is not None:
+                team_ideas_and_rates = []
+                team_ideas_serializer = StudentIdeaStepTwoAbpSerializer(team_ideas, many=True)
+                for idea in team_ideas_serializer.data:
+                    idea_rates = RateStudentIdeaStepTwoAbp.objects.\
+                        get_rate_student_ideas_by_idea(idea['id'])
+                    if idea_rates is not None:
+                        idea_rates_serializer = RateStudentIdeaByIdeaSerializer(
+                            idea_rates, many=True
+                        )
+                        team_ideas_and_rates.append({
+                            'idea': idea,
+                            'rates': idea_rates_serializer.data
+                        })
+                    else:
+                        team_ideas_and_rates.append({
+                            'idea': idea,
+                            'rates': []
+                        })
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': team_ideas_and_rates
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se encontró las ideas del equipo, revise el equipo enviado.'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se envío el grupo correspondiente.'
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
