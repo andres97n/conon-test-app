@@ -14,6 +14,14 @@ from .api.api_unknown_concept_reference_step_four_abp.viewsets import \
     UnknownConceptReferenceStepFourAbpViewSet
 from .api.api_perform_action_step_five_abp.viewsets import PerformActionStepFiveAbpViewSet
 from .api.api_rate_perform_action_step_five_abp.viewsets import RatePerformActionStepFiveAbpViewSet
+from .api.api_problem_definition_step_six_abp.viewsets import ProblemDefinitionStepSixAbpViewSet
+from .api.api_problem_definition_reference_step_six_abp.viewsets import \
+    ProblemDefinitionReferenceStepSixAbpViewSet
+from .api.api_get_information_step_seven_abp.viewsets import GetInformationStepSevenAbpViewSet
+from .api.api_information_reference_step_seven_abp.viewsets import \
+    InformationReferenceStepSevenAbpViewSet
+from .api.api_problem_resolution_step_eight_abp.viewsets import ProblemResolutionStepEightAbpViewSet
+
 
 router = routers.DefaultRouter()
 
@@ -77,6 +85,30 @@ router.register(
     RatePerformActionStepFiveAbpViewSet,
     basename='rate_perform_action_step_five_abp'
 )
+router.register(
+    r'step-six/problem-definition',
+    ProblemDefinitionStepSixAbpViewSet,
+    basename='problem_definition_step_six_abp'
+)
+router.register(
+    r'step-six/problem-definition-reference',
+    ProblemDefinitionReferenceStepSixAbpViewSet,
+    basename='problem_definition_reference_step_six_abp'
+)
+router.register(
+    r'step-seven/get-information-abp',
+    GetInformationStepSevenAbpViewSet,
+    basename='get_information_step_seven_abp'
+)
+router.register(
+    r'step-seven/information-reference',
+    InformationReferenceStepSevenAbpViewSet,
+    basename='information_reference_step_seven_abp'
+)
+router.register(
+    r'step-eight/problem-resolution',
+    ProblemResolutionStepEightAbpViewSet,
+    basename='problem_resolution_step_eight_abp'
+),
 
 urlpatterns = router.urls
-

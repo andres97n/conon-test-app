@@ -15,6 +15,9 @@ from .api.api_unknown_concept_step_four_abp.api import get_unknown_concepts_with
 from .api.api_perform_action_step_five_abp.api import (get_student_actions_by_team_detail,
                                                        get_student_actions_and_rates_by_team_and_user,
                                                        get_student_actions_and_rates_by_team)
+from .api.api_problem_definition_step_six_abp.api import get_problem_definition_with_references
+from .api.api_get_information_step_seven_abp.api import get_information_model_with_references
+
 urlpatterns = [
     path(
         r"step-one/opinion/user-opinions/<int:team_detail>/",
@@ -85,5 +88,15 @@ urlpatterns = [
         r"step-five/perform-action/team-perform-actions-rates/<int:team>/",
         get_student_actions_and_rates_by_team,
         name="perform_actions_and_rates_by_team"
+    ),
+    path(
+        r"step-six/problem-definition/team-definition-references/<int:team>/",
+        get_problem_definition_with_references,
+        name="problem_definition_and_references"
+    ),
+    path(
+        r"step-seven/get-information-abp/get-information-abp-reference/<int:team>/",
+        get_information_model_with_references,
+        name="get_information_abp_and_references"
     ),
 ]

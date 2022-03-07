@@ -7,7 +7,7 @@ from applications.abp_steps.models import (PerformActionStepFiveAbp, RatePerform
 from .serializers import (PerformActionStepFiveAbpListByTeamDetailSerializer,
                           PerformActionStepFiveAbpListSerializer)
 from applications.abp_steps.api.api_rate_perform_action_step_five_abp.serializers import \
-    RatePerformActionStepFiveAbpListSerializer
+    RatePerformActionStepFiveAbpListSerializer, RatePerformActionStepFiveAbpByActionListSerializer
 
 
 @api_view(['GET'])
@@ -67,12 +67,13 @@ def get_student_actions_and_rates_by_team_and_user(request, team, user):
                     student_actions, many=True
                 )
                 for student_action in student_actions_serializer.data:
-                    rate_student_action = RatePerformActionStepFiveAbp.objects.\
+                    rate_student_action = RatePerformActionStepFiveAbp.objects. \
                         get_rate_perform_action_list_by_action(student_action['id'], active=True)
                     if rate_student_action is not None:
-                        rate_student_action_serializer = RatePerformActionStepFiveAbpListSerializer(
-                            rate_student_action, many=True
-                        )
+                        rate_student_action_serializer = \
+                            RatePerformActionStepFiveAbpByActionListSerializer(
+                                rate_student_action, many=True
+                            )
                         team_actions_and_rates.append({
                             'perform_action': student_action,
                             'rates': rate_student_action_serializer.data
@@ -121,7 +122,7 @@ def get_student_actions_and_rates_by_team_and_user(request, team, user):
 def get_student_actions_and_rates_by_team(request, team):
     if request.method == 'GET':
         if team:
-            team_actions = PerformActionStepFiveAbp.objects.\
+            team_actions = PerformActionStepFiveAbp.objects. \
                 get_student_actions_by_team(team)
             if team_actions is not None:
                 team_actions_rates = []
@@ -129,7 +130,7 @@ def get_student_actions_and_rates_by_team(request, team):
                     team_actions, many=True
                 )
                 for action in team_actions_serializer.data:
-                    action_rates = RatePerformActionStepFiveAbp.objects.\
+                    action_rates = RatePerformActionStepFiveAbp.objects. \
                         get_rate_perform_action_list_by_action(action['id'], active=True)
                     if action_rates is not None:
                         rate_student_action_serializer = RatePerformActionStepFiveAbpListSerializer(

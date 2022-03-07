@@ -55,3 +55,17 @@ class RatePerformActionStepFiveAbpListSerializer(serializers.ModelSerializer):
             'active': instance.active,
             'created_at': instance.created_at
         }
+
+
+class RatePerformActionStepFiveAbpByActionListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'user': {
+                'id': instance.user.id,
+                'name': instance.user.__str__()
+            },
+            'rate_perform_action': instance.rate_perform_action,
+            'active': instance.active,
+            'created_at': instance.created_at
+        }

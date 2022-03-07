@@ -18,6 +18,13 @@ from .api.api_unknown_concept_reference_step_four_abp.managers import \
     UnknownConceptReferenceStepFourAbpManager
 from .api.api_perform_action_step_five_abp.managers import PerformActionStepFiveAbpManager
 from .api.api_rate_perform_action_step_five_abp.managers import RatePerformActionStepFiveAbpManager
+from .api.api_problem_definition_step_six_abp.managers import ProblemDefinitionStepSixAbpManager
+from .api.api_problem_definition_reference_step_six_abp.managers import \
+    ProblemDefinitionReferenceStepFixAbpManager
+from .api.api_get_information_step_seven_abp.managers import GetInformationStepSevenAbpManager
+from .api.api_information_reference_step_seven_abp.managers import \
+    InformationReferenceStepSevenAbpManager
+from .api.api_problem_resolution_step_eight_abp.managers import ProblemResolutionStepEightAbpManager
 
 
 class OpinionStepOneAbp(BaseModel):
@@ -346,7 +353,7 @@ class RatePerformActionStepFiveAbp(BaseModelActive):
 
 class ProblemDefinitionStepSixAbp(BaseModelActive):
     problem_definition = models.TextField(null=False, blank=False)
-    observations = models.TextField(null=False, blank=False)
+    observations = models.TextField(null=False, blank=True)
 
     team_abp = models.ForeignKey(
         TeamAbp,
@@ -355,24 +362,61 @@ class ProblemDefinitionStepSixAbp(BaseModelActive):
         blank=False
     )
 
+    objects = ProblemDefinitionStepSixAbpManager()
+
     def __str__(self):
-        return self.problem_definition
+        return f'{self.id}'
 
     class Meta:
         db_table = 'problem_definition_step_six_abp'
         verbose_name = 'ProblemDefinitionStepSixAbp'
 
 
-class GetInformationStepSevenAbp(BaseModelActive):
-    get_information = models.TextField(null=False, blank=False)
-    observations = models.TextField(null=False, blank=False)
+class ProblemDefinitionReferenceStepSixAbp(BaseModelActive):
+    problem_reference = models.URLField(
+        null=False,
+        blank=False
+    )
 
-    team_detail_abp = models.ForeignKey(
-        TeamDetailAbp,
+    team_abp = models.ForeignKey(
+        TeamAbp,
         on_delete=models.CASCADE,
         null=False,
         blank=False
     )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+
+    objects = ProblemDefinitionReferenceStepFixAbpManager()
+
+    def __str__(self):
+        return self.problem_reference
+
+    class Meta:
+        db_table = 'problem_definition_reference_step_six_abp'
+        verbose_name = 'ProblemDefinitionReferenceStepSixAbp'
+
+
+class GetInformationStepSevenAbp(BaseModelActive):
+    get_information = models.TextField(null=False, blank=False)
+    observations = models.TextField(
+        null=False,
+        blank=True,
+        default=''
+    )
+
+    team_abp = models.ForeignKey(
+        TeamAbp,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+
+    objects = GetInformationStepSevenAbpManager()
 
     def __str__(self):
         return self.get_information
@@ -382,11 +426,8 @@ class GetInformationStepSevenAbp(BaseModelActive):
         verbose_name = 'GetInformationStepSevenAbp'
 
 
-class ProblemResolutionStepEightAbp(BaseModelActive):
-    problem_resolution = models.TextField(null=False, blank=False)
-    video_url = models.URLField(null=False, blank=False)
-    image_references = models.JSONField(null=False, blank=False)
-    observations = models.TextField(null=False, blank=False)
+class InformationReferenceStepSevenAbp(BaseModelActive):
+    information_reference = models.URLField(null=False, blank=False)
 
     team_abp = models.ForeignKey(
         TeamAbp,
@@ -394,6 +435,41 @@ class ProblemResolutionStepEightAbp(BaseModelActive):
         null=False,
         blank=False
     )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+
+    objects = InformationReferenceStepSevenAbpManager()
+
+    def __str__(self):
+        return self.information_reference
+
+    class Meta:
+        db_table = 'information_reference_step_seven_abp'
+        verbose_name = 'InformationReferenceStepSevenAbp'
+
+
+class ProblemResolutionStepEightAbp(BaseModelActive):
+    problem_resolution = models.TextField(null=False, blank=False)
+    video_url = models.URLField(null=False, blank=False)
+    image_references = models.JSONField(null=False, blank=False)
+    observations = models.TextField(
+        null=False,
+        blank=True,
+        default=''
+    )
+
+    team_abp = models.ForeignKey(
+        TeamAbp,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+
+    objects = ProblemResolutionStepEightAbpManager()
 
     def __str__(self):
         return self.problem_resolution
