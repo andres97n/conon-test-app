@@ -17,21 +17,14 @@ class TopicManager(models.Manager):
             return None
 
     def topic_exists(self, pk=None):
-        try:
-            result = self.filter(id=pk, active=True, auth_state='A').first()
-            if result:
-                return True
-            else:
-                return False
-        except None:
-            return False
+        return self.filter(id=pk, active=True, auth_state='A').exists()
 
-    def get_topics_by_type(self, type=None):
+    def get_topics_by_type(self, prototype=None):
         try:
             self.filter()
             return self.select_related('owner', 'owner__person', 'classroom', 'asignature'). \
                 filter(
-                    type=type, auth_state='A'
+                    type=prototype, auth_state='A'
                 ).order_by('-created_at', 'active')
         except:
             return None

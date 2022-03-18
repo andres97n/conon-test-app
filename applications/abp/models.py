@@ -78,6 +78,7 @@ class TeamAbp(BaseModel):
         STEP_SIX = 6
         STEP_SEVEN = 7
         STEP_EIGHT = 8
+        STEP_NINE = 9
 
     step = models.PositiveIntegerField(
         choices=StepTeamAbpStatus.choices,
@@ -254,7 +255,7 @@ class EvaluationAbp(BaseModel):
         null=False,
         blank=False
     )
-    observation = models.TextField(
+    observations = models.TextField(
         null=True,
         blank=True
     )
@@ -271,8 +272,8 @@ class EvaluationAbp(BaseModel):
         null=False,
         blank=False
     )
-    user = models.ForeignKey(
-        User,
+    team_detail_abp = models.ForeignKey(
+        TeamDetailAbp,
         on_delete=models.CASCADE,
         null=False,
         blank=False
@@ -290,6 +291,11 @@ class EvaluationAbp(BaseModel):
 
 
 class EvaluationDetailAbp(BaseModel):
+    title_evaluation_detail = models.CharField(
+        max_length=250,
+        null=False,
+        blank=False
+    )
     grade_percentage = models.FloatField(
         default=0,
         null=False,

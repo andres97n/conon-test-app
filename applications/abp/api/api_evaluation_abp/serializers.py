@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from applications.abp.models import EvaluationAbp, Abp
-from applications.users.models import User
+from applications.abp.models import EvaluationAbp, Abp, TeamDetailAbp
 
 
 class EvaluationAbpSerializer(serializers.ModelSerializer):
@@ -30,10 +29,11 @@ class EvaluationAbpSerializer(serializers.ModelSerializer):
                     'abp': 'Error, la metodología ABP ingresada no es válida; consulte con el Administrador.'
                 }
             )
-        if not User.objects.user_exists(validated_data['moderator'].id):
+        if not TeamDetailAbp.objects.exists_team_detail_abp(validated_data['team_detail_abp'].id):
             raise serializers.ValidationError(
                 {
-                    'moderator': 'Error, el moderador ingresado no es válido; consulte con el Administrador.'
+                    'team_detail_abp': 'Error, el Estudiante no existe o está inactivo; consulte '
+                                       'con el Administrador.'
                 }
             )
         evaluation_abp = EvaluationAbp(**validated_data)
@@ -45,16 +45,17 @@ class EvaluationAbpSerializer(serializers.ModelSerializer):
         if instance.abp != validated_data['abp']:
             raise serializers.ValidationError(
                 {
-                    'abp': 'Error, no se puede cambiar de pertenencia; por favor consulte con el Administrador.'
+                    'abp': 'Error, no se puede cambiar de Metodología; por favor consulte '
+                           'con el Administrador.'
                 }
             )
-        if instance.user != validated_data['user']:
-            if not User.objects.user_exists(validated_data['user'].id):
-                raise serializers.ValidationError(
-                    {
-                        'user': 'Error, el usuario ingresado no es válido; consulte con el Administrador.'
-                    }
-                )
+        if instance.team_detail_abp != validated_data['team_detail_abp']:
+            raise serializers.ValidationError(
+                {
+                    'team_detail_abp': 'Error, no se puede cambiar el Estudiante ingresado; '
+                                       'consulte con el Administrador.'
+                }
+            )
         update_evaluation_abp = super().update(instance, validated_data)
         update_evaluation_abp.save()
         return update_evaluation_abp
@@ -71,13 +72,16 @@ class EvaluationAbpSerializer(serializers.ModelSerializer):
                     'title': instance.abp.topic.title
                 },
             },
-            'user': {
-                'id': instance.user.id,
-                'name': instance.user.__str__()
+            'team_detail_abp': {
+                'id': instance.team_detail_abp.id,
+                'user': {
+                    'id': instance.team_detail_abp.user.id,
+                    'name': instance.team_detail_abp.user.__str__()
+                }
             },
             'description': instance.description,
             'final_grade': instance.final_grade,
-            'observation': instance.observation,
+            'observations': instance.observations,
             'state': instance.state,
             'created_at': instance.created_at
         }

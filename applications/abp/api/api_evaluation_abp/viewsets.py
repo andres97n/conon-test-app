@@ -1,5 +1,7 @@
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import EvaluationAbpSerializer
 from applications.base.permissions import IsOwnerAndTeacher
@@ -10,6 +12,8 @@ class EvaluationAbpViewSet(viewsets.ModelViewSet):
     serializer_class = EvaluationAbpSerializer
     permission_classes = [IsOwnerAndTeacher]
     pagination_class = CononPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['abp', 'team_detail_abp', 'state']
 
     # Return Team ABP
     def get_queryset(self, pk=None):
@@ -45,6 +49,7 @@ class EvaluationAbpViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': evaluation_abp_serializer.data['id'],
                     'message': 'Evaluación creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED
@@ -117,8 +122,8 @@ class EvaluationAbpViewSet(viewsets.ModelViewSet):
         # Get instance
         evaluation_abp = self.get_queryset(pk)
         if evaluation_abp:
-            evaluation_abp.auth_state = 'I'
             evaluation_abp.state = 0
+            evaluation_abp.auth_state = 'I'
             evaluation_abp.save()
 
             return Response(
@@ -137,3 +142,17 @@ class EvaluationAbpViewSet(viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    # Block Evaluation ABP
+    @action(detail=True, methods=['DELETE'], url_path='block')
+    def block_evaluation_abp(self, request, pk=None):
+        evaluation_abp = self.get_queryset(pk)
+        evaluation_abp.state = 0
+        evaluation_abp.save()
+
+        return Response(
+            {
+                'ok': True,
+                'message': 'Evaluación bloqueada correctamente.'
+            },
+            status=status.HTTP_200_OK
+        )

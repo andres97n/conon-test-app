@@ -1,5 +1,8 @@
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 from .serializers import EvaluationDetailAbpSerializer
 from applications.base.permissions import IsOwnerAndTeacher
@@ -8,6 +11,8 @@ from applications.base.permissions import IsOwnerAndTeacher
 class EvaluationDetailAbpViewSet(viewsets.ModelViewSet):
     serializer_class = EvaluationDetailAbpSerializer
     permission_classes = [IsOwnerAndTeacher]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['evaluation_abp', 'active']
 
     # Return Rubric Detail ABP
     def get_queryset(self, pk=None):
@@ -37,6 +42,7 @@ class EvaluationDetailAbpViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': evaluation_detail_abp_serializer.data['id'],
                     'message': 'Calificación guardada correctamente.'
                 },
                 status=status.HTTP_201_CREATED
@@ -129,3 +135,17 @@ class EvaluationDetailAbpViewSet(viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    # Block Evaluation Detail Abp
+    @action(detail=True, methods=['DELETE'], url_path='block')
+    def block_evaluation_detail_abp(self, request, pk=None):
+        evaluation_detail_abp = self.get_queryset(pk)
+        evaluation_detail_abp.active = False
+        evaluation_detail_abp.save()
+
+        return Response(
+            {
+                'ok': True,
+                'message': 'Detalle de Evaluación bloqueado correctamente.'
+            },
+            status=status.HTTP_200_OK
+        )

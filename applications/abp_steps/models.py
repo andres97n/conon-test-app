@@ -454,8 +454,8 @@ class InformationReferenceStepSevenAbp(BaseModelActive):
 
 class ProblemResolutionStepEightAbp(BaseModelActive):
     problem_resolution = models.TextField(null=False, blank=False)
-    video_url = models.URLField(null=False, blank=False)
-    image_references = models.JSONField(null=False, blank=False)
+    video_url = models.URLField(null=False, blank=True)
+    image_references = models.JSONField(null=False, blank=True)
     observations = models.TextField(
         null=False,
         blank=True,

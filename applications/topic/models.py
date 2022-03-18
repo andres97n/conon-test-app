@@ -1,11 +1,14 @@
 from django.db import models
 
-from applications.base.models import BaseModel
+from applications.base.models import BaseModel, BaseModelActive
 from applications.users.models import Student, User
 from applications.school.models import Classroom, Asignature
+
 from applications.topic.api.api_topic.managers import TopicManager
 from applications.topic.api.api_comment.managers import CommentManager
 from applications.topic.api.api_reply.managers import ReplyManager
+from applications.topic.api.api_topic_student_evaluation.managers import \
+    TopicStudentEvaluationManager
 
 # TODO: Revisar porque en algunos raise errors en serializers se muestra como array y en otros no
 
@@ -179,3 +182,49 @@ class Reply(BaseModel):
 
     def __str__(self):
         return self.detail
+
+
+class TopicStudentEvaluation(BaseModelActive):
+    class StudentEvaluationChoices(models.IntegerChoices):
+        AUTO_EVALUATION = 1
+        CO_EVALUATION = 2
+
+    type = models.PositiveSmallIntegerField(
+        choices=StudentEvaluationChoices.choices,
+        null=False,
+        blank=False
+    )
+    evaluation_body = models.JSONField(null=False, blank=False)
+    final_grade = models.FloatField(
+        null=False,
+        blank=False,
+        default=0
+    )
+    observations = models.TextField(
+        null=True,
+        blank=True,
+        default=''
+    )
+
+    topic = models.ForeignKey(
+        Topic,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+
+    objects = TopicStudentEvaluationManager()
+
+    class Meta:
+        db_table = 'topic_student_evaluation'
+        verbose_name = 'TopicStudentEvaluation'
+        verbose_name_plural = 'TopicStudentEvaluations'
+
+    def __str__(self):
+        return self.final_grade

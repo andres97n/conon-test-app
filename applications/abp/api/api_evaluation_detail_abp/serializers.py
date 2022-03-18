@@ -42,18 +42,32 @@ class EvaluationDetailAbpSerializer(serializers.ModelSerializer):
             'id': instance.id,
             'evaluation_abp': {
                 'id': instance.evaluation_abp.id,
-                'description': instance.description,
-                'abp': {
-                    'id': instance.evaluation_abp.abp.id,
-                    'problem': instance.evaluation_abp.abp.problem
-                },
-                'user': {
-                    'id': instance.evaluation_abp.user.id,
-                    'name': instance.evaluation_abp.user.__str__()
+                'description': instance.evaluation_abp.description,
+                'abp': instance.evaluation_abp.abp.id,
+                'team_detail_abp': {
+                    'id': instance.evaluation_abp.team_detail_abp.id,
+                    'user': {
+                        'id': instance.evaluation_abp.team_detail_abp.user.id,
+                        'name': instance.evaluation_abp.team_detail_abp.user.__str__()
+                    }
                 },
             },
-            'grade_percentage': instance.grade_percentage,
+            "title_evaluation_detail": instance.title_evaluation_detail,
             'evaluation_description': instance.evaluation_description,
+            'grade_percentage': instance.grade_percentage,
+            'rating_value': instance.rating_value,
+            'active': instance.active,
+            'created_at': instance.created_at
+        }
+
+
+class EvaluationDetailAbpListByEvaluationSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            "title_evaluation_detail": instance.title_evaluation_detail,
+            'evaluation_description': instance.evaluation_description,
+            'grade_percentage': instance.grade_percentage,
             'rating_value': instance.rating_value,
             'active': instance.active,
             'created_at': instance.created_at
