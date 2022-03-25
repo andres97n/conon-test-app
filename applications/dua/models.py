@@ -1,6 +1,6 @@
 from django.db import models
 
-from applications.base.models import BaseModel
+from applications.base.models import BaseModel, BaseModelActive
 from applications.topic.models import Topic
 from applications.users.models import User
 from .api.api_dua.managers import DuaManager
@@ -13,39 +13,17 @@ from .api.api_answer.managers import AnswerManager
 
 
 class Dua(BaseModel):
-
     class DuaStatus(models.IntegerChoices):
         CLOSE = 0
         OPEN = 1
 
-    written_conceptualization = models.TextField(
-        null=False,
-        blank=False
-    )
-    oral_conceptualization = models.JSONField(
-        null=False,
-        blank=False
-    )
-    example = models.TextField(
-        null=False,
-        blank=False
-    )
-    video = models.JSONField(
-        null=True,
-        blank=True
-    )
-    images = models.JSONField(
-        null=False,
-        blank=True
-    )
-    extra_information = models.URLField(
-        null=True,
-        blank=True
-    )
-    observations = models.TextField(
-        null=True,
-        blank=True
-    )
+    written_conceptualization = models.TextField(null=False, blank=False)
+    oral_conceptualization = models.JSONField(null=False, blank=False)
+    example = models.TextField(null=False, blank=False)
+    video = models.URLField(null=False, blank=False)
+    images = models.JSONField(null=False, blank=True)
+    extra_information = models.URLField(null=True, blank=True)
+    observations = models.TextField(null=True, blank=True)
     state = models.PositiveSmallIntegerField(
         'estado',
         choices=DuaStatus.choices,
@@ -72,22 +50,13 @@ class Dua(BaseModel):
 
 
 class Activity(BaseModel):
-
     class ActivityStatus(models.IntegerChoices):
         CLOSE = 0
         OPEN = 1
 
-    description = models.TextField(
-        null=False,
-        blank=False
-    )
-    objective = models.TextField(
-        null=True,
-        blank=True
-    )
-    final_grade = models.DecimalField(
-        max_digits=4,
-        decimal_places=2,
+    description = models.TextField(null=False, blank=False)
+    objective = models.TextField(null=True, blank=True)
+    final_grade = models.FloatField(
         default=10,
         null=False,
         blank=False
@@ -119,10 +88,7 @@ class Activity(BaseModel):
 
 
 class Question(BaseModel):
-    title = models.TextField(
-        null=False,
-        blank=False
-    )
+    title = models.TextField(null=False, blank=False)
     '''
     {
     answer_1={
@@ -137,9 +103,7 @@ class Question(BaseModel):
         null=False,
         blank=False
     )
-    value = models.DecimalField(
-        decimal_places=2,
-        max_digits=4,
+    value = models.FloatField(
         default=0,
         null=False,
         blank=False
@@ -168,15 +132,9 @@ class Question(BaseModel):
         return self.title
 
 
-class ActivityStudent(BaseModel):
-    qualification = models.FloatField(
-        null=False,
-        blank=False
-    )
-    observation = models.TextField(
-        null=True,
-        blank=True
-    )
+class ActivityStudent(BaseModelActive):
+    qualification = models.FloatField(null=False, blank=False)
+    observations = models.TextField(null=True, blank=True)
 
     activity = models.ForeignKey(
         Activity,
@@ -205,7 +163,7 @@ class ActivityStudent(BaseModel):
         return self.qualification
 
 
-class Answer(BaseModel):
+class Answer(BaseModelActive):
     """
     {
         'literal': 'A',
@@ -218,9 +176,7 @@ class Answer(BaseModel):
         null=False,
         blank=False
     )
-    value = models.DecimalField(
-        max_digits=4,
-        decimal_places=2,
+    value = models.FloatField(
         default=0,
         null=False,
         blank=False

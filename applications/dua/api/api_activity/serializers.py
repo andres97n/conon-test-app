@@ -30,7 +30,7 @@ class ActivitySerializer(serializers.ModelSerializer):
                     'dua': 'Error, no se puede crear esta Actividad; consulte con el Administrador.'
                 }
             )
-        activity = Dua(**validated_data)
+        activity = Activity(**validated_data)
         activity.save()
         return activity
 
@@ -53,7 +53,6 @@ class ActivitySerializer(serializers.ModelSerializer):
             'id': instance.id,
             'dua': {
                 'id': instance.dua.id,
-                'title': instance.dua.observations,
                 'topic': {
                     'id': instance.dua.topic.id,
                     'title': instance.dua.topic.title
@@ -61,16 +60,29 @@ class ActivitySerializer(serializers.ModelSerializer):
             },
             'description': instance.description,
             'objective': instance.objective,
+            'final_grade': instance.final_grade,
+            'state': instance.state,
             'created_at': instance.created_at
         }
 
 
 class ActivityDetailSerializer(serializers.Serializer):
     def to_representation(self, instance):
-        print(instance)
         return {
             'id': instance['question'],
             'title': instance['question__title'],
             'answers': instance['question__answers'],
             'value': instance['question__value']
+        }
+
+
+class ActivityByDuaSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'description': instance.description,
+            'objective': instance.objective,
+            'final_grade': instance.final_grade,
+            'state': instance.state,
+            'created_at': instance.created_at
         }

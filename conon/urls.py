@@ -60,6 +60,7 @@ urlpatterns = [
     path('abp-steps/api/', include('applications.abp_steps.routers')),
     path('user/api/path/', include('applications.users.urls')),
     path('topic/api/path/', include('applications.topic.urls')),
+    path('dua/api/path/', include('applications.dua.urls')),
     path('abp/api/path/', include('applications.abp.urls')),
     path('abp-steps/api/path/', include('applications.abp_steps.urls')),
 ]

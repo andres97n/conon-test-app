@@ -34,7 +34,7 @@ class EvaluationAbpManager(models.Manager):
                 team_detail_abp__auth_state='A',
                 state=1,
                 auth_state='A',
-            ).first()
+            )
         except:
             return None
         

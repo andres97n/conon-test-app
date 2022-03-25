@@ -86,3 +86,21 @@ class EvaluationAbpSerializer(serializers.ModelSerializer):
             'created_at': instance.created_at
         }
 
+
+class EvaluationAbpByAbpSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'team_detail_abp': {
+                'id': instance.team_detail_abp.id,
+                'user': {
+                    'id': instance.team_detail_abp.user.id,
+                    'name': instance.team_detail_abp.user.__str__()
+                }
+            },
+            'description': instance.description,
+            'final_grade': instance.final_grade,
+            'observations': instance.observations,
+            'state': instance.state,
+            'created_at': instance.created_at
+        }

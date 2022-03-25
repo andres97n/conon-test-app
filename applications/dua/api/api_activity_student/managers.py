@@ -4,7 +4,7 @@ from django.db import models
 class ActivityStudentManager(models.Manager):
 
     def get_activity_student_list(self):
-        self.select_related('activity', 'owner').filter(auth_state='A').order_by('created_at')
+        return self.select_related('activity', 'owner').filter(auth_state='A').order_by('-created_at')
 
     def get_activity_student_by_id(self, pk=None):
         data = None
@@ -18,12 +18,31 @@ class ActivityStudentManager(models.Manager):
         return data
 
     def activity_student_exists(self, pk=None):
-        result = None
-        try:
-            result = self.filter(id=pk, auth_state='A')
-        except None:
-            pass
+        return self.filter(id=pk, active=True, auth_state='A')
 
-        if result is not None:
-            return True
-        return False
+    def activity_student_by_activity_and_owner(self, activity=None, owner=None):
+        try:
+            return self.select_related('activity', 'owner').filter(
+                activity=activity,
+                activity__state=1,
+                activity__auth_state='A',
+                owner=owner,
+                owner__is_active=True,
+                owner__auth_state='A',
+                active=True,
+                auth_state='A'
+            )
+        except:
+            return None
+
+    def is_activity_student_exists_by_activity_and_owner(self, activity=None, owner=None):
+        return self.filter(
+            activity=activity,
+            activity__state=1,
+            activity__auth_state='A',
+            owner=owner,
+            owner__is_active=True,
+            owner__auth_state='A',
+            active=True,
+            auth_state='A'
+        ).exists()

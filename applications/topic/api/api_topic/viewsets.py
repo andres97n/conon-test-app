@@ -60,6 +60,7 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': topic_serializer.data['id'],
                     'message': 'Tema creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED

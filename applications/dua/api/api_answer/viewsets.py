@@ -1,14 +1,18 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .serializers import AnswerSerializer
 from applications.base.permissions import IsOwnerAndStudent
+from applications.base.paginations import CononPagination
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
     serializer_class = AnswerSerializer
     permission_classes = ([IsOwnerAndStudent])
+    pagination_class = CononPagination
 
     # Return Answer
     def get_queryset(self, pk=None):
@@ -19,6 +23,10 @@ class AnswerViewSet(viewsets.ModelViewSet):
     # Get Answer List
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
         answer_serializer = self.get_serializer(queryset, many=True)
 
         return Response(
@@ -31,14 +39,22 @@ class AnswerViewSet(viewsets.ModelViewSet):
 
     # Create Answer
     def create(self, request, *args, **kwargs):
-        answer_serializer = self.get_serializer(data=request.data)
+        is_many = True if isinstance(request.data, list) else False
+        answer_serializer = self.get_serializer(data=request.data, many=is_many)
         if answer_serializer.is_valid():
             answer_serializer.save()
 
             return Response(
                 {
                     'ok': True,
-                    'message': 'Respuesta creada correctamente.'
+                    'answer':
+                        answer_serializer.data
+                        if isinstance(answer_serializer.data, list)
+                        else answer_serializer.data['id'],
+                    'message':
+                        'Respuestas agregadas correctamente'
+                        if isinstance(answer_serializer.data, list)
+                        else 'Respuesta agregada correctamente'
                 },
                 status=status.HTTP_201_CREATED
             )
@@ -127,4 +143,18 @@ class AnswerViewSet(viewsets.ModelViewSet):
                 'detail': 'No existe esta Respuesta.'
             },
             status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Block Answer
+    @action(detail=True, methods=['DELETE'], url_path='block')
+    def block_answer(self, request, pk=None):
+        answer = get_object_or_404(self.serializer_class.Meta.model, id=pk)
+        answer.active = False
+        answer.save()
+        return Response(
+            {
+                'ok': True,
+                'message': 'Respuesta bloqueada correctamente.'
+            },
+            status=status.HTTP_200_OK
         )

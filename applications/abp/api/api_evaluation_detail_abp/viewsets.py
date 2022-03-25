@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -6,11 +7,13 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import EvaluationDetailAbpSerializer
 from applications.base.permissions import IsOwnerAndTeacher
+from applications.base.paginations import CononShortPagination
 
 
 class EvaluationDetailAbpViewSet(viewsets.ModelViewSet):
     serializer_class = EvaluationDetailAbpSerializer
     permission_classes = [IsOwnerAndTeacher]
+    pagination_class = CononShortPagination
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['evaluation_abp', 'active']
 
@@ -23,6 +26,10 @@ class EvaluationDetailAbpViewSet(viewsets.ModelViewSet):
     # Get Rubric Detail ABP List
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
         evaluation_detail_abp_serializer = self.get_serializer(queryset, many=True)
 
         return Response(
@@ -138,10 +145,9 @@ class EvaluationDetailAbpViewSet(viewsets.ModelViewSet):
     # Block Evaluation Detail Abp
     @action(detail=True, methods=['DELETE'], url_path='block')
     def block_evaluation_detail_abp(self, request, pk=None):
-        evaluation_detail_abp = self.get_queryset(pk)
+        evaluation_detail_abp = get_object_or_404(self.serializer_class.Meta.model, id=pk)
         evaluation_detail_abp.active = False
         evaluation_detail_abp.save()
-
         return Response(
             {
                 'ok': True,

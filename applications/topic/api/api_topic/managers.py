@@ -82,6 +82,14 @@ class TopicManager(models.Manager):
     def get_topics_by_students(self, student_id=None, period_id=None):
         try:
             return self.select_related('owner', 'classroom', 'asignature').\
-                filter(students=student_id, classroom__school_period=period_id, auth_state='A')
+                filter(
+                students=student_id,
+                classroom__school_period=period_id,
+                classroom__state=1,
+                classroom__auth_state='A',
+                asignature__state=1,
+                asignature__auth_state='A',
+                auth_state='A'
+            )
         except:
             return None

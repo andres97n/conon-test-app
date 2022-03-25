@@ -37,7 +37,15 @@ class DuaSerializer(serializers.ModelSerializer):
         if not Topic.objects.topic_exists(validated_data['topic'].id):
             raise serializers.ValidationError(
                 {
-                    'topic': 'Error, no se puede crear este Tema; consulte con el Administrador.'
+                    'topic': 'Error, el Tópico ingresado no existe o está inactivo; consulte '
+                             'con el Administrador.'
+                }
+            )
+        elif validated_data['topic'].type != 1:
+            raise serializers.ValidationError(
+                {
+                    'topic': 'Error, el Tópico ingresado tiene que ser de Metodología DUA; '
+                             'consulte con el Administrador.'
                 }
             )
         dua = Dua(**validated_data)

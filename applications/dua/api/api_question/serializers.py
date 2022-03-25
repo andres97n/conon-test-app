@@ -22,8 +22,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     # Create A Question
     def create(self, validated_data):
-        if not Activity.objects. \
-                activity_exists(validated_data['activity'].id):
+        if not Activity.objects.activity_exists(validated_data['activity'].id):
             raise serializers.ValidationError(
                 {
                     'activity': 'Error, no se puede crear esta Pregunta; por favor '
@@ -55,6 +54,18 @@ class QuestionSerializer(serializers.ModelSerializer):
                 'id': instance.activity.id,
                 'description': instance.activity.description
             },
+            'title': instance.title,
+            'answers': instance.answers,
+            'value': instance.value,
+            'active': instance.active,
+            'created_at': instance.created_at
+        }
+
+
+class QuestionByActivitySerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
             'title': instance.title,
             'answers': instance.answers,
             'value': instance.value,

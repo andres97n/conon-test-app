@@ -1,14 +1,18 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .serializers import QuestionSerializer
 from applications.base.permissions import IsOwnerAndTeacher
+from applications.base.paginations import CononPagination
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
     permission_classes = ([IsOwnerAndTeacher])
+    pagination_class = CononPagination
 
     # Return Question Data
     def get_queryset(self, pk=None):
@@ -19,6 +23,10 @@ class QuestionViewSet(viewsets.ModelViewSet):
     # Get Question List
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
         question_serializer = self.get_serializer(queryset, many=True)
 
         return Response(
@@ -31,15 +39,22 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
     # Create Question
     def create(self, request, *args, **kwargs):
-        question_serializer = self.get_serializer(data=request.data)
+        is_many = True if isinstance(request.data, list) else False
+        question_serializer = self.get_serializer(data=request.data, many=is_many)
         if question_serializer.is_valid():
             question_serializer.save()
 
             return Response(
                 {
                     'ok': True,
-                    'id': question_serializer.data['id'],
-                    'message': 'Pregunta agregada correctamente.'
+                    'question':
+                        question_serializer.data
+                        if isinstance(question_serializer.data, list)
+                        else question_serializer.data['id'],
+                    'message':
+                        'Preguntas agregadas correctamente'
+                        if isinstance(question_serializer.data, list)
+                        else 'Pregunta agregada correctamente'
                 },
                 status=status.HTTP_201_CREATED
             )
@@ -129,4 +144,18 @@ class QuestionViewSet(viewsets.ModelViewSet):
                 'detail': 'No existe esta Pregunta.'
             },
             status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Block Question
+    @action(detail=True, methods=['DELETE'], url_path='block')
+    def block_question(self, request, pk=None):
+        question = get_object_or_404(self.serializer_class.Meta.model, id=pk)
+        question.active = False
+        question.save()
+        return Response(
+            {
+                'ok': True,
+                'message': 'Pregunta bloqueada correctamente.'
+            },
+            status=status.HTTP_200_OK
         )

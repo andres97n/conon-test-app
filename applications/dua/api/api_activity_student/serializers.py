@@ -16,23 +16,27 @@ class ActivityStudentSerializer(serializers.ModelSerializer):
     def validate_qualification(self, value):
         if value < 0:
             raise serializers.ValidationError(
-                detail='Error, la Calificación no puede tener un valor menor que 0.'
+                {
+                    'qualification': 'Error, la Calificación no puede tener un valor menor que 0.'
+                }
             )
 
         return value
 
     # Create Data
     def create(self, validated_data):
-        if not Activity.objects. \
-                activity_exists(validated_data['activity'].id):
+        if not Activity.objects.activity_exists(validated_data['activity'].id):
             raise serializers.ValidationError(
-                detail='Error, no se pudo guardar su respuesta; '
-                       'por favor consulte con el Administrador.'
+                {
+                    'activity': 'Error, no se pudo guardar su respuesta; '
+                                'por favor consulte con el Administrador.'
+                }
             )
-        if not User.objects. \
-                user_exists(validated_data['owner'].id):
+        if not User.objects.user_exists(validated_data['owner'].id):
             raise serializers.ValidationError(
-                detail='Error, Usuario inválido; por favor consulte con el Administrador.'
+                {
+                    'owner': 'Error, Usuario inválido; por favor consulte con el Administrador.'
+                }
             )
         activity_student = ActivityStudent(**validated_data)
         activity_student.save()
@@ -42,8 +46,17 @@ class ActivityStudentSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if instance.activity != validated_data['activity']:
             raise serializers.ValidationError(
-                detail='Error, no se puede editar esta Respuesta; '
-                       'por favor consulte con el Administrador '
+                {
+                    'activity': 'Error, no se puede editar esta Respuesta; '
+                                'por favor consulte con el Administrador '
+                }
+            )
+        if instance.owner != validated_data['owner']:
+            raise serializers.ValidationError(
+                {
+                    'owner': 'Error, no se puede cambiar de Usuario; '
+                             'por favor consulte con el Administrador '
+                }
             )
         update_activity_student = super().update(instance, validated_data)
         update_activity_student.save()
@@ -62,6 +75,19 @@ class ActivityStudentSerializer(serializers.ModelSerializer):
                 'name': instance.owner.__str__()
             },
             'qualification': instance.qualification,
-            'observation': instance.observation,
+            'observations': instance.observations,
+            'active': instance.active,
             'created_at': instance.created_at
         }
+
+
+class ActivityStudentByActivityAndOwnerSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'qualification': instance.qualification,
+            'observations': instance.observations,
+            'active': instance.active,
+            'created_at': instance.created_at
+        }
+

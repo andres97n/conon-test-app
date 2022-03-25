@@ -296,14 +296,16 @@ class EvaluationDetailAbp(BaseModel):
         null=False,
         blank=False
     )
+    evaluation_description = models.TextField(null=True, blank=True)
     grade_percentage = models.FloatField(
         default=0,
         null=False,
         blank=False
     )
-    evaluation_description = models.TextField(
+    detail_body = models.JSONField(
         null=True,
-        blank=True
+        blank=True,
+        default=dict
     )
     rating_value = models.FloatField(
         default=0,

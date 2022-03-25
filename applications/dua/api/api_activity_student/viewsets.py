@@ -1,8 +1,12 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_tracking.mixins import LoggingMixin
+from django_filters.rest_framework import DjangoFilterBackend
 
+from applications.base.paginations import CononPagination
 from .serializers import ActivityStudentSerializer
 from applications.base.permissions import IsOwnerAndStudent
 
@@ -10,8 +14,11 @@ from applications.base.permissions import IsOwnerAndStudent
 class ActivityStudentViewSet(LoggingMixin, viewsets.ModelViewSet):
     serializer_class = ActivityStudentSerializer
     permission_classes = ([IsOwnerAndStudent])
+    pagination_class = CononPagination
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['activity', 'active']
 
     # Return Data
     def get_queryset(self, pk=None):
@@ -22,6 +29,11 @@ class ActivityStudentViewSet(LoggingMixin, viewsets.ModelViewSet):
     # Get Data List
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        print(queryset)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
         activity_student_serializer = self.get_serializer(queryset, many=True)
 
         return Response(
@@ -41,6 +53,7 @@ class ActivityStudentViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': activity_student_serializer.data['id'],
                     'message': 'Actividad creada correctamente.'
                 },
                 status=status.HTTP_201_CREATED
@@ -130,4 +143,18 @@ class ActivityStudentViewSet(LoggingMixin, viewsets.ModelViewSet):
                 'detail': 'No existe esta Actividad.'
             },
             status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # BLOCK ACTIVITY STUDENT
+    @action(detail=True, methods=['DELETE'], url_path='block')
+    def block_activity_student(self, request, pk=None):
+        activity = get_object_or_404(self.serializer_class.Meta.model, id=pk)
+        activity.active = 0
+        activity.save()
+        return Response(
+            {
+                'ok': True,
+                'message': 'Actividad bloqueada correctamente.'
+            },
+            status=status.HTTP_200_OK
         )

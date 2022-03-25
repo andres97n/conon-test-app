@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
@@ -5,11 +6,13 @@ from rest_framework.decorators import action
 
 from .serializers import ActivitySerializer, ActivityDetailSerializer
 from applications.base.permissions import IsOwnerAndTeacher
+from applications.base.paginations import CononPagination
 
 
 class ActivityViewSet(viewsets.ModelViewSet):
     serializer_class = ActivitySerializer
     permission_classes = ([IsOwnerAndTeacher])
+    pagination_class = CononPagination
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}
 
@@ -22,6 +25,10 @@ class ActivityViewSet(viewsets.ModelViewSet):
     # Get DUA List
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
         activity_serializer = self.get_serializer(queryset, many=True)
 
         return Response(
@@ -165,3 +172,17 @@ class ActivityViewSet(viewsets.ModelViewSet):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    # Block Activity
+    @action(detail=True, methods=['DELETE'], url_path='block')
+    def block_activity_dua(self, request, pk=None):
+        activity = get_object_or_404(self.serializer_class.Meta.model, id=pk)
+        activity.state = 0
+        activity.save()
+        return Response(
+            {
+                'ok': True,
+                'message': 'Actividad bloqueada correctamente.'
+            },
+            status=status.HTTP_200_OK
+        )

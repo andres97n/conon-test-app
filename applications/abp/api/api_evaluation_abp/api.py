@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from applications.base.permissions import IsTeacherOrIsStudent
 from applications.abp.models import EvaluationAbp, EvaluationDetailAbp
-from .serializers import EvaluationAbpSerializer
+from .serializers import EvaluationAbpByAbpSerializer
 from applications.abp.api.api_evaluation_detail_abp.serializers import \
     EvaluationDetailAbpListByEvaluationSerializer
 
@@ -25,7 +25,7 @@ def get_evaluation_apb_with_details(request, abp, team_detail_abp):
                         "details": []
                     }]
                 else:
-                    evaluation_abp_serializer = EvaluationAbpSerializer(
+                    evaluation_abp_serializer = EvaluationAbpByAbpSerializer(
                         evaluation_abp.first()
                     )
                     evaluation_details = EvaluationDetailAbp.objects. \

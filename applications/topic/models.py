@@ -183,6 +183,8 @@ class Reply(BaseModel):
     def __str__(self):
         return self.detail
 
+# TODO: Eliminar Modelo
+
 
 class TopicStudentEvaluation(BaseModelActive):
     class StudentEvaluationChoices(models.IntegerChoices):
@@ -227,4 +229,4 @@ class TopicStudentEvaluation(BaseModelActive):
         verbose_name_plural = 'TopicStudentEvaluations'
 
     def __str__(self):
-        return self.final_grade
+        return f'{self.final_grade}'

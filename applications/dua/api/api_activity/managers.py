@@ -19,15 +19,7 @@ class ActivityManager(models.Manager):
         return activity
 
     def activity_exists(self, pk=None):
-        result = None
-        try:
-            result = self.filter(id=pk, state=1, auth_state='A')
-        except None:
-            pass
-
-        if result is not None:
-            return True
-        return False
+        return self.filter(id=pk, state=1, auth_state='A').exists()
 
     def get_questions_by_activity(self, pk=None):
         try:
@@ -40,3 +32,14 @@ class ActivityManager(models.Manager):
         except:
             return None
 
+    def get_activity_by_dua(self, dua=None):
+        try:
+            return self.select_related('dua').filter(
+                dua=dua,
+                dua__state=1,
+                dua__auth_state='A',
+                state=1,
+                auth_state='A'
+            )
+        except:
+            return None
