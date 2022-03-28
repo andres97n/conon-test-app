@@ -7,16 +7,16 @@ class ConversationDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conversation_Detail
         exclude = [
-            'created_at',
-            'updated_at',
             'auth_state'
         ]
 
     # Validate State of Conversation
     def validate_state(self, value):
-        if value > 1:
+        if value > 2:
             raise serializers.ValidationError(
-                detail="Error, no se puede guardar este estado."
+                {
+                    'state': "Error, no se puede guardar este estado."
+                }
             )
         return value
 
@@ -24,7 +24,22 @@ class ConversationDetailSerializer(serializers.ModelSerializer):
     def validate_owner(self, value):
         if not User.objects.user_exists(value.id):
             raise serializers.ValidationError(
-                detail='Error, este Usuario no existe.'
+                {
+                    'owner': 'Error, este Usuario no existe.'
+                }
+            )
+        elif not Conversation.objects.is_owner_in_conversation(value.id):
+            raise serializers.ValidationError(
+                {
+                    'owner': 'Error, este Usuario no pertenece a esta Conversación; consulte '
+                            'con el Administrador.'
+                }
+            )
+        elif value != self.context.get('request').user:
+            raise serializers.ValidationError(
+                {
+                    'owner': 'Error, por falta de permisos este usuario no puede mandar este mensaje.'
+                }
             )
         return value
 
@@ -32,25 +47,14 @@ class ConversationDetailSerializer(serializers.ModelSerializer):
     def validate_conversation(self, value):
         if not Conversation.objects.conversation_exists(value.id):
             raise serializers.ValidationError(
-                detail='Error, no se puede enviar este mensaje; consulte con el Administrador.'
+                {
+                    'conversation': 'Error, no se puede enviar este mensaje; '
+                                    'consulte con el Administrador.'
+                }
             )
         return value
 
-    # Validate All data
-    def validate(self, attrs):
-        if not Conversation_Detail.objects.is_owner_in_conversation(
-                attrs['conversation'].id,
-                attrs['owner'].id
-        ):
-            raise serializers.ValidationError(
-                detail='Error, este Usuario no puede enviar este mensaje; consulte con el Administrador.'
-            )
-        if attrs['owner'] != self.context.get('request').user:
-            raise serializers.ValidationError(
-                detail='Error, por falta de permisos este usuario no puede mandar este mensaje.'
-            )
-        return attrs
-
+'''
     # Update Conversation Detail
     def update(self, instance, validated_data):
         if instance.conversation != validated_data['conversation']:
@@ -61,6 +65,15 @@ class ConversationDetailSerializer(serializers.ModelSerializer):
         update_conversation = super().update(instance, validated_data)
         update_conversation.save()
         return update_conversation
+'''
+
+
+class ConversationDetailListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Conversation_Detail
+        exclude = [
+            'auth_state'
+        ]
 
     def to_representation(self, instance):
         return {
@@ -71,7 +84,8 @@ class ConversationDetailSerializer(serializers.ModelSerializer):
                 'name': instance.owner.__str__()
             },
             'detail': instance.detail,
-            'send_date': instance.send_date,
             'state': instance.state,
-            'blocked': instance.blocked
+            'blocked': instance.blocked,
+            'created_at': instance.created_at,
+            'updated_at': instance.updated_at,
         }

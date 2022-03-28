@@ -127,3 +127,11 @@ class TeachersShortSerializer(serializers.ModelSerializer):
             'title': instance['title']
         }
 
+
+class TeacherObjectShortSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance['teacher_id'],
+            'identification': instance['teacher__person__identification'],
+            'name': f"{instance['teacher__person__name']} {instance['teacher__person__last_name']}",
+        }

@@ -80,3 +80,22 @@ class AsignatureClassroomManager(models.Manager):
         except:
             return None
 
+    def get_asignature_classroom_by_classroom(self, classroom=None):
+        try:
+            return self.select_related('classroom', 'asignature', 'teacher').filter(
+                classroom=classroom,
+                classroom__state=1,
+                classroom__auth_state='A',
+                asignature__state=1,
+                asignature__auth_state='A',
+                teacher__auth_state='A',
+                state=1,
+                auth_state='A'
+            ).values(
+                'teacher_id',
+                'teacher__person__identification',
+                'teacher__person__name',
+                'teacher__person__last_name',
+            )
+        except:
+            return None

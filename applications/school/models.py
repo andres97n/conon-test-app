@@ -11,10 +11,6 @@ from applications.school.api.api_glossary.managers import GlossaryManager
 from applications.school.api.api_glossary_detail.managers import GlossaryDetailManager
 
 
-# TODO: Crear una tabla de niveles para las tablas
-#   Aula y Asignatura
-
-
 class SchoolPeriod(BaseModel):
     class PeriodStatus(models.IntegerChoices):
         CLOSE = 0

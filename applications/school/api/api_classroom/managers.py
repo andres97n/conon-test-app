@@ -69,6 +69,17 @@ class ClassroomManager(models.Manager):
         except:
             return None
 
-# TODO: Comprobar si funciona
     def exists_classroom(self, classroom=None):
         return self.filter(id=classroom, state=1, auth_state='A').exists()
+
+    def get_classroom_by_student_and_period(self, period=None, student=None):
+        try:
+            return self.select_related('school_period').filter(
+                school_period=period,
+                school_period__state=1,
+                school_period__auth_state='A',
+                students=student,
+                students__auth_state='A'
+            ).first()
+        except:
+            return None

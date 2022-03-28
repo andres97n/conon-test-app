@@ -7,6 +7,7 @@ class ConversationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conversation
         exclude = [
+            'updated_at',
             'auth_state'
         ]
 
@@ -44,10 +45,10 @@ class ConversationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 detail='Error, ya existe esta Conversación.'
             )
-        conversation = Classroom(**validated_data)
+        conversation = Conversation(**validated_data)
         conversation.save()
         return conversation
-
+'''
     # Update Conversation
     def update(self, instance, validated_data):
         if instance.first_user != validated_data['first_user']:
@@ -63,6 +64,15 @@ class ConversationSerializer(serializers.ModelSerializer):
         update_conversation = super().update(instance, validated_data)
         update_conversation.save()
         return update_conversation
+'''
+
+
+class ConversationListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Conversation
+        exclude = [
+            'auth_state'
+        ]
 
     # Get Conversation
     def to_representation(self, instance):
@@ -77,5 +87,6 @@ class ConversationSerializer(serializers.ModelSerializer):
                 'name': instance.second_user.__str__()
             },
             'blocked': instance.blocked,
-            'created_at': instance.created_at
+            'created_at': instance.created_at,
+            'updated_at': instance.updated_at,
         }

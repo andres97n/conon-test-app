@@ -115,3 +115,15 @@ class StudentManager(models.Manager):
             ).first()
         except:
             return None
+
+    def get_student_object_by_user(self, user=None):
+        try:
+            return self.select_related('person').filter(
+                person__user=user,
+                person__auth_state='A',
+                person__user__is_active=True,
+                person__user__auth_state='A',
+                auth_state='A'
+            ).first()
+        except:
+            return None

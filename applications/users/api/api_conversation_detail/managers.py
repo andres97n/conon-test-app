@@ -4,50 +4,43 @@ from django.db import models
 class ConversationDetailManager(models.Manager):
 
     def get_conversation_detail_list(self):
-        return self.select_related('conversation', 'owner').filter(auth_state='A').order_by('-send_date')
+        return self.select_related('conversation', 'owner').\
+            filter(auth_state='A').order_by('-created_at')
 
     def get_conversation_detail_by_pk(self, pk=None):
-        conversation_detail = None
         try:
-            conversation_detail = self.select_related('conversation', 'owner'). \
-                filter(id=pk, auth_state='A').first()
+            return self.select_related('conversation', 'owner'). \
+                filter(blocked=False, auth_state='A').get(id=pk)
         except None:
-            pass
-        return conversation_detail
+            return None
+
+    def get_active_conversation_detail(self):
+        return self.select_related('first_user', 'second_user').filter(
+            blocked=False,
+            auth_state='A'
+        )
 
     def get_conversation_detail_by_conversation_pk(self, pk=None):
-        conversation = None
         try:
-            conversation = self.select_related('conversation', 'owner'). \
-                filter(auth_state='A', conversation=pk). \
-                order_by('-send_date')
-        except None:
-            pass
-        return conversation
-
-    def is_owner_in_conversation(self, conversation_id=None, pk=None):
-        user_1, user_2 = None, None
-        try:
-            user_1 = self.filter(
-                conversation_id=conversation_id,
-                conversation__first_user_id=pk,
+            return self.select_related('conversation', 'owner').filter(
+                conversation=pk,
                 conversation__blocked=False,
-                conversation__auth_state='A'
-            )
+                conversation__auth_state='A',
+                blocked=False,
+                auth_state='A'
+            ).order_by('-created_at')
         except None:
-            pass
+            return None
 
+    def not_view_messages_owner(self, user=None):
         try:
-            user_2 = self.filter(
-                conversation_id=conversation_id,
-                conversation__second_user_id=pk,
-                conversation__blocked=False,
-                conversation__auth_state='A'
-            )
-        except None:
-            pass
-
-        if (user_1 is not None) or (user_2 is not None):
-            return True
-        else:
-            return False
+            return self.select_related('owner').filter(
+                owner=user,
+                owner__is_active=True,
+                owner__auth_state='A',
+                blocked=False,
+                state=0,
+                auth_state='A'
+            ).count()
+        except:
+            return None

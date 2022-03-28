@@ -259,18 +259,13 @@ class Conversation_Detail(BaseModel):
 
     class MessageStateChoices(models.IntegerChoices):
         NOT_VIEW = 0
-        VIEW = 1
+        SENT = 1
+        VIEW = 2
 
     detail = models.TextField(
         'Mensaje',
         null=False,
         blank=False
-    )
-    send_date = models.DateTimeField(
-        'Fecha de Creación',
-        auto_now_add=True,
-        auto_now=False,
-        blank=True
     )
     state = models.PositiveSmallIntegerField(
         'Estado',
