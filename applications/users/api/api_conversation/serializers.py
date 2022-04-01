@@ -11,6 +11,16 @@ class ConversationSerializer(serializers.ModelSerializer):
             'auth_state'
         ]
 
+    # Validate State of Conversation
+    def validate_state(self, value):
+        if value > 1:
+            raise serializers.ValidationError(
+                {
+                    'state': "Error, no se puede guardar este estado."
+                }
+            )
+        return value
+
     # Validate First User
     def validate_first_user(self, value):
         if not User.objects.user_exists(value.id):
@@ -86,6 +96,7 @@ class ConversationListSerializer(serializers.ModelSerializer):
                 'id': instance.second_user.id,
                 'name': instance.second_user.__str__()
             },
+            'state': instance.state,
             'blocked': instance.blocked,
             'created_at': instance.created_at,
             'updated_at': instance.updated_at,

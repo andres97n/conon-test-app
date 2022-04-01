@@ -52,22 +52,49 @@ def get_user_messages_count(request, user):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_user_conversations_list(request, user):
+def get_user_conversations_list(request, user, search):
     if request.method == 'GET':
         if user:
-            user_first = Conversation.objects.user_exists_like_first_in_conversation(user=user)
-            user_second = Conversation.objects.user_exists_like_second_in_conversation(user=user)
+            user_first = []
+            user_second = []
+            if search:
+                if search == 'all':
+                    user_first = Conversation.objects.user_exists_like_first_in_conversation(user=user)
+                    user_second = Conversation.objects.user_exists_like_second_in_conversation(user=user)
+                elif search == 'unanswered':
+                    user_first = Conversation.objects.user_exists_like_first_in_conversation(user=user).\
+                        filter(state=0)
+                    user_second = Conversation.objects.user_exists_like_second_in_conversation(user=user).\
+                        filter(state=0)
+            else:
+                user_first = Conversation.objects.user_exists_like_first_in_conversation(user=user).\
+                    filter(conversation_detail__state=0)
+                user_second = Conversation.objects.user_exists_like_second_in_conversation(user=user).\
+                    filter(conversation_detail__state=0)
             if user_first is not None and user_second is not None:
                 user_first_serializer = ConversationListSerializer(user_first, many=True)
                 user_second_serializer = ConversationListSerializer(user_second, many=True)
-                user_conversations = [user_first_serializer.data, user_second_serializer.data]
-                return Response(
-                    {
-                        'ok': True,
-                        'conon_data': user_conversations
-                    },
-                    status=status.HTTP_200_OK
-                )
+                user_conversations = []
+                if len(user_second_serializer.data) > 0 or len(user_first_serializer.data) > 0:
+                    for student in user_first_serializer.data:
+                        user_conversations.append(student)
+                    for student in user_second_serializer.data:
+                        user_conversations.append(student)
+                    return Response(
+                        {
+                            'ok': True,
+                            'conon_data': user_conversations
+                        },
+                        status=status.HTTP_200_OK
+                    )
+                else:
+                    return Response(
+                        {
+                            'ok': True,
+                            'conon_data': user_conversations
+                        },
+                        status=status.HTTP_200_OK
+                    )
             else:
                 return Response(
                     {

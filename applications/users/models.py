@@ -220,10 +220,20 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
 
 
 class Conversation(BaseModel):
+    class ConversationStateChoices(models.IntegerChoices):
+        UNANSWERED = 0
+        ANSWERED = 1
 
     blocked = models.BooleanField(
         'Bloqueado',
         default=False,
+        null=False,
+        blank=True
+    )
+    state = models.PositiveSmallIntegerField(
+        'Estado',
+        choices=ConversationStateChoices.choices,
+        default=0,
         null=False,
         blank=True
     )
@@ -259,8 +269,7 @@ class Conversation_Detail(BaseModel):
 
     class MessageStateChoices(models.IntegerChoices):
         NOT_VIEW = 0
-        SENT = 1
-        VIEW = 2
+        VIEW = 1
 
     detail = models.TextField(
         'Mensaje',

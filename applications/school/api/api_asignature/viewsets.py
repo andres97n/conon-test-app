@@ -7,6 +7,7 @@ from rest_framework_tracking.mixins import LoggingMixin
 
 from .serializers import AsignatureSerializer, AsignatureDetailSerializer
 from applications.base.paginations import CononPagination
+from applications.base.permissions import IsTeacher
 from applications.school.models import Classroom, AsignatureClassroom, KnowledgeArea
 from applications.school.api.api_classroom.serializers import ClassroomShortSerializer
 from applications.school.api.api_knowledge_area.serializers import TeacherByAreaListSerializer
@@ -14,7 +15,7 @@ from applications.school.api.api_knowledge_area.serializers import TeacherByArea
 
 
 class AsignatureViewSet(LoggingMixin, viewsets.ModelViewSet):
-    permission_classes = ([IsAdminUser])
+    permission_classes = ([IsTeacher, IsAdminUser])
     serializer_class = AsignatureSerializer
     pagination_class = CononPagination
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']

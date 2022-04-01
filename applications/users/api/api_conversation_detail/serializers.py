@@ -10,9 +10,9 @@ class ConversationDetailSerializer(serializers.ModelSerializer):
             'auth_state'
         ]
 
-    # Validate State of Conversation
+    # Validate State of Message
     def validate_state(self, value):
-        if value > 2:
+        if value > 1:
             raise serializers.ValidationError(
                 {
                     'state': "Error, no se puede guardar este estado."

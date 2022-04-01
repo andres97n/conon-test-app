@@ -22,7 +22,7 @@ urlpatterns = [
         name="conversation_user_messages"
     ),
     path(
-        r"conversation/user-conversations/<int:user>/",
+        r"conversation/user-conversations/<int:user>/<str:search>/",
         get_user_conversations_list,
         name="conversation_user-list"
     ),

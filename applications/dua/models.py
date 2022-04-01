@@ -23,7 +23,6 @@ class Dua(BaseModel):
     video = models.URLField(null=False, blank=False)
     images = models.JSONField(null=False, blank=True)
     extra_information = models.URLField(null=True, blank=True)
-    observations = models.TextField(null=True, blank=True)
     state = models.PositiveSmallIntegerField(
         'estado',
         choices=DuaStatus.choices,

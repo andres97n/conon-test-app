@@ -63,8 +63,8 @@ def get_user_conversation_for_student(request, user, school_period):
                 )
                 if classroom is not None:
                     students = Classroom.objects.get_students_by_classroom_id(pk=classroom.id)
-                    student_serializer = StudentObjectShotListSerializer(students, many=True)
                     if students is not None:
+                        student_serializer = StudentObjectShotListSerializer(students, many=True)
                         asignature_classroom = AsignatureClassroom.objects.\
                             get_asignature_classroom_by_classroom(classroom=classroom.id)
                         if asignature_classroom is not None:

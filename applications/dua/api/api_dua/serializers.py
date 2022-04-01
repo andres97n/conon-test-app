@@ -79,7 +79,7 @@ class DuaSerializer(serializers.ModelSerializer):
             'video': instance.video,
             'images': instance.images,
             'extra_information': instance.extra_information,
-            'observations': instance.observations,
+            'state': instance.state,
             'created_at': instance.created_at
         }
 
