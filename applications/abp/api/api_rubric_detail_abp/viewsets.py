@@ -30,14 +30,22 @@ class RubricDetailAbpViewSet(viewsets.ModelViewSet):
 
     # Create Rubric Detail ABP
     def create(self, request, *args, **kwargs):
-        rubric_detail_abp_serializer = self.get_serializer(data=request.data)
+        is_many = True if isinstance(request.data, list) else False
+        rubric_detail_abp_serializer = self.get_serializer(data=request.data, many=is_many)
         if rubric_detail_abp_serializer.is_valid():
             rubric_detail_abp_serializer.save()
 
             return Response(
                 {
                     'ok': True,
-                    'message': 'Sección creada correctamente.'
+                    'rubric_detail_abp':
+                        rubric_detail_abp_serializer.data
+                        if isinstance(rubric_detail_abp_serializer.data, list)
+                        else rubric_detail_abp_serializer.data['id'],
+                    'message':
+                        'Secciones agregadas correctamente'
+                        if isinstance(rubric_detail_abp_serializer.data, list)
+                        else 'Sección agregada correctamente'
                 },
                 status=status.HTTP_201_CREATED
             )

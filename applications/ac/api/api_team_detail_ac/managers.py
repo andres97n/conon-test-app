@@ -1,5 +1,4 @@
 
-
 from django.db import models
 
 
@@ -38,3 +37,15 @@ class TeamDetailAcManager(models.Manager):
 
     def exists_team_detail_ac(self, pk=None):
         return self.filter(id=pk, active=True, auth_state='A').exists()
+
+    def get_team_detail_by_team_ac(self, team=None):
+        try:
+            return self.select_related('team_ac').filter(
+                team_ac=team,
+                team_ac__active=True,
+                team_ac__auth_state='A',
+                active=True,
+                auth_state='A'
+            )
+        except:
+            return None

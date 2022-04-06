@@ -51,14 +51,21 @@ class RubricDetailAcViewSet(LoggingMixin, viewsets.GenericViewSet):
     # Create Rubric Detail Ac
     def create(self, request, *args, **kwargs):
         # Send information to serializer
-        rubric_detail_ac_serializer = self.get_serializer(data=request.data)
+        is_many = True if isinstance(request.data, list) else False
+        rubric_detail_ac_serializer = self.get_serializer(data=request.data, many=is_many)
         if rubric_detail_ac_serializer.is_valid():
             rubric_detail_ac_serializer.save()
             return Response(
                 {
                     'ok': True,
-                    'id': rubric_detail_ac_serializer.data['id'],
-                    'message': 'Calificación creada correctamente.'
+                    'rubric_detail_abp':
+                        rubric_detail_ac_serializer.data
+                        if isinstance(rubric_detail_ac_serializer.data, list)
+                        else rubric_detail_ac_serializer.data['id'],
+                    'message':
+                        'Calificaciones agregadas correctamente'
+                        if isinstance(rubric_detail_ac_serializer.data, list)
+                        else 'Calificación agregada correctamente'
                 },
                 status=status.HTTP_201_CREATED
             )

@@ -16,4 +16,18 @@ class TeamAcManager(models.Manager):
     def exists_team_ac(self, pk=None):
         return self.get_team_ac_active_object_queryset(pk=pk).exists()
 
+    def team_ac_by_ac(self, ac=None, user=None):
+        try:
+            return self.select_related('ac').filter(
+                ac=ac,
+                ac__state=1,
+                ac__auth_state='A',
+                teamdetailac__owner=user,
+                teamdetailac__active=True,
+                teamdetailac__auth_state='A',
+                active=True,
+                auth_state='A'
+            )
+        except:
+            return None
 

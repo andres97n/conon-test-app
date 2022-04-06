@@ -49,14 +49,21 @@ class StudentEvaluationDetailAcViewSet(viewsets.GenericViewSet):
     # Create Student Evaluation Detail Ac
     def create(self, request, *args, **kwargs):
         # Send information to serializer
-        student_evaluation_detail_ac_serializer = self.get_serializer(data=request.data)
+        is_many = True if isinstance(request.data, list) else False
+        student_evaluation_detail_ac_serializer = self.get_serializer(data=request.data, many=is_many)
         if student_evaluation_detail_ac_serializer.is_valid():
             student_evaluation_detail_ac_serializer.save()
             return Response(
                 {
                     'ok': True,
-                    'id': student_evaluation_detail_ac_serializer.data['id'],
-                    'message': 'Evaluación creada correctamente.'
+                    'evaluation_detail_abp':
+                        student_evaluation_detail_ac_serializer.data
+                        if isinstance(student_evaluation_detail_ac_serializer.data, list)
+                        else student_evaluation_detail_ac_serializer.data['id'],
+                    'message':
+                        'Respuestas agregadas correctamente'
+                        if isinstance(student_evaluation_detail_ac_serializer.data, list)
+                        else 'Respuesta agregada correctamente'
                 },
                 status=status.HTTP_201_CREATED
             )

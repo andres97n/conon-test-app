@@ -128,4 +128,3 @@ def get_student_team_abp(request, abp, user):
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
-

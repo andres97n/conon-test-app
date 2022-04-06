@@ -58,3 +58,17 @@ class StudentEvaluationDetailAcListSerializer(serializers.ModelSerializer):
             'active': instance.active,
             'created_at': instance.created_at
         }
+
+
+class StudentEvaluationDetailAcShortListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'rubric_detail_ac': {
+                'id': instance.rubric_detail_ac.id,
+                'detail_title': instance.rubric_detail_ac.detail_title
+            },
+            'detail_value': instance.detail_value,
+            'active': instance.active,
+            'created_at': instance.created_at
+        }

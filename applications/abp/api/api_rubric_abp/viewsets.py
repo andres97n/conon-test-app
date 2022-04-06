@@ -49,6 +49,7 @@ class RubricAbpViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': rubric_abp_serializer.data['id'],
                     'message': 'Rúbrica creada correctamente.'
                 },
                 status=status.HTTP_201_CREATED

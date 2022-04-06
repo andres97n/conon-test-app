@@ -19,3 +19,16 @@ class RubricAcManager(models.Manager):
     def exists_rubric_ac(self, pk=None):
         return self.filter(id=pk, state=1, auth_state='A').exists()
 
+    def get_rubric_ac_by_ac(self, ac=None):
+        try:
+            return self.select_related('ac').filter(
+                ac=ac,
+                ac__state=1,
+                ac__auth_state='A',
+                state=1,
+                auth_state='A'
+            )
+        except:
+            return None
+
+

@@ -89,3 +89,17 @@ class TeamDetailAcListSerializer(serializers.ModelSerializer):
             'active': instance.active,
             'created_at': instance.created_at
         }
+
+
+class TeamDetailAcShortListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'owner': {
+                'id': instance.owner.id,
+                'name': instance.owner.__str__()
+            },
+            'role_type': instance.role_type,
+            'active': instance.active,
+            'created_at': instance.created_at
+        }

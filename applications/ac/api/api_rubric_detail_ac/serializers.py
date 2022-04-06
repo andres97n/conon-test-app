@@ -62,3 +62,17 @@ class RubricDetailAcListSerializer(serializers.ModelSerializer):
             'active': instance.active,
             'created_at': instance.created_at
         }
+
+
+class RubricDetailAcShortListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'detail_title': instance.detail_title,
+            'detail_description': instance.detail_description,
+            'percentage_grade': instance.percentage_grade,
+            'rating_value': instance.rating_value,
+            'observations': instance.observations,
+            'active': instance.active,
+            'created_at': instance.created_at
+        }

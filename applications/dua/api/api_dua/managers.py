@@ -19,6 +19,7 @@ class DuaManager(models.Manager):
 
     def get_dua_by_topic(self, pk=None):
         try:
+            print(pk)
             return self.select_related('topic').filter(
                 state=1, auth_state='A'
             ).get(topic_id=pk)

@@ -46,6 +46,7 @@ class TeamAbpViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': team_abp_serializer.data['id'],
                     'message': 'Grupo creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED

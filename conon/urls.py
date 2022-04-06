@@ -63,6 +63,7 @@ urlpatterns = [
     path('topic/api/path/', include('applications.topic.urls')),
     path('dua/api/path/', include('applications.dua.urls')),
     path('abp/api/path/', include('applications.abp.urls')),
+    path('ac/api/path/', include('applications.ac.urls')),
     path('abp-steps/api/path/', include('applications.abp_steps.urls')),
 ]
 

@@ -70,3 +70,16 @@ class StudentEvaluationAcListSerializer(serializers.ModelSerializer):
             'state': instance.state,
             'created_at': instance.created_at
         }
+
+
+class StudentEvaluationAcShortListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'description': instance.description,
+            'evaluation_type': instance.evaluation_type,
+            'final_value': instance.final_value,
+            'observations': instance.observations,
+            'state': instance.state,
+            'created_at': instance.created_at
+        }

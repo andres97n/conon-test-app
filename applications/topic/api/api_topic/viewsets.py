@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from rest_framework_tracking.mixins import LoggingMixin
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .serializers import TopicSerializer
+from .serializers import TopicSerializer, TopicShortListSerializer
 from applications.base.permissions import IsOwnerAndTeacher
-from applications.base.paginations import CononShortPagination
+from applications.base.paginations import CononPagination
 # from applications.topic.filters import TopicFilterSet
 from applications.dua.models import Dua
 from applications.users.models import Student, Teacher
@@ -18,11 +18,12 @@ from applications.school.api.api_classroom.serializers import StudentsForManyCho
 class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
     permission_classes = ([IsOwnerAndTeacher])
     serializer_class = TopicSerializer
-    pagination_class = CononShortPagination
+    list_serializer = TopicShortListSerializer
+    pagination_class = CononPagination
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['owner', 'type', 'active']
+    filterset_fields = ['owner', 'type', 'active', 'auth_state']
 
     # filter_class = TopicFilterSet
 
@@ -38,7 +39,7 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
 
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = self.get_serializer(page, many=True)
+            serializer = self.list_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
         topic_serializer = self.get_serializer(queryset, many=True)
@@ -135,16 +136,17 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
         if topic is not None:
             topic.active = False
             topic.auth_state = 'I'
+            topic.save()
 
             if topic.type == 1:
-                topic_dua = Dua.objects.get_dua_by_topic(pk)
+                topic_dua = Dua.objects.get_dua_by_topic(pk=topic.id)
+                print(topic_dua)
                 # TODO: Eliminar cuando se tenga todas las metodologías
                 if topic_dua is not None:
 
                     topic_dua.state = 0
                     topic_dua.auth_state = 'I'
                     topic_dua.save()
-                    topic.save()
 
                     return Response(
                         {
@@ -212,9 +214,10 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
                     status=status.HTTP_200_OK
                 )
 
-    @action(detail=True, methods=['PUT'], url_path='block-topic')
+    @action(detail=True, methods=['DELETE'], url_path='block')
     def block_topic(self, request, pk=None):
         topic = self.get_queryset(pk=pk)
+        print(topic.active)
         if topic is not None:
             topic.active = False
             topic.save()
@@ -223,14 +226,16 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
                 {
                     'ok': True,
                     'message': 'Tema de Estudio bloqueado correctamente.'
-                }
+                },
+                status=status.HTTP_200_OK
             )
 
         return Response(
             {
                 'ok': False,
                 'detail': 'No se encontró el Tema de Estudio'
-            }
+            },
+            status=status.HTTP_404_NOT_FOUND
         )
 
     @action(detail=False, methods=['DELETE'], url_path='destroy-topics')

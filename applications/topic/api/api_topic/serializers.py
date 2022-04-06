@@ -135,3 +135,21 @@ class TopicSerializer(serializers.ModelSerializer):
             # 'students': self.get_students(instance.students),
         }
 
+
+class TopicShortListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'title': instance.title,
+            'type': instance.type,
+            'classroom': {
+                'id': instance.classroom.id,
+                'name': instance.classroom.__str__(),
+            },
+            'asignature': {
+                'id': instance.asignature.id,
+                'name': instance.asignature.__str__(),
+            },
+            'active': instance.active,
+            'created_at': instance.created_at
+        }

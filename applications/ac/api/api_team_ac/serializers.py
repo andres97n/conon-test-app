@@ -49,3 +49,13 @@ class TeamAcListSerializer(serializers.ModelSerializer):
             'state': instance.state,
             'created_at': instance.created_at
         }
+
+
+class TeamAcShortListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'observations': instance.observations,
+            'state': instance.state,
+            'created_at': instance.created_at
+        }

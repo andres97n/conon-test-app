@@ -20,6 +20,7 @@ class Ac(BaseModel):
 
     real_problem = models.TextField(null=False, blank=False)
     context_video = models.URLField(null=True, blank=True)
+    path_reference = models.URLField(null=True, blank=True)
     context_audio = models.JSONField(
         null=True,
         blank=True,
@@ -99,7 +100,7 @@ class TeamDetailAc(BaseModelActive):
     objects = TeamDetailAcManager()
 
     class Meta:
-        db_table = 'api_team_detail_ac'
+        db_table = 'team_detail_ac'
         verbose_name = 'TeamDetailAc'
         verbose_name_plural = 'TeamDetailsAc'
 

@@ -48,14 +48,21 @@ class TeamDetailAcViewSet(viewsets.GenericViewSet):
     # Create Team Detail Ac
     def create(self, request, *args, **kwargs):
         # Send information to serializer
-        team_detail_ac_serializer = self.get_serializer(data=request.data)
+        is_many = True if isinstance(request.data, list) else False
+        team_detail_ac_serializer = self.get_serializer(data=request.data, many=is_many)
         if team_detail_ac_serializer.is_valid():
             team_detail_ac_serializer.save()
             return Response(
                 {
                     'ok': True,
-                    'id': team_detail_ac_serializer.data['id'],
-                    'message': 'Estudiante asignado correctamente'
+                    'team_detail_ac':
+                        team_detail_ac_serializer.data
+                        if isinstance(team_detail_ac_serializer.data, list)
+                        else team_detail_ac_serializer.data['id'],
+                    'message':
+                        'Estudiantes agregados correctamente'
+                        if isinstance(team_detail_ac_serializer.data, list)
+                        else 'Estudiante agregado correctamente'
                 },
                 status=status.HTTP_201_CREATED
             )

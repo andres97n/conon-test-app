@@ -17,10 +17,7 @@ class Abp(BaseModel):
         CLOSE = 0
         OPEN = 1
 
-    problem = models.TextField(
-        null=False,
-        blank=False
-    )
+    problem = models.TextField(null=False, blank=False)
     oral_explication = models.JSONField(
         null=True,
         blank=True

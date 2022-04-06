@@ -69,7 +69,8 @@ class AcSerializer(serializers.ModelSerializer):
             },
             'real_problem': instance.real_problem,
             'context_video': instance.context_video,
-            'contex_audio': instance.contex_audio,
+            'context_audio': instance.context_audio,
+            'path_reference': instance.path_reference,
             'state': instance.state,
             'created_at': instance.created_at
         }

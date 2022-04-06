@@ -36,14 +36,22 @@ class TeamDetailAbpViewSet(viewsets.ModelViewSet):
 
     # Create Team Detail ABP
     def create(self, request, *args, **kwargs):
-        team_detail_abp_serializer = self.get_serializer(data=request.data)
+        is_many = True if isinstance(request.data, list) else False
+        team_detail_abp_serializer = self.get_serializer(data=request.data, many=is_many)
         if team_detail_abp_serializer.is_valid():
             team_detail_abp_serializer.save()
 
             return Response(
                 {
                     'ok': True,
-                    'message': 'Estudiante agregado correctamente.'
+                    'team_detail_abp':
+                        team_detail_abp_serializer.data
+                        if isinstance(team_detail_abp_serializer.data, list)
+                        else team_detail_abp_serializer.data['id'],
+                    'message':
+                        'Estudiantes agregados correctamente'
+                        if isinstance(team_detail_abp_serializer.data, list)
+                        else 'Estudiante agregado correctamente'
                 },
                 status=status.HTTP_201_CREATED
             )
