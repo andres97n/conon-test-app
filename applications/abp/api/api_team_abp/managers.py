@@ -48,9 +48,15 @@ class TeamAbpManager(models.Manager):
         except:
             return None
 
-    def get_team_abp_list_by_abp(self, abp_id):
+    def get_team_abp_list_by_abp(self, abp_id=None):
         try:
-            return self.select_related('abp').filter(abp_id=abp_id, state=1, auth_state='A')
+            return self.select_related('abp').filter(
+                abp=abp_id,
+                abp__state=1,
+                abp__auth_state='A',
+                state=1,
+                auth_state='A'
+            )
         except:
             return None
 

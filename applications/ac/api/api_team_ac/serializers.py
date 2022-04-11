@@ -46,7 +46,7 @@ class TeamAcListSerializer(serializers.ModelSerializer):
                 },
             },
             'observations': instance.observations,
-            'state': instance.state,
+            'active': instance.active,
             'created_at': instance.created_at
         }
 
@@ -56,6 +56,6 @@ class TeamAcShortListSerializer(serializers.Serializer):
         return {
             'id': instance.id,
             'observations': instance.observations,
-            'state': instance.state,
+            'active': instance.active,
             'created_at': instance.created_at
         }

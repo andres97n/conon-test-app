@@ -5,12 +5,13 @@ from rest_framework.decorators import api_view, permission_classes
 
 from applications.ac.models import TeamAc, TeamDetailAc
 from .serializers import TeamAcShortListSerializer
-from applications.ac.api.api_team_detail_ac.serializers import TeamDetailAcShortListSerializer
+from applications.ac.api.api_team_detail_ac.serializers import (TeamDetailAcShortListSerializer,
+                                                                TeamDetailAcSerializer)
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_student_team_abp(request, ac, user):
+def get_student_team_abc(request, ac, user):
     if request.method == 'GET':
         if ac and user:
             team_ac = TeamAc.objects.team_ac_by_ac(ac=ac, user=user)
@@ -28,7 +29,7 @@ def get_student_team_abp(request, ac, user):
                     )
                     if team_detail_ac is not None:
                         team_detail_ac_serializer = TeamDetailAcShortListSerializer(
-                            current_team_ac, many=True
+                            team_detail_ac, many=True
                         )
                         current_team_ac.append({
                             "team_ac": team_ac_serializer.data,
@@ -54,6 +55,47 @@ def get_student_team_abp(request, ac, user):
                     {
                         'ok': False,
                         'detail': 'No se encontró el grupo del estudiante enviado.'
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se enviaron los valores necesarios para procesar.'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+    else:
+        return Response(
+            {
+                'ok': False,
+                'detail': 'Método no permitido.'
+            },
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_team_detail_ac_by_user(request, ac, user):
+    if request.method == 'GET':
+        if ac and user:
+            user_data = TeamDetailAc.objects.get_team_detail_ac_by_ac_and_owner(ac=ac, owner=user)
+            if user_data is not None:
+                user_data_serializer = TeamDetailAcSerializer(user_data)
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': user_data_serializer.data
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se pudo encontrar la información del Usuario.'
                     },
                     status=status.HTTP_404_NOT_FOUND
                 )

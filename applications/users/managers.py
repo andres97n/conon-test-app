@@ -118,3 +118,12 @@ class UserManager(BaseUserManager, models.Manager):
 
     def exists_username(self, username=None):
         return self.filter(username=username, is_active=True, auth_state='A').exists()
+
+    def get_email_by_user(self, user=None):
+        try:
+            return self.filter(
+                is_active=True,
+                auth_state='A'
+            ).get(id=user)
+        except:
+            return None

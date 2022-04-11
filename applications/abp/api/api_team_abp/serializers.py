@@ -85,3 +85,13 @@ class StudentsInTeamAbpSerializer(serializers.Serializer):
             'active': instance['teamdetailabp__active']
         }
 
+
+class TeamAbpShortListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'step': instance.step,
+            'observations': instance.observations,
+            'state': instance.state,
+            'created_at': instance.created_at
+        }

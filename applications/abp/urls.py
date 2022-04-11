@@ -1,7 +1,7 @@
 from django.urls import path
 
 from applications.abp.api.api_team_abp.api import \
-    get_students_by_classroom_for_to_group, get_student_team_abp
+    get_students_by_classroom_for_to_group, get_student_team_abp, get_team_abp_with_students
 from applications.abp.api.api_rubric_abp.api import get_rubric_abp_detail_list_by_abp
 from applications.abp.api.api_evaluation_abp.api import get_evaluation_apb_with_details
 
@@ -25,5 +25,10 @@ urlpatterns = [
         r"evaluation-abp/evaluation-abp-detail-by-evaluation/<int:abp>/<int:team_detail_abp>/",
         get_evaluation_apb_with_details,
         name="evaluation_abp_detail_by_evaluation"
+    ),
+    path(
+        r"team-abp/team-abp-with-students/<int:abp>/",
+        get_team_abp_with_students,
+        name="team_abp_with_students"
     ),
 ]

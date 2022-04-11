@@ -26,7 +26,7 @@ class TeamDetailAcViewSet(viewsets.GenericViewSet):
 
     # Return Team Ac Detail List
     def get_queryset(self):
-        return self.serializer_class().Meta.model.objects.get_ac_list()
+        return self.serializer_class().Meta.model.objects.get_team_detail_ac_list()
 
     # Get Team Detail AC List
     def list(self, request, *args, **kwargs):
@@ -70,6 +70,30 @@ class TeamDetailAcViewSet(viewsets.GenericViewSet):
             {
                 'ok': False,
                 'detail': team_detail_ac_serializer.errors,
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Update Team Detail AC
+    def update(self, request, pk=None, *args, **kwargs):
+        team_detail_abp = self.get_object(pk)
+        # Send information to serializer referencing the instance
+        team_detail_abp_serializer = self.get_serializer(team_detail_abp, data=request.data)
+        if team_detail_abp_serializer.is_valid():
+            team_detail_abp_serializer.save()
+
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': team_detail_abp_serializer.data,
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': team_detail_abp_serializer.errors,
             },
             status=status.HTTP_400_BAD_REQUEST
         )

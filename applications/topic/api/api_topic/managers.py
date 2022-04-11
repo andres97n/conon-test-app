@@ -5,7 +5,7 @@ class TopicManager(models.Manager):
 
     def get_topic_list(self):
         return self.select_related('owner', 'classroom', 'asignature').filter(auth_state='A'). \
-            order_by('-created_at', 'active')
+            order_by('-active', '-created_at')
 
     def get_topic_by_id(self, pk=None):
         try:
@@ -41,7 +41,12 @@ class TopicManager(models.Manager):
     def get_students_by_topic_id(self, pk=None, active=None):
         try:
             if active is not None:
-                return self.filter(id=pk, active=True, auth_state='A').values(
+                return self.filter(
+                    id=pk,
+                    active=True,
+                    auth_state='A',
+                    students__auth_state='A'
+                ).values(
                     'students',
                     'students__person__identification',
                     'students__person__name',
@@ -89,6 +94,7 @@ class TopicManager(models.Manager):
                 classroom__auth_state='A',
                 asignature__state=1,
                 asignature__auth_state='A',
+                active=True,
                 auth_state='A'
             )
         except:

@@ -290,7 +290,6 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=['POST'], url_path='new-students')
     def get_new_teachers_for_area(self, request, pk=None):
         students = self.get_serializer().Meta.model.objects.get_students_by_topic_id(pk=pk, active=True)
-
         if students is not None:
             if request.data:
                 student_serializer = StudentShortListSerializer(

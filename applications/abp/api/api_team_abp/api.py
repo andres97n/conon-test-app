@@ -4,10 +4,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
 from applications.school.models import Classroom
-from applications.abp.models import TeamAbp
+from applications.abp.models import TeamAbp, TeamDetailAbp
 from applications.base.permissions import IsOwnerAndTeacher
-from applications.abp.api.api_team_abp.serializers import StudentsInTeamAbpSerializer
+from .serializers import StudentsInTeamAbpSerializer, TeamAbpShortListSerializer
 from applications.school.api.api_classroom.serializers import StudentsByClassroomForGroupsSerializer
+from applications.abp.api.api_team_detail_abp.serializers import TeamDetailAbpShortListSerializer
 
 # TODO: When the team is deleted o changed the state all the teams
 #  detail will be change the active field
@@ -117,6 +118,58 @@ def get_student_team_abp(request, abp, user):
                 {
                     'ok': False,
                     'detail': 'No se enviaron los valores necesarios para procesar.'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+    else:
+        return Response(
+            {
+                'ok': False,
+                'detail': 'Método no permitido.'
+            },
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_team_abp_with_students(request, abp):
+    if request.method == 'GET':
+        if abp:
+            team_abp = TeamAbp.objects.get_team_abp_list_by_abp(abp_id=abp)
+            if team_abp is not None:
+                team_details_abp = []
+                for team in team_abp:
+                    team_detail_abp = TeamDetailAbp.objects.get_team_detail_by_team(team=team)
+                    if team_detail_abp is not None:
+                        team_abp_serializer = TeamAbpShortListSerializer(team)
+                        team_detail_abp_serializer = TeamDetailAbpShortListSerializer(
+                            team_detail_abp, many=True
+                        )
+                        team_details_abp.append({
+                            'team_abp': team_abp_serializer.data,
+                            'details': team_detail_abp_serializer.data
+                        })
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': team_details_abp
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se encontró el grupo, por favor revise la referencia enviada.'
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se envío el Abp.'
                 },
                 status=status.HTTP_404_NOT_FOUND
             )

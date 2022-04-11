@@ -153,3 +153,17 @@ class TopicShortListSerializer(serializers.Serializer):
             'active': instance.active,
             'created_at': instance.created_at
         }
+
+
+class TopicStudentsListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        user = User.objects.get_email_by_user(user=instance['students__person__user'])
+        if user is None:
+            user = 'No tiene correo'
+        return {
+            'id': instance['students'],
+            'identification': instance['students__person__identification'],
+            'name': f"{instance['students__person__name']} {instance['students__person__last_name']}",
+            'age': instance['students__person__age'],
+            'email': user.email
+        }

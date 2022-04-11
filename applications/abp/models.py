@@ -109,7 +109,7 @@ class TeamAbp(BaseModel):
         verbose_name_plural = 'TeamsAbp'
 
     def __str__(self):
-        return self.abp.id
+        return f'{self.id}'
 
 
 class TeamDetailAbp(BaseModel):

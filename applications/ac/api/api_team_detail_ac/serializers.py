@@ -33,12 +33,6 @@ class TeamDetailAcSerializer(serializers.ModelSerializer):
                                'consulte con el Administrador.'
                 }
             )
-        elif TeamDetailAc.objects.get_team_ac_students_count(attrs['team_ac'].id) == 4:
-            raise serializers.ValidationError(
-                {
-                    'team_ac': 'Error, el grupo ya tiene cuatro integrantes en el grupo.'
-                }
-            )
         if not User.objects.user_exists(attrs['owner'].id):
             raise serializers.ValidationError(
                 {
@@ -46,20 +40,40 @@ class TeamDetailAcSerializer(serializers.ModelSerializer):
                              'consulte con el Administrador.'
                 }
             )
-        elif TeamDetailAc.objects.exists_user_in_team_ac(attrs['team_ac'].id, attrs['owner'].id):
-            raise serializers.ValidationError(
-                {
-                    'owner': 'Error, el Estudiante enviado ya ha sido agregado a este grupo.'
-                }
-            )
 
         return attrs
 
     # Create Team Detail AC
     def create(self, validated_data):
+        if TeamDetailAc.objects.get_team_ac_students_count(validated_data['team_ac'].id) == 4:
+            raise serializers.ValidationError(
+                {
+                    'team_ac': 'Error, el grupo ya tiene cuatro integrantes en el grupo.'
+                }
+            )
+        if TeamDetailAc.objects.exists_user_in_team_ac(
+                validated_data['team_ac'].id, validated_data['owner'].id
+        ):
+            raise serializers.ValidationError(
+                {
+                    'owner': 'Error, el Estudiante enviado ya ha sido agregado a este grupo.'
+                }
+            )
         team_detail_ac = TeamDetailAc(**validated_data)
         team_detail_ac.save()
         return team_detail_ac
+
+    # Update Team Detail ABP
+    def update(self, instance, validated_data):
+        if instance.owner != validated_data['owner']:
+            raise serializers.ValidationError(
+                {
+                    'owner': 'No se puede cambiar de referencia de Usuario.'
+                }
+            )
+        update_team_detail_abp = super().update(instance, validated_data)
+        update_team_detail_abp.save()
+        return update_team_detail_abp
 
 
 class TeamDetailAcListSerializer(serializers.ModelSerializer):
@@ -77,8 +91,8 @@ class TeamDetailAcListSerializer(serializers.ModelSerializer):
                 'id': instance.team_ac.id,
                 'observations': instance.team_ac.observations,
                 'ac': {
-                    'id': instance.team_ac.abp.id,
-                    'state': instance.team_ac.abp.state
+                    'id': instance.team_ac.ac.id,
+                    'state': instance.team_ac.ac.state
                 },
             },
             'owner': {
