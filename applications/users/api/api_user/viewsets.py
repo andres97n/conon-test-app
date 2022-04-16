@@ -1,12 +1,13 @@
 from rest_framework import viewsets
 from rest_framework import status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 from rest_framework.response import Response
 from rest_framework_tracking.mixins import LoggingMixin
 
 from applications.base.permissions import IsTeacher
 from applications.base.paginations import CononPagination
 from .serializers import UserSerializer, UpdateUserSerializer
+from applications.users.auth.serializers import PasswordSerializer
 
 
 # TODO: API provisonal del Usuario, en un
@@ -170,3 +171,31 @@ class UserViewSet(LoggingMixin, viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+
+"""
+    # Changer User Password
+    @action(detail=True, methods=['POST'], url_path='change-password')
+    def change_user_password(self, request, pk=None):
+        user = self.get_queryset(pk)
+        if user:
+            password_serializer = PasswordSerializer(data=request.data)
+            if password_serializer.is_valid():
+                user.set_password(password_serializer.validated_data['password'])
+                user.save()
+                return Response({
+                    'ok': True,
+                    'message': 'Contraseña actualizada correctamente.'
+                })
+            return Response({
+                'ok': False,
+                'detail': password_serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No existe este Usuario.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+"""

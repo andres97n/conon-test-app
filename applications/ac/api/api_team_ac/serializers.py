@@ -27,11 +27,12 @@ class TeamAcSerializer(serializers.ModelSerializer):
 
 
 class TeamAcListSerializer(serializers.ModelSerializer):
-    model = TeamAc
-    exclude = [
-        'updated_at',
-        'auth_state'
-    ]
+    class Meta:
+        model = TeamAc
+        exclude = [
+            'updated_at',
+            'auth_state'
+        ]
 
     # Return Team AC
     def to_representation(self, instance):

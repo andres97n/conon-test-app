@@ -22,11 +22,11 @@ class StudentEvaluationDetailAcSerializer(serializers.ModelSerializer):
                 }
             )
         if not StudentEvaluationAc.objects.exists_student_evaluation_ac(
-                validated_data['student_evaluation'].id
+                validated_data['student_evaluation_ac'].id
         ):
             raise serializers.ValidationError(
                 {
-                    'student_evaluation': 'Error, la evaluación ingresada no es válida; '
+                    'student_evaluation_ac': 'Error, la evaluación ingresada no es válida; '
                                           'consulte con el Administrador.'
                 }
             )
@@ -54,7 +54,9 @@ class StudentEvaluationDetailAcListSerializer(serializers.ModelSerializer):
                 'id': instance.student_evaluation_ac.id,
                 'evaluation_type': instance.student_evaluation_ac.evaluation_type
             },
+            'evaluation_type': instance.evaluation_type,
             'detail_value': instance.detail_value,
+            'detail_body': instance.detail_body,
             'active': instance.active,
             'created_at': instance.created_at
         }
@@ -64,11 +66,10 @@ class StudentEvaluationDetailAcShortListSerializer(serializers.Serializer):
     def to_representation(self, instance):
         return {
             'id': instance.id,
-            'rubric_detail_ac': {
-                'id': instance.rubric_detail_ac.id,
-                'detail_title': instance.rubric_detail_ac.detail_title
-            },
+            'rubric_detail_ac': instance.rubric_detail_ac.id,
+            'evaluation_type': instance.evaluation_type,
             'detail_value': instance.detail_value,
+            'detail_body': instance.detail_body,
             'active': instance.active,
             'created_at': instance.created_at
         }

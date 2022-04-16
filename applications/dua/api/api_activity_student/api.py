@@ -16,6 +16,7 @@ def get_student_activity_with_details(request, activity, owner):
             activity_student_dua = ActivityStudent.objects.activity_student_by_activity_and_owner(
                 activity=activity, owner=owner
             )
+            print(activity_student_dua)
             if activity_student_dua is not None:
                 activity_student_with_answers = []
                 if not activity_student_dua:

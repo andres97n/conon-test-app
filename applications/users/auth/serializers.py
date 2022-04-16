@@ -155,3 +155,23 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
                 'refresh': instance['refresh']
             }
         }
+
+
+class PasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(
+        max_length=128,
+        min_length=6,
+        write_only=True
+    )
+    repeated_password = serializers.CharField(
+        max_length=128,
+        min_length=6,
+        write_only=True
+    )
+
+    def validate(self, data):
+        if data['password'] != data['repeated_password']:
+            raise serializers.ValidationError(
+                {'password': 'Debe ingresar ambas contraseñas iguales.'}
+            )
+        return data

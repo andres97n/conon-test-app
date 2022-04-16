@@ -16,7 +16,7 @@ class TeamAcViewSet(LoggingMixin, viewsets.GenericViewSet):
     permission_classes = [IsTeacher]
     pagination_class = CononPagination
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['topic', 'active']
+    filterset_fields = ['ac', 'active']
 
     # Return Single Object
     def get_object(self, pk=None):
@@ -26,7 +26,7 @@ class TeamAcViewSet(LoggingMixin, viewsets.GenericViewSet):
 
     # Return Detail Ac List
     def get_queryset(self):
-        return self.serializer_class().Meta.model.objects.get_ac_list()
+        return self.list_serializer_class().Meta.model.objects.get_team_ac_list()
 
     # Get Team AC List
     def list(self, request, *args, **kwargs):

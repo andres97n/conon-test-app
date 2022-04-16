@@ -115,3 +115,55 @@ def get_team_detail_ac_by_user(request, ac, user):
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_team_ac_with_students(request, ac):
+    if request.method == 'GET':
+        if ac:
+            team_ac = TeamAc.objects.get_team_ac_by_ac(ac=ac)
+            if team_ac is not None:
+                team_details_abp = []
+                for team in team_ac:
+                    team_detail_ac = TeamDetailAc.objects.get_team_detail_ac_by_team(team=team)
+                    if team_detail_ac is not None:
+                        team_ac_serializer = TeamAcShortListSerializer(team)
+                        team_detail_ac_serializer = TeamDetailAcShortListSerializer(
+                            team_detail_ac, many=True
+                        )
+                        team_details_abp.append({
+                            'team_ac': team_ac_serializer.data,
+                            'details': team_detail_ac_serializer.data
+                        })
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': team_details_abp
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se encontró el grupo, por favor revise la referencia enviada.'
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se envío el Ac.'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+    else:
+        return Response(
+            {
+                'ok': False,
+                'detail': 'Método no permitido.'
+            },
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )

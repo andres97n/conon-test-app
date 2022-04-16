@@ -15,3 +15,10 @@ class AcManager(models.Manager):
 
     def exists_ac_methodology(self, pk=None):
         return self.filter(id=pk, state=1, auth_state='A').exists()
+
+    def get_ac_by_topic(self, topic=None):
+        try:
+            return self.select_related('topic').filter(auth_state='A').get(topic=topic)
+        except:
+            return None
+

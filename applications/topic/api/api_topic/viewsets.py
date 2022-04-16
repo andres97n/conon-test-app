@@ -10,6 +10,8 @@ from applications.base.permissions import IsOwnerAndTeacher
 from applications.base.paginations import CononPagination
 # from applications.topic.filters import TopicFilterSet
 from applications.dua.models import Dua
+from applications.abp.models import Abp
+from applications.ac.models import Ac
 from applications.users.models import Student, Teacher
 from applications.users.api.api_student.serializers import StudentShortListSerializer
 from applications.school.api.api_classroom.serializers import StudentsForManyChoicesSerializer
@@ -140,21 +142,10 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
 
             if topic.type == 1:
                 topic_dua = Dua.objects.get_dua_by_topic(pk=topic.id)
-                print(topic_dua)
-                # TODO: Eliminar cuando se tenga todas las metodologías
                 if topic_dua is not None:
-
                     topic_dua.state = 0
                     topic_dua.auth_state = 'I'
                     topic_dua.save()
-
-                    return Response(
-                        {
-                            'ok': True,
-                            'message': 'Tema eliminado correctamente.'
-                        },
-                        status=status.HTTP_200_OK
-                    )
                 else:
                     return Response(
                         {
@@ -163,14 +154,49 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
                         },
                         status=status.HTTP_400_BAD_REQUEST
                     )
-
-        return Response(
-            {
-                'ok': False,
-                'detail': 'No existe este Tema de Estudio.'
-            },
-            status=status.HTTP_404_NOT_FOUND
-        )
+            elif topic.type == 2:
+                topic_abp = Abp.objects.get_abp_by_topic(topic=topic.id)
+                if topic_abp is not None:
+                    topic_abp.state = 1
+                    topic_abp.auth_state = 'I'
+                    topic_abp.save()
+                else:
+                    return Response(
+                        {
+                            'ok': False,
+                            'detail': 'No se pudo eliminar la metodología ABP.'
+                        },
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+            elif topic.type == 3:
+                topic_ac = Ac.objects.get_ac_by_topic(topic=topic.id)
+                if topic_ac is not None:
+                    topic_ac.state = 1
+                    topic_ac.auth_state = 'I'
+                    topic_ac.save()
+                else:
+                    return Response(
+                        {
+                            'ok': False,
+                            'detail': 'No se pudo eliminar la metodología AC.'
+                        },
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Tema eliminado correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No existe este Tema de Estudio.'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
 
     # TODO: Investigate how form url path with django-filters
     #   and form the path but with the id of the topic
@@ -217,7 +243,6 @@ class TopicViewSet(LoggingMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=['DELETE'], url_path='block')
     def block_topic(self, request, pk=None):
         topic = self.get_queryset(pk=pk)
-        print(topic.active)
         if topic is not None:
             topic.active = False
             topic.save()

@@ -19,3 +19,9 @@ class AbpManager(models.Manager):
             return self.filter(state=1, auth_state='A').get(id=pk)
         except:
             return None
+
+    def get_abp_by_topic(self, topic=None):
+        try:
+            return self.select_related('topic').filter(auth_state='A').get(topic=topic)
+        except:
+            return None

@@ -179,20 +179,11 @@ class RubricDetailAc(BaseModelActive):
 
 
 class StudentEvaluationAc(BaseModel):
-    class StudentEvaluationAcTypeStatus(models.IntegerChoices):
-        AUTOEVALUATION = 1
-        COEVALUATION = 2
-
     class StudentEvaluationAcStatus(models.IntegerChoices):
         CLOSE = 0
         OPEN = 1
 
-    description = models.TextField(null=False, blank=False)
-    evaluation_type = models.PositiveSmallIntegerField(
-        choices=StudentEvaluationAcTypeStatus.choices,
-        null=False,
-        blank=False
-    )
+    description = models.TextField(null=True, blank=True)
     final_value = models.FloatField(null=False, blank=False)
     observations = models.TextField(null=True, blank=True)
     state = models.PositiveSmallIntegerField(
@@ -226,7 +217,23 @@ class StudentEvaluationAc(BaseModel):
 
 
 class StudentEvaluationDetailAc(BaseModelActive):
+    class StudentEvaluationAcTypeStatus(models.IntegerChoices):
+        AUTOEVALUATION = 1
+        COEVALUATION = 2
+        OTHER = 3
+
+    evaluation_type = models.PositiveSmallIntegerField(
+        choices=StudentEvaluationAcTypeStatus.choices,
+        null=False,
+        blank=False
+    )
     detail_value = models.FloatField(null=False, blank=False)
+    detail_body = models.JSONField(
+
+        null=True,
+        blank=True,
+        default=dict
+    )
 
     rubric_detail_ac = models.ForeignKey(
         RubricDetailAc,
@@ -250,3 +257,4 @@ class StudentEvaluationDetailAc(BaseModelActive):
 
     def __str__(self):
         return self.detail_value
+

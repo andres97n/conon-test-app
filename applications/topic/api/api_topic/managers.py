@@ -9,10 +9,10 @@ class TopicManager(models.Manager):
 
     def get_topic_by_id(self, pk=None):
         try:
-            return self.select_related('owner', 'classroom', 'asignature').filter(
-                id=pk,
-                auth_state='A'
-            ).first()
+            return self.select_related('owner', 'classroom', 'asignature').\
+                filter(
+                    auth_state='A'
+                ).get(id=pk)
         except None:
             return None
 

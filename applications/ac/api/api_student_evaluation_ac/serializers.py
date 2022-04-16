@@ -1,4 +1,3 @@
-
 from rest_framework import serializers
 
 from applications.ac.models import StudentEvaluationAc, RubricAc, TeamDetailAc
@@ -43,6 +42,26 @@ class StudentEvaluationAcSerializer(serializers.ModelSerializer):
         student_activity_ac.save()
         return student_activity_ac
 
+    # Update Evaluation AC
+    def update(self, instance, validated_data):
+        if instance.rubric_ac != validated_data['rubric_ac']:
+            raise serializers.ValidationError(
+                {
+                    'rubric_ac': 'Error, no se puede cambiar de Rúbrica; por favor consulte '
+                                 'con el Administrador.'
+                }
+            )
+        if instance.team_detail_ac != validated_data['team_detail_ac']:
+            raise serializers.ValidationError(
+                {
+                    'team_detail_ac': 'Error, no se puede cambiar el Estudiante ingresado; '
+                                      'consulte con el Administrador.'
+                }
+            )
+        update_evaluation_ac = super().update(instance, validated_data)
+        update_evaluation_ac.save()
+        return update_evaluation_ac
+
 
 class StudentEvaluationAcListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -56,7 +75,7 @@ class StudentEvaluationAcListSerializer(serializers.ModelSerializer):
         return {
             'id': instance.id,
             'rubric_ac': {
-                'id':  instance.rubric_ac.id,
+                'id': instance.rubric_ac.id,
                 'description_rubric': instance.rubric_ac.description_rubric
             },
             'team_detail_ac': {
@@ -64,7 +83,6 @@ class StudentEvaluationAcListSerializer(serializers.ModelSerializer):
                 'role_type': instance.team_detail_ac.role_type
             },
             'description': instance.description,
-            'evaluation_type': instance.evaluation_type,
             'final_value': instance.final_value,
             'observations': instance.observations,
             'state': instance.state,
@@ -77,7 +95,6 @@ class StudentEvaluationAcShortListSerializer(serializers.Serializer):
         return {
             'id': instance.id,
             'description': instance.description,
-            'evaluation_type': instance.evaluation_type,
             'final_value': instance.final_value,
             'observations': instance.observations,
             'state': instance.state,

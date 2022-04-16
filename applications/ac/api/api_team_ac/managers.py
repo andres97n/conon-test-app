@@ -31,3 +31,15 @@ class TeamAcManager(models.Manager):
         except:
             return None
 
+    def get_team_ac_by_ac(self, ac=None):
+        try:
+            return self.select_related('ac').filter(
+                ac=ac,
+                ac__state=1,
+                ac__auth_state='A',
+                active=True,
+                auth_state='A'
+            )
+        except:
+            return None
+

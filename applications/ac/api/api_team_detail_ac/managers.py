@@ -65,3 +65,17 @@ class TeamDetailAcManager(models.Manager):
             ).get(owner=owner)
         except:
             return None
+
+    def get_team_detail_ac_by_team(self, team=None):
+        try:
+            return self.select_related('team_ac', 'owner').filter(
+                team_ac=team,
+                team_ac__active=True,
+                team_ac__auth_state='A',
+                owner__is_active=True,
+                owner__auth_state='A',
+                active=True,
+                auth_state='A'
+            )
+        except:
+            return None

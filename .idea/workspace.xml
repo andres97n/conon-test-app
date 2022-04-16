@@ -6,26 +6,29 @@
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_team_abp/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_team_abp/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_team_abp/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_team_abp/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_team_abp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_team_abp/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_team_detail_abp/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_team_detail_abp/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_team_detail_abp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_team_detail_abp/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/abp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/abp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_rubric_ac/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_rubric_ac/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/abp/api/api_abp/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/abp/api/api_abp/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_ac/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_ac/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_student_evaluation_ac/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_student_evaluation_ac/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_student_evaluation_ac/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_student_evaluation_ac/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_student_evaluation_ac/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_student_evaluation_ac/viewsets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_student_evaluation_detail_ac/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_student_evaluation_detail_ac/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/ac/api/api_team_ac/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_team_ac/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_team_ac/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_team_ac/managers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/ac/api/api_team_ac/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_team_ac/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_team_ac/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_team_ac/viewsets.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/ac/api/api_team_detail_ac/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_team_detail_ac/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_team_detail_ac/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_team_detail_ac/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_team_detail_ac/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_team_detail_ac/viewsets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/ac/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/ac/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/topic/api/api_topic/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/topic/api/api_topic/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/dua/api/api_activity_student/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/dua/api/api_activity_student/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/dua/api/api_dua/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/dua/api/api_dua/managers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/topic/api/api_topic/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/topic/api/api_topic/managers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/topic/api/api_topic/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/topic/api/api_topic/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/topic/api/api_topic/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/topic/api/api_topic/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/topic/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/topic/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/api/api_user/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/api/api_user/viewsets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/users/auth/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/auth/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/applications/users/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/users/managers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conon/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,18 +65,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="DatabaseDriversLRU" value="postgresql" />
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.detected.package.tslint" value="true" />
-    <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+  }
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/applications/abp/api/api_team_abp" />
@@ -611,6 +610,15 @@
       <workItem from="1649615515936" duration="641000" />
       <workItem from="1649624454628" duration="6558000" />
       <workItem from="1649637479067" duration="8175000" />
+      <workItem from="1649691021070" duration="3210000" />
+      <workItem from="1649813363975" duration="5090000" />
+      <workItem from="1649948700620" duration="2999000" />
+      <workItem from="1649958540564" duration="3121000" />
+      <workItem from="1649974262801" duration="2477000" />
+      <workItem from="1649983869006" duration="9195000" />
+      <workItem from="1650035015040" duration="6396000" />
+      <workItem from="1650057524628" duration="3788000" />
+      <workItem from="1650071712900" duration="4109000" />
     </task>
     <servers />
   </component>

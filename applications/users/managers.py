@@ -45,16 +45,14 @@ class UserManager(BaseUserManager, models.Manager):
             filter(auth_state='A', is_active=True).order_by('username')
 
     def get_user_detail_data(self, pk=None):
-        user = None
         try:
-            user = self.select_related('person').filter(
+            return self.select_related('person').filter(
                 id=pk,
                 is_active=True,
                 auth_state='A'
             ).first()
         except None:
-            pass
-        return user
+            return None
 
     def user_exists(self, pk=None):
         return self.filter(id=pk, is_active=True, auth_state='A').exists()
@@ -127,3 +125,11 @@ class UserManager(BaseUserManager, models.Manager):
             ).get(id=user)
         except:
             return None
+
+    def get_user_by_username(self, username=None):
+        try:
+            return self.filter(username=username, is_active=True, auth_state='A').first()
+        except:
+            return None
+
+
