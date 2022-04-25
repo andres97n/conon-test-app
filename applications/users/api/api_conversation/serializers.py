@@ -101,3 +101,27 @@ class ConversationListSerializer(serializers.ModelSerializer):
             'created_at': instance.created_at,
             'updated_at': instance.updated_at,
         }
+
+
+class ConversationFirstUserShortListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'user': instance.second_user.id,
+            'state': instance.state,
+            'blocked': instance.blocked,
+            'created_at': instance.created_at,
+            'updated_at': instance.updated_at,
+        }
+
+
+class ConversationSecondUserShortListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'user': instance.first_user.id,
+            'state': instance.state,
+            'blocked': instance.blocked,
+            'created_at': instance.created_at,
+            'updated_at': instance.updated_at,
+        }

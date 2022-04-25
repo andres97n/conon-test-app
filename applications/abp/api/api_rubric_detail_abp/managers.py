@@ -13,3 +13,14 @@ class RubricDetailAbpManager(models.Manager):
         return self.select_related('rubric_abp').\
             filter(auth_state='A', active=True).order_by('-created_at')
 
+    def get_rubric_abp_detail_by_rubric(self, rubric=None):
+        try:
+            return self.select_related('rubric_abp').filter(
+                rubric_abp=rubric,
+                rubric_abp__state=1,
+                rubric_abp__auth_state='A',
+                active=True,
+                auth_state='A'
+            )
+        except:
+            return None

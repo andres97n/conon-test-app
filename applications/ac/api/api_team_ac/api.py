@@ -167,3 +167,44 @@ def get_team_ac_with_students(request, ac):
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def is_team_ac_finished(request, team):
+    if request.method == 'GET':
+        if team:
+            team_detail = TeamDetailAc.objects.is_team_finished_by_team_detail(team_detail=team)
+            if team_detail is not None:
+                is_team_finished_work = team_detail.exists()
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': is_team_finished_work
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se encontró el integrante del equipo.'
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se envío el Equipo.'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+    else:
+        return Response(
+            {
+                'ok': False,
+                'detail': 'Método no permitido.'
+            },
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )

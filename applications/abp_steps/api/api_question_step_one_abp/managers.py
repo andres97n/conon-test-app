@@ -22,3 +22,34 @@ class QuestionStepOneAbpManager(models.Manager):
         except:
             return None
 
+    def get_questions_abp_by_team(self, team=None):
+        try:
+            return self.select_related('team_abp').filter(
+                team_abp=team,
+                team_abp__state=1,
+                team_abp__auth_state='A',
+                active=True,
+                auth_state='A'
+            )
+        except:
+            return None
+
+    def get_answers_by_team(self, team=None):
+        try:
+            return self.select_related('team_abp').filter(
+                team_abp=team,
+                team_abp__state=1,
+                team_abp__auth_state='A',
+                active=True,
+                auth_state='A'
+            ).values(
+                'id',
+                'answersteponeabp',
+                'answersteponeabp__user',
+                'answersteponeabp__teacher_answer',
+                'answersteponeabp__active',
+                'answersteponeabp__created_at'
+            )
+        except:
+            return None
+

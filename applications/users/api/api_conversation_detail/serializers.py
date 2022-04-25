@@ -32,7 +32,7 @@ class ConversationDetailSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {
                     'owner': 'Error, este Usuario no pertenece a esta Conversación; consulte '
-                            'con el Administrador.'
+                             'con el Administrador.'
                 }
             )
         elif value != self.context.get('request').user:

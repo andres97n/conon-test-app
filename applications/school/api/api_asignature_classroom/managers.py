@@ -1,6 +1,7 @@
 from django.db import models
 
 # TODO: Realizar la limpieza de registros cuando el período lectivo termine.
+from django.db.models import Count
 
 
 class AsignatureClassroomManager(models.Manager):
@@ -91,11 +92,27 @@ class AsignatureClassroomManager(models.Manager):
                 teacher__auth_state='A',
                 state=1,
                 auth_state='A'
-            ).values(
+            ).distinct('teacher_id').values(
                 'teacher_id',
                 'teacher__person__identification',
                 'teacher__person__name',
                 'teacher__person__last_name',
             )
+        except:
+            return None
+
+    def get_classrooms_by_teacher(self, teacher=None, period=None):
+        try:
+            return self.select_related('classroom', 'asignature', 'teacher').filter(
+                classroom__school_period=period,
+                classroom__state=1,
+                classroom__auth_state='A',
+                asignature__state=1,
+                asignature__auth_state='A',
+                teacher=teacher,
+                teacher__auth_state='A',
+                state=1,
+                auth_state='A'
+            ).distinct('classroom_id', 'teacher_id')
         except:
             return None

@@ -94,3 +94,31 @@ class TeacherManager(models.Manager):
             ).get()
         except:
             return None
+
+    def get_teacher_object_by_user(self, user=None):
+        try:
+            return self.select_related('person').filter(
+                person__user=user,
+                person__auth_state='A',
+                person__user__is_active=True,
+                person__user__auth_state='A',
+                auth_state='A'
+            ).first()
+        except:
+            return None
+
+    def get_teacher_list_exclude_owner(self, owner=None):
+        try:
+            return self.select_related('person').filter(
+                person__auth_state='A',
+                auth_state='A'
+            ).order_by('person__last_name').exclude(id=owner).values(
+                'id',
+                'person__identification',
+                'person__name',
+                'person__last_name',
+                'title',
+                'person__user'
+            )
+        except:
+            return None

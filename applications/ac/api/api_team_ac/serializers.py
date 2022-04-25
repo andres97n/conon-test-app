@@ -25,6 +25,18 @@ class TeamAcSerializer(serializers.ModelSerializer):
         team_ac.save()
         return team_ac
 
+    def update(self, instance, validated_data):
+        if instance.ac != validated_data['ac']:
+            raise serializers.ValidationError(
+                {
+                    'ac': 'Error, no se puede cambiar la metodología; '
+                          'consulte con el Administrador.'
+                }
+            )
+        update_team_ac = super().update(instance, validated_data)
+        update_team_ac.save()
+        return update_team_ac
+
 
 class TeamAcListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,6 +58,7 @@ class TeamAcListSerializer(serializers.ModelSerializer):
                     'title': instance.ac.topic.title
                 },
             },
+            'team_state': instance.team_state,
             'observations': instance.observations,
             'active': instance.active,
             'created_at': instance.created_at
@@ -56,6 +69,7 @@ class TeamAcShortListSerializer(serializers.Serializer):
     def to_representation(self, instance):
         return {
             'id': instance.id,
+            'team_state': instance.team_state,
             'observations': instance.observations,
             'active': instance.active,
             'created_at': instance.created_at

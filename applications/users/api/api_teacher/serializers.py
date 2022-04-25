@@ -135,3 +135,13 @@ class TeacherObjectShortSerializer(serializers.Serializer):
             'identification': instance['teacher__person__identification'],
             'name': f"{instance['teacher__person__name']} {instance['teacher__person__last_name']}",
         }
+
+
+class TeacherShorListByConversation(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance['id'],
+            'identification': instance['person__identification'],
+            'name': f"{instance['person__name']} {instance['person__last_name']}",
+            'user': instance['person__user']
+        }

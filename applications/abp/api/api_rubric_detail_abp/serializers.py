@@ -50,6 +50,7 @@ class RubricDetailAbpSerializer(serializers.ModelSerializer):
                 },
             },
             'title_detail': instance.title_detail,
+            'description_detail': instance.description_detail,
             'grade_percentage': instance.grade_percentage,
             'rating_value': instance.rating_value,
             'observations_detail': instance.observations_detail,
@@ -57,3 +58,16 @@ class RubricDetailAbpSerializer(serializers.ModelSerializer):
             'created_at': instance.created_at
         }
 
+
+class RubricDetailAbpShortListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'title_detail': instance.title_detail,
+            'description_detail': instance.description_detail,
+            'grade_percentage': instance.grade_percentage,
+            'rating_value': instance.rating_value,
+            'observations_detail': instance.observations_detail,
+            'active': instance.active,
+            'created_at': instance.created_at
+        }

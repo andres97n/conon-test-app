@@ -5,7 +5,7 @@ class ConversationDetailManager(models.Manager):
 
     def get_conversation_detail_list(self):
         return self.select_related('conversation', 'owner').\
-            filter(auth_state='A').order_by('-created_at')
+            filter(auth_state='A').order_by('created_at')
 
     def get_conversation_detail_by_pk(self, pk=None):
         try:
@@ -15,7 +15,7 @@ class ConversationDetailManager(models.Manager):
             return None
 
     def get_active_conversation_detail(self):
-        return self.select_related('first_user', 'second_user').filter(
+        return self.select_related('owner').filter(
             blocked=False,
             auth_state='A'
         )

@@ -67,6 +67,30 @@ class TeamAcViewSet(LoggingMixin, viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    # Update Team Ac
+    def update(self, request, pk=None, *args, **kwargs):
+        team_ac = self.get_object(pk)
+        # Send information to serializer referencing the instance
+        team_ac_serializer = self.get_serializer(team_ac, data=request.data)
+        if team_ac_serializer.is_valid():
+            team_ac_serializer.save()
+
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': team_ac_serializer.data,
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': team_ac_serializer.errors,
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
     # Block Team Ac
     @action(detail=True, methods=['DELETE'], url_path='block')
     def block_team_ac(self, request, pk=None):

@@ -6,7 +6,8 @@ from .api.api_opinion_step_one_abp.api import (get_opinions_by_team_detail,
                                                get_opinions_step_one_count,
                                                get_team_opinions_and_interactions)
 from .api.api_question_step_one_abp.api import get_questions_step_one_count, \
-    get_questions_and_answers_step_by_team
+    get_questions_and_answers_step_by_team, get_questions_by_team
+from .api.api_answer_step_one_abp.api import get_answer_by_team
 from .api.api_student_idea_step_two_abp.api import (get_student_ideas_by_team_detail,
                                                     get_student_ideas_and_rates_by_team_and_user,
                                                     get_ideas_and_rates_by_team)
@@ -48,6 +49,16 @@ urlpatterns = [
         r"step-one/question/questions-and-answers/<int:team>/",
         get_questions_and_answers_step_by_team,
         name="questions_and_answers_step_one_abp"
+    ),
+    path(
+        r"step-one/question/questions-by-team/<int:team>/",
+        get_questions_by_team,
+        name="questions_by_team"
+    ),
+    path(
+        r"step-one/answer/answers-by-team/<int:team>/",
+        get_answer_by_team,
+        name="answers_by_team"
     ),
     path(
         r"step-two/student-idea/team-detail/<int:team_detail>/",

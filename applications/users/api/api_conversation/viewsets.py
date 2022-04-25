@@ -20,7 +20,7 @@ class ConversationViewSet(LoggingMixin, viewsets.GenericViewSet):
     logging_methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     sensitive_fields = {'access', 'refresh'}
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id', 'block']
+    filterset_fields = ['id', 'blocked']
 
     # Get Conversation Data
     def get_object(self, pk=None):
@@ -93,7 +93,7 @@ class ConversationViewSet(LoggingMixin, viewsets.GenericViewSet):
     @action(detail=True, methods=['DELETE'], url_path='block')
     def block_conversation(self, request, pk=None):
         conversation = self.get_object(pk)
-        conversation.active = False
+        conversation.blocked = True
         conversation.save()
 
         return Response(

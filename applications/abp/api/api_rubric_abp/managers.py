@@ -59,4 +59,20 @@ class RubricAbpManager(models.Manager):
 
     def get_rubric_abp_by_abp(self, abp=None):
         return self.select_related('abp').\
-            filter(abp=abp, auth_state='A')
+            filter(
+            abp=abp,
+            auth_state='A'
+        )
+
+    def get_rubric_abp_object_by_abp(self, abp=None):
+        try:
+            return self.select_related('abp'). \
+                filter(
+                abp=abp,
+                abp__state=1,
+                abp__auth_state='A',
+                state=1,
+                auth_state='A'
+            )
+        except:
+            return None

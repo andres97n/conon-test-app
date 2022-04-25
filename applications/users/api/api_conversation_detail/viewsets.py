@@ -16,7 +16,7 @@ class ConversationDetailViewSet(viewsets.GenericViewSet):
     list_serializer_class = ConversationDetailListSerializer
     pagination_class = CononPagination
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['conversation', 'block']
+    filterset_fields = ['conversation', 'blocked']
 
     # Get Conversation Data
     def get_object(self, pk=None):
@@ -55,7 +55,7 @@ class ConversationDetailViewSet(viewsets.GenericViewSet):
                 {
                     'ok': True,
                     'id': conversation_detail_serializer.data['id'],
-                    'detail': 'Mensaje enviado correctamente.'
+                    'message': 'Mensaje enviado correctamente.'
                 },
                 status=status.HTTP_201_CREATED
             )
@@ -80,7 +80,7 @@ class ConversationDetailViewSet(viewsets.GenericViewSet):
             return Response(
                 {
                     'ok': True,
-                    'detail': 'Mensaje eliminado correctamente.'
+                    'message': 'Mensaje eliminado correctamente.'
                 },
                 status=status.HTTP_200_OK
             )
@@ -97,7 +97,7 @@ class ConversationDetailViewSet(viewsets.GenericViewSet):
     @action(detail=True, methods=['DELETE'], url_path='block')
     def block_conversation_detail(self, request, pk=None):
         conversation_detail = self.get_object(pk)
-        conversation_detail.active = False
+        conversation_detail.blocked = True
         conversation_detail.save()
 
         return Response(

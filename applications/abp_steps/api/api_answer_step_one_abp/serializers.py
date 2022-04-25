@@ -92,3 +92,19 @@ class AnswersAbpByQuestionSerializer(serializers.Serializer):
             'active': instance.active,
             'created_at': instance.created_at
         }
+
+
+class AnswerAbpByQuestionStepOneAbpSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance['answersteponeabp'],
+            'question': {
+                'id': instance['id']
+            },
+            'user': {
+                'id': ['answersteponeabp__user'],
+            },
+            'teacher_answer': instance['answersteponeabp__teacher_answer'],
+            'active': instance['answersteponeabp__active'],
+            'created_at': instance['answersteponeabp__created_at']
+        }

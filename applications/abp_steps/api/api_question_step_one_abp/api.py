@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from applications.base.permissions import IsStudent
 from applications.abp_steps.models import QuestionStepOneAbp, AnswerStepOneAbp
 from applications.abp.models import TeamAbp
-from .serializers import QuestionsByTeamAbpSerializer
+from .serializers import QuestionsByTeamAbpSerializer, QuestionsAbpByTeamAbpSerializer
 from applications.abp_steps.api.api_answer_step_one_abp.serializers import \
     AnswersAbpByQuestionSerializer
 
@@ -98,6 +98,47 @@ def get_questions_and_answers_step_by_team(request, team):
                 {
                     'ok': False,
                     'detail': 'No se enviaron los valores necesarios para la consulta.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    else:
+        return Response(
+            {
+                'ok': False,
+                'detail': 'Método no permitido.'
+            },
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsStudent])
+def get_questions_by_team(request, team):
+    if request.method == 'GET':
+        if team:
+            question_abp = QuestionStepOneAbp.objects.get_questions_abp_by_team(team=team)
+            if question_abp is not None:
+                question_abp_serializer = QuestionsAbpByTeamAbpSerializer(question_abp, many=True)
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': question_abp_serializer.data
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se pudo encontrar las preguntas realizadas del equipo.'
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se envío el equipo.'
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )

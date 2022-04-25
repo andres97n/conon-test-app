@@ -11,7 +11,7 @@ class ClassroomManager(models.Manager):
 
     def get_classroom_by_id(self, pk=None):
         try:
-            return self.filter(id=pk, state=1, auth_state='A').first()
+            return self.filter(state=1, auth_state='A').get(id=pk)
         except:
             return None
 
@@ -78,8 +78,7 @@ class ClassroomManager(models.Manager):
                 school_period=period,
                 school_period__state=1,
                 school_period__auth_state='A',
-                students=student,
-                students__auth_state='A'
+                students=student
             ).first()
         except:
             return None

@@ -79,3 +79,15 @@ class RubricDetailSerializer(serializers.Serializer):
                 'active': instance['rubricdetailabp__active']
             }
         }
+
+
+class RubricAbpShortListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'description_rubric': instance.description_rubric,
+            'abp_final_value': instance.abp_final_value,
+            'observations': instance.observations,
+            'state': instance.state,
+            'created_at': instance.created_at
+        }

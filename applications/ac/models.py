@@ -51,6 +51,16 @@ class Ac(BaseModel):
 
 
 class TeamAc(BaseModelActive):
+    class TeamStateStatus(models.IntegerChoices):
+        FINISHED = 0
+        WORKING = 1
+
+    team_state = models.PositiveSmallIntegerField(
+        choices=TeamStateStatus.choices,
+        default=1,
+        null=False,
+        blank=True
+    )
     observations = models.TextField(null=True, blank=True)
 
     ac = models.ForeignKey(
@@ -257,4 +267,3 @@ class StudentEvaluationDetailAc(BaseModelActive):
 
     def __str__(self):
         return self.detail_value
-

@@ -78,9 +78,36 @@ class ConversationManager(models.Manager):
     def is_owner_in_conversation(self, user=None):
         user_first = self.user_exists_like_first_in_conversation(user=user)
         user_second = self.user_exists_like_second_in_conversation(user=user)
-        if user_first and user_second:
+        if user_first or user_second:
             if user_first.exists():
                 return True
-            elif user_second:
+            elif user_second.exists():
                 return True
         return False
+
+    def get_conversations_by_user_id(self, user=None):
+        try:
+            first_user = self.select_related('first_user', 'second_user').filter(
+                first_user=user,
+                first_user__is_active=True,
+                first_user__auth_state='A',
+                second_user__is_active=True,
+                second_user__auth_state='A',
+                state=1,
+                auth_state='A'
+            )
+            second_user = self.select_related('first_user', 'second_user').filter(
+                second_user=user,
+                second_user__is_active=True,
+                second_user__auth_state='A',
+                first_user__is_active=True,
+                first_user__auth_state='A',
+                state=1,
+                auth_state='A'
+            )
+            return {
+                'first_user': first_user,
+                'second_user': second_user
+            }
+        except:
+            return None

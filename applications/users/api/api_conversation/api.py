@@ -57,19 +57,18 @@ def get_user_conversations_list(request, user, search):
         if user:
             user_first = []
             user_second = []
-            if search:
-                if search == 'all':
-                    user_first = Conversation.objects.user_exists_like_first_in_conversation(user=user)
-                    user_second = Conversation.objects.user_exists_like_second_in_conversation(user=user)
-                elif search == 'unanswered':
-                    user_first = Conversation.objects.user_exists_like_first_in_conversation(user=user).\
-                        filter(state=0)
-                    user_second = Conversation.objects.user_exists_like_second_in_conversation(user=user).\
-                        filter(state=0)
+            if search == 'all':
+                user_first = Conversation.objects.user_exists_like_first_in_conversation(user=user)
+                user_second = Conversation.objects.user_exists_like_second_in_conversation(user=user)
+            elif search == 'unanswered':
+                user_first = Conversation.objects.user_exists_like_first_in_conversation(user=user). \
+                    filter(state=0)
+                user_second = Conversation.objects.user_exists_like_second_in_conversation(user=user). \
+                    filter(state=0)
             else:
-                user_first = Conversation.objects.user_exists_like_first_in_conversation(user=user).\
+                user_first = Conversation.objects.user_exists_like_first_in_conversation(user=user). \
                     filter(conversation_detail__state=0)
-                user_second = Conversation.objects.user_exists_like_second_in_conversation(user=user).\
+                user_second = Conversation.objects.user_exists_like_second_in_conversation(user=user). \
                     filter(conversation_detail__state=0)
             if user_first is not None and user_second is not None:
                 user_first_serializer = ConversationListSerializer(user_first, many=True)
@@ -101,6 +100,54 @@ def get_user_conversations_list(request, user, search):
                         'ok': False,
                         'detail': 'Por favor revise la referencia del Usuario enviada, '
                                   'ocurrió un error.'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se envío el Usuario.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    else:
+        return Response(
+            {
+                'ok': False,
+                'detail': 'Método no permitido.'
+            },
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_current_conversations_list(request, user):
+    if request.method == 'GET':
+        if user:
+            user_first = Conversation.objects.user_exists_like_first_in_conversation(user=user)
+            user_second = Conversation.objects.user_exists_like_second_in_conversation(user=user)
+            if user_first is not None and user_second is not None:
+                user_conversations = []
+                user_first_serializer = ConversationListSerializer(user_first, many=True)
+                user_second_serializer = ConversationListSerializer(user_second, many=True)
+                for student in user_first_serializer.data:
+                    user_conversations.append(student)
+                for student in user_second_serializer.data:
+                    user_conversations.append(student)
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': user_conversations
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se pudo encontrar las conversaciones del usuario.'
                     },
                     status=status.HTTP_400_BAD_REQUEST
                 )

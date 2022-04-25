@@ -61,3 +61,13 @@ class QuestionsByTeamAbpSerializer(serializers.Serializer):
             'active': instance['questionsteponeabp__active'],
             'created_at': instance['questionsteponeabp__created_at']
         }
+
+
+class QuestionsAbpByTeamAbpSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'moderator_question': instance.moderator_question,
+            'active': instance.active,
+            'created_at': instance.created_at
+        }
