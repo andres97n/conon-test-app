@@ -103,11 +103,11 @@ class Student(BaseModel):
         null=True,
         blank=True,
     )
-    observations = models.JSONField(
+    observations = models.TextField(
         'observaciones',
-        default=dict,
+        default='S/N',
         null=True,
-        blank=True,
+        blank=True
     )
 
     person = models.OneToOneField(

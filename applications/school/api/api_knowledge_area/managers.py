@@ -17,7 +17,7 @@ class KnowledgeAreaManager(models.Manager):
             return self.select_related(
                 'coordinator',
                 'sub_coordinator'
-            ).filter(id=pk, auth_state='A').first()
+            ).filter(auth_state='A').get(id=pk)
         except:
             return None
 

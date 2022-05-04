@@ -62,7 +62,7 @@ class SchoolPeriodSerializer(serializers.ModelSerializer):
             'init_date': instance.init_date,
             'end_date': instance.end_date,
             'school_end_date': instance.school_end_date,
-            'state': instance.get_state_display(),
+            'state': instance.state,
             'observations': instance.observations,
             'created_at': instance.created_at
         }

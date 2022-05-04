@@ -16,22 +16,13 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = KnowledgeArea
-        fields = [
-            'id',
-            'name',
-            'coordinator',
-            'sub_coordinator',
-            'objective',
-            'observations',
-            'created_at',
-            'teachers'
+        exclude = [
+            'updated_at',
+            'auth_state'
         ]
-
-# TODO: Confirmar la funcionalidad de la siguiente validación
 
     # Validate Area Type
     def validate_type(self, value):
-        print(value)
         if value:
             if KnowledgeArea.objects.is_type_exits(type=value):
                 raise serializers.ValidationError(
@@ -39,6 +30,7 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
                         'type': ['Error, es tipo de área ya fue seleccionada.']
                     }
                 )
+        return value
 
     # Validate Teachers
     def validate_teachers(self, value):
@@ -101,9 +93,6 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
 
     # Get Knowledge Area Data
     def to_representation(self, instance):
-
-        # data = super().to_representation(instance)
-
         return {
             'id': instance.id,
             'name': instance.name,
@@ -116,7 +105,7 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
                 'name': instance.sub_coordinator.person.full_name()
             },
             'objective': instance.objective,
-            'type': instance.get_type_display(),
+            'type': instance.type,
             'observations': instance.observations,
             'created_at': instance.created_at
         }

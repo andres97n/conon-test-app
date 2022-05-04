@@ -9,8 +9,6 @@ from .api.api_question.managers import QuestionManager
 from .api.api_activity_student.managers import ActivityStudentManager
 from .api.api_answer.managers import AnswerManager
 
-# TODO: Revisar si la relación de Activity con Topic y foreign o onetoone
-
 
 class Dua(BaseModel):
     class DuaStatus(models.IntegerChoices):

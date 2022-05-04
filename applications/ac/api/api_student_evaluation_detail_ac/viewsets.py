@@ -27,7 +27,7 @@ class StudentEvaluationDetailAcViewSet(viewsets.GenericViewSet):
 
     # Return Student Evaluation Detail Ac List
     def get_queryset(self):
-        return self.serializer_class().Meta.model.objects.get_student_evaluation_ac_list()
+        return self.serializer_class().Meta.model.objects.get_student_evaluation_detail_ac_list()
 
     # Get Student Evaluation Detail Ac List
     def list(self, request, *args, **kwargs):

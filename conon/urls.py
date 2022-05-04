@@ -37,6 +37,7 @@ schema_view = get_schema_view(
    permission_classes=(permissions.AllowAny,),
 )
 
+
 urlpatterns = [
     # path('login/', Login.as_view(), name='login'),
     # path('logout/', Logout.as_view(), name='logout'),
@@ -58,13 +59,15 @@ urlpatterns = [
     path('topic/api/', include('applications.topic.routers')),
     path('dua/api/', include('applications.dua.routers')),
     path('abp/api/', include('applications.abp.routers')),
-    path('ac/api/', include('applications.ac.routers')),
     path('abp-steps/api/', include('applications.abp_steps.routers')),
+    path('ac/api/', include('applications.ac.routers')),
+    path('ac-roles/api/', include('applications.ac_roles.routers')),
     path('user/api/path/', include('applications.users.urls')),
     path('topic/api/path/', include('applications.topic.urls')),
     path('dua/api/path/', include('applications.dua.urls')),
     path('abp/api/path/', include('applications.abp.urls')),
     path('ac/api/path/', include('applications.ac.urls')),
     path('abp-steps/api/path/', include('applications.abp_steps.urls')),
+    path('ac-roles/api/path/', include('applications.ac_roles.urls')),
 ]
 

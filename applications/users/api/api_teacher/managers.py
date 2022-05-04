@@ -30,15 +30,7 @@ class TeacherManager(models.Manager):
 
     # Return if the Teacher is active
     def is_active(self, pk=None):
-        teacher = None
-        try:
-            teacher = self.filter(id=pk, auth_state='A').first()
-        except:
-            pass
-        if teacher is None:
-            return False
-
-        return True
+        return self.filter(id=pk, auth_state='A').exists()
 
     def get_user(self, pk=None):
         result = None
