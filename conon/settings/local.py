@@ -1,6 +1,7 @@
 
 from .base import *
 import json
+import os
 
 with open("secret/prod.json") as f:
     secret_local = json.loads(f.read())
@@ -46,6 +47,8 @@ CORS_ORIGIN_WHITELIST = [
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'))
 # STATICFILES_DIRS = [BASE_DIR / 'static']
 
 '''

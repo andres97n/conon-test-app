@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/runtime.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conon/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conon/settings/local.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/local.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -629,7 +630,7 @@
       <workItem from="1651677035588" duration="1267000" />
       <workItem from="1651678768978" duration="3653000" />
       <workItem from="1651766363161" duration="3738000" />
-      <workItem from="1651773193289" duration="1417000" />
+      <workItem from="1651773193289" duration="1983000" />
     </task>
     <servers />
   </component>
