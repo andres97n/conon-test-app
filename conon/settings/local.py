@@ -2,7 +2,7 @@
 from .base import *
 import json
 
-with open("secret/local.json") as f:
+with open("secret/prod.json") as f:
     secret_local = json.loads(f.read())
 
 

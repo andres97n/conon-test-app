@@ -1,8 +1,12 @@
 venv/
-secret/
+requirements/
 applications/base/migrations/*
 applications/users/migrations/*
 applications/school/migrations/*
 applications/topic/migrations/*
 applications/dua/migrations/*
+applications/abp/migrations/*
+applications/abp_steps/migrations/*
+applications/ac/migrations/*
+applications/ac_roles/migrations/*
 .idea
