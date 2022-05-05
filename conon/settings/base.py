@@ -92,8 +92,8 @@ SIMPLE_JWT = {
 SWAGGER_SETTINGS = {
     'DOC_EXPANSION': 'none',
     'USE_SESSION_AUTH': True,
-    'LOGIN_URL': 'http://127.0.0.1:8000/admin/',
-    'LOGOUT_URL': 'http://127.0.0.1:8000/swagger/'
+    # 'LOGIN_URL': 'http://127.0.0.1:8000/admin/',
+    # 'LOGOUT_URL': 'http://127.0.0.1:8000/swagger/'
 }
 
 MIDDLEWARE = [
