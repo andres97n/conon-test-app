@@ -15,7 +15,7 @@ def get_secret_local(secret_name, secrets=secret_local):
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
