@@ -38,11 +38,13 @@ DATABASES = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://conon-app-test.herokuapp.com"
+    "https://conon.netlify.app"
 ]
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
     "https://conon-app-test.herokuapp.com"
+    "https://conon.netlify.app"
 ]
 
 # Static files (CSS, JavaScript, Images)
