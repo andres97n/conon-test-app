@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/runtime.txt" beforeDir="false" afterPath="$PROJECT_DIR$/runtime.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conon/settings/local.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/local.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conon/settings/prod.py" beforeDir="false" afterPath="$PROJECT_DIR$/conon/settings/prod.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,11 +53,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/conon" />
       <recent name="$PROJECT_DIR$/applications/abp/api/api_team_abp" />
       <recent name="$PROJECT_DIR$/applications/abp" />
       <recent name="$PROJECT_DIR$/applications/topic/api" />
-      <recent name="$PROJECT_DIR$/applications/school/api" />
-      <recent name="$PROJECT_DIR$/applications/users" />
     </key>
   </component>
   <component name="RunManager">
@@ -628,7 +629,7 @@
       <workItem from="1651677035588" duration="1267000" />
       <workItem from="1651678768978" duration="3653000" />
       <workItem from="1651766363161" duration="3738000" />
-      <workItem from="1651773193289" duration="2462000" />
+      <workItem from="1651773193289" duration="2700000" />
     </task>
     <servers />
   </component>
