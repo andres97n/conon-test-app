@@ -85,18 +85,8 @@ class KnowledgeAreaManager(models.Manager):
         except:
             return None
 
-    def is_type_exits(self, type=None):
-        area = None
-        try:
-            area = self.filter(type=type, auth_state='A')
-        except:
-            area = None
-
-        print(area)
-        if area is None:
-            return False
-
-        return True
+    def is_type_exits(self, prototype=None):
+        return self.filter(type=prototype, auth_state='A').exists()
 
     def get_teachers_ids_by_area(self, area=None):
         try:

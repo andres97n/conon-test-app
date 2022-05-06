@@ -25,11 +25,7 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
     def validate_type(self, value):
         if value:
             if KnowledgeArea.objects.is_type_exits(type=value):
-                raise serializers.ValidationError(
-                    {
-                        'type': ['Error, es tipo de área ya fue seleccionada.']
-                    }
-                )
+                raise serializers.ValidationError('Error, es tipo de área ya fue seleccionada.')
         return value
 
     # Validate Teachers
