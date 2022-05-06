@@ -13,20 +13,12 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
         lookup_url_kwarg='pk'
     )
     """
-
     class Meta:
         model = KnowledgeArea
         exclude = [
             'updated_at',
             'auth_state'
         ]
-
-    # Validate Area Type
-    def validate_type(self, value):
-        if value:
-            if KnowledgeArea.objects.is_type_exits(prototype=value):
-                raise serializers.ValidationError('Error, es tipo de área ya fue seleccionada.')
-        return value
 
     # Validate Teachers
     def validate_teachers(self, value):
