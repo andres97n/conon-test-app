@@ -24,7 +24,7 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
     # Validate Area Type
     def validate_type(self, value):
         if value:
-            if KnowledgeArea.objects.is_type_exits(type=value):
+            if KnowledgeArea.objects.is_type_exits(prototype=value):
                 raise serializers.ValidationError('Error, es tipo de área ya fue seleccionada.')
         return value
 
