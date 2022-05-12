@@ -21,7 +21,7 @@ class TeamAcViewSet(LoggingMixin, viewsets.GenericViewSet):
     # Return Single Object
     def get_object(self, pk=None):
         return get_object_or_404(
-            self.serializer_class.Meta.model.objects.get_ac_active_queryset(), id=pk
+            self.serializer_class.Meta.model.objects.get_team_ac_active_queryset(), id=pk
         )
 
     # Return Detail Ac List

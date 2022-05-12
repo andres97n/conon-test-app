@@ -26,6 +26,18 @@ class ProblemResolutionGroupAcSerializer(serializers.ModelSerializer):
         problem_resolution_group_ac.save()
         return problem_resolution_group_ac
 
+    # Update Problem Resolution Group AC
+    def update(self, instance, validated_data):
+        if instance.team_ac != validated_data['team_ac']:
+            raise serializers.ValidationError(
+                {
+                    'team_ac': 'Error, una vez ingresado el Equipo no se puede cambiar el mismo.'
+                }
+            )
+        update_problem_resolution_group_ac = super().update(instance, validated_data)
+        update_problem_resolution_group_ac.save()
+        return update_problem_resolution_group_ac
+
 
 class ProblemResolutionGroupAcListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,7 +52,7 @@ class ProblemResolutionGroupAcListSerializer(serializers.ModelSerializer):
             'id': instance.id,
             'team_ac': {
                 'id': instance.team_ac.id,
-                'role_type': instance.team_ac.role_type
+                'team_state': instance.team_ac.team_state
             },
             'problem_resolution': instance.problem_resolution,
             'references_images': instance.references_images,

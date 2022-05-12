@@ -17,7 +17,7 @@ class MemberPerformanceCoordinatorAcViewSet(viewsets.GenericViewSet):
     permission_classes = [IsStudent]
     pagination_class = CononPagination
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['team_detail_ac', 'active']
+    filterset_fields = ['team_detail_ac', 'member_ac', 'active']
 
     # Return Single Object
     def get_object(self, pk=None):

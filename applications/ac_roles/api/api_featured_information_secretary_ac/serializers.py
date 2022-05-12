@@ -33,6 +33,24 @@ class FeaturedInformationSecretaryAcSerializer(serializers.ModelSerializer):
         featured_information_secretary_ac.save()
         return featured_information_secretary_ac
 
+    # Update Featured Information Secretary AC
+    def update(self, instance, validated_data):
+        if instance.team_detail_ac != validated_data['team_detail_ac']:
+            raise serializers.ValidationError(
+                {
+                    'team_detail_ac': 'Error, una vez ingresado el Integrante no se lo puede cambiar.'
+                }
+            )
+        if instance.member_ac != validated_data['member_ac']:
+            raise serializers.ValidationError(
+                {
+                    'member_ac': 'Error, una vez ingresado el Integrante no se lo puede cambiar.'
+                }
+            )
+        update_featured_information_secretary_ac = super().update(instance, validated_data)
+        update_featured_information_secretary_ac.save()
+        return update_featured_information_secretary_ac
+
 
 class FeaturedInformationSecretaryAcListSerializer(serializers.ModelSerializer):
     class Meta:

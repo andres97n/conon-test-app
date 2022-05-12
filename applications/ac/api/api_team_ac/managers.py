@@ -43,3 +43,14 @@ class TeamAcManager(models.Manager):
         except:
             return None
 
+    def is_team_ac_finished(self, team=None):
+        try:
+            return self.select_related('team_ac').filter(
+                id=team,
+                team_state=0,
+                active=True,
+                auth_state='A',
+            )
+        except:
+            return None
+

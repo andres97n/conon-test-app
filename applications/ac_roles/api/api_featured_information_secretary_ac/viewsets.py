@@ -77,6 +77,30 @@ class FeaturedInformationSecretaryAcViewSet(viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    # Update Featured Information Secretary Ac
+    def update(self, request, pk=None):
+        featured_information_secretary_ac = self.get_object(pk)
+        # Send information to serializer referencing the instance
+        featured_information_secretary_ac_serializer = self.serializer_class(
+            featured_information_secretary_ac, data=request.data
+        )
+        if featured_information_secretary_ac_serializer.is_valid():
+            featured_information_secretary_ac_serializer.save()
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': featured_information_secretary_ac_serializer.data,
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {
+                'ok': False,
+                'detail': featured_information_secretary_ac_serializer.errors,
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
     # Block Featured Information Secretary Ac
     @action(detail=True, methods=['DELETE'], url_path='block')
     def block_featured_information_secretary_ac(self, request, pk=None):

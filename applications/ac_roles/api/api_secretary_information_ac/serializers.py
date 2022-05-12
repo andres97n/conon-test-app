@@ -1,8 +1,6 @@
-
-
 from rest_framework import serializers
 
-from applications.ac.models import TeamDetailAc
+from applications.ac.models import TeamAc
 from applications.ac_roles.models import SecretaryInformationAc
 
 
@@ -16,11 +14,11 @@ class SecretaryInformationAcSerializer(serializers.ModelSerializer):
 
     # Create Secretary Information AC
     def create(self, validated_data):
-        if not TeamDetailAc.objects.exists_team_detail_ac(validated_data['team_detail_ac'].id):
+        if not TeamAc.objects.exists_team_ac(validated_data['team_ac'].id):
             raise serializers.ValidationError(
                 {
-                    'team_detail_ac': 'Error, el integrante ingresado no existe o está inactivo; '
-                                      'consulte con el Administrador.'
+                    'team_ac': 'Error, el integrante ingresado no existe o está inactivo; '
+                               'consulte con el Administrador.'
                 }
             )
         secretary_information_ac = SecretaryInformationAc(**validated_data)
@@ -39,12 +37,11 @@ class SecretaryInformationAcListSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return {
             'id': instance.id,
-            'team_detail_ac': {
-                'id': instance.team_detail_ac.id,
-                'role_type': instance.team_detail_ac.role_type
+            'team_ac': {
+                'id': instance.team_ac.id,
+                'team_state': instance.team_ac.team_state
             },
             'external_path': instance.external_path,
             'active': instance.active,
             'created_at': instance.created_at
         }
-

@@ -26,6 +26,18 @@ class PerformanceDescriptionSpokesmanAcSerializer(serializers.ModelSerializer):
         performance_description_spokesman_ac.save()
         return performance_description_spokesman_ac
 
+    # Update Performance Description Spokesman AC
+    def update(self, instance, validated_data):
+        if instance.team_detail_ac != validated_data['team_detail_ac']:
+            raise serializers.ValidationError(
+                {
+                    'team_detail_ac': 'Error, una vez ingresado el Integrante no se lo puede cambiar.'
+                }
+            )
+        update_performance_description_spokesman_ac = super().update(instance, validated_data)
+        update_performance_description_spokesman_ac.save()
+        return update_performance_description_spokesman_ac
+
 
 class PerformanceDescriptionSpokesmanAcListSerializer(serializers.ModelSerializer):
     class Meta:

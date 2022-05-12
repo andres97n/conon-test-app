@@ -72,7 +72,7 @@ class MemberPerformanceCoordinatorAc(BaseModelActive):
 class ProblemResolutionGroupAc(BaseModelActive):
     problem_resolution = models.TextField(null=False, blank=False)
     references_images = models.JSONField(null=False, blank=True, default=dict)
-    observations = models.TextField(null=False, blank=False)
+    observations = models.TextField(null=True, blank=True, default='')
 
     team_ac = models.ForeignKey(
         TeamAc,
@@ -246,8 +246,8 @@ class PerformanceDescriptionSpokesmanAc(BaseModelActive):
 class SecretaryInformationAc(BaseModelActive):
     external_path = models.URLField(null=False, blank=False)
 
-    team_detail_ac = models.ForeignKey(
-        TeamDetailAc,
+    team_ac = models.ForeignKey(
+        TeamAc,
         on_delete=models.CASCADE,
         null=False,
         blank=False

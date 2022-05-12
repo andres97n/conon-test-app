@@ -80,15 +80,3 @@ class TeamDetailAcManager(models.Manager):
         except:
             return None
 
-    def is_team_finished_by_team_detail(self, team_detail=None):
-        try:
-            return self.select_related('team_ac').filter(
-                id=team_detail,
-                team_ac__active=True,
-                team_ac__auth_state='A',
-                team_ac__team_state=0,
-                active=True,
-                auth_state='A',
-            )
-        except:
-            return None

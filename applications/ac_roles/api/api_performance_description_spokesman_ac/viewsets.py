@@ -77,6 +77,30 @@ class PerformanceDescriptionSpokesmanAcViewSet(viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    # Update Performance Description Spokesman Ac
+    def update(self, request, pk=None):
+        performance_description_spokesman_ac = self.get_object(pk)
+        # Send information to serializer referencing the instance
+        performance_description_spokesman_ac_serializer = self.serializer_class(
+            performance_description_spokesman_ac, data=request.data
+        )
+        if performance_description_spokesman_ac_serializer.is_valid():
+            performance_description_spokesman_ac_serializer.save()
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': performance_description_spokesman_ac_serializer.data,
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {
+                'ok': False,
+                'detail': performance_description_spokesman_ac_serializer.errors,
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
     # Block Performance Description Spokesman Ac
     @action(detail=True, methods=['DELETE'], url_path='block')
     def block_performance_description_spokesman_ac(self, request, pk=None):

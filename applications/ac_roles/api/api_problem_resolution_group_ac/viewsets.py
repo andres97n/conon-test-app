@@ -77,6 +77,30 @@ class ProblemResolutionGroupAcViewSet(viewsets.GenericViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    # Update Problem Resolution Group Ac
+    def update(self, request, pk=None):
+        problem_resolution_group_ac = self.get_object(pk)
+        # Send information to serializer referencing the instance
+        problem_resolution_ac_serializer = self.serializer_class(
+            problem_resolution_group_ac, data=request.data
+        )
+        if problem_resolution_ac_serializer.is_valid():
+            problem_resolution_ac_serializer.save()
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': problem_resolution_ac_serializer.data,
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {
+                'ok': False,
+                'detail': problem_resolution_ac_serializer.errors,
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
     # Block Problem Resolution Group Ac
     @action(detail=True, methods=['DELETE'], url_path='block')
     def block_problem_resolution_group_ac(self, request, pk=None):

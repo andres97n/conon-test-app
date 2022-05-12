@@ -15,7 +15,9 @@ from applications.ac_roles.api.api_teacher_answer_ac.serializers import TeacherA
 def get_questions_and_answers_ac(request, team_detail):
     if request.method == 'GET':
         if team_detail:
-            questions_ac = SpokesmanQuestionAc.objects.get_questions_by_team_detail(team_detail=team_detail)
+            questions_ac = SpokesmanQuestionAc.objects.get_questions_by_team_detail(
+                team_detail=team_detail
+            )
             if questions_ac is not None:
                 questions_and_answers = []
                 questions_serializer = SpokesmanQuestionAcListSerializer(
@@ -34,7 +36,7 @@ def get_questions_and_answers_ac(request, team_detail):
                     else:
                         questions_and_answers.append({
                             'question': question,
-                            'answer': []
+                            'answer': {}
                         })
                 return Response(
                     {

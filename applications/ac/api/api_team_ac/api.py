@@ -174,9 +174,9 @@ def get_team_ac_with_students(request, ac):
 def is_team_ac_finished(request, team):
     if request.method == 'GET':
         if team:
-            team_detail = TeamDetailAc.objects.is_team_finished_by_team_detail(team_detail=team)
-            if team_detail is not None:
-                is_team_finished_work = team_detail.exists()
+            team = TeamAc.objects.is_team_ac_finished(team=team)
+            if team is not None:
+                is_team_finished_work = team.exists()
                 return Response(
                     {
                         'ok': True,
