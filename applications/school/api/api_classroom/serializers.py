@@ -72,7 +72,7 @@ class ClassroomSerializer(serializers.ModelSerializer):
                 'name': instance.school_period.__str__(),
                 'period_date': instance.school_period.get_period_date()
             },
-            'state': instance.state(),
+            'state': instance.state,
             # 'students': self.get_students(instance.students),
             'created_at': instance.created_at
         }
