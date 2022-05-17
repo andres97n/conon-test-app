@@ -52,7 +52,7 @@ class StudentEvaluationDetailAcListSerializer(serializers.ModelSerializer):
             },
             'student_evaluation_ac': {
                 'id': instance.student_evaluation_ac.id,
-                'evaluation_type': instance.student_evaluation_ac.evaluation_type
+                'description': instance.student_evaluation_ac.description
             },
             'evaluation_type': instance.evaluation_type,
             'detail_value': instance.detail_value,

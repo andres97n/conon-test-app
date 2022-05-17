@@ -6,24 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="98bb9570-0bed-482f-b3e9-6e5903eab628" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_team_ac/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_team_ac/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_team_ac/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_team_ac/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_team_ac/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_team_ac/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_team_detail_ac/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_team_detail_ac/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/api/api_activity_description_spokesman_ac/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/api/api_activity_description_spokesman_ac/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/api/api_activity_description_spokesman_ac/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/api/api_activity_description_spokesman_ac/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/api/api_featured_information_secretary_ac/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/api/api_featured_information_secretary_ac/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/api/api_featured_information_secretary_ac/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/api/api_featured_information_secretary_ac/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/api/api_member_performance_coordinator_ac/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/api/api_member_performance_coordinator_ac/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/api/api_performance_description_spokesman_ac/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/api/api_performance_description_spokesman_ac/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/api/api_performance_description_spokesman_ac/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/api/api_performance_description_spokesman_ac/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/api/api_problem_resolution_group_ac/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/api/api_problem_resolution_group_ac/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/api/api_problem_resolution_group_ac/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/api/api_problem_resolution_group_ac/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/api/api_secretary_information_ac/managers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/api/api_secretary_information_ac/managers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/api/api_secretary_information_ac/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/api/api_secretary_information_ac/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/api/api_secretary_information_ac/viewsets.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/api/api_secretary_information_ac/viewsets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/api/api_spokesman_question_ac/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/api/api_spokesman_question_ac/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/applications/ac_roles/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac_roles/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/ac/api/api_student_evaluation_detail_ac/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/ac/api/api_student_evaluation_detail_ac/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/applications/school/api/api_classroom/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/applications/school/api/api_classroom/serializers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -659,7 +643,12 @@
       <workItem from="1652222994817" duration="13106000" />
       <workItem from="1652247800301" duration="12000" />
       <workItem from="1652371062225" duration="2847000" />
-      <workItem from="1652381266806" duration="1054000" />
+      <workItem from="1652381266806" duration="3308000" />
+      <workItem from="1652475422357" duration="619000" />
+      <workItem from="1652665476905" duration="1022000" />
+      <workItem from="1652667744831" duration="919000" />
+      <workItem from="1652715591649" duration="3825000" />
+      <workItem from="1652805569192" duration="89000" />
     </task>
     <servers />
   </component>
