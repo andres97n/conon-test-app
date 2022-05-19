@@ -15,7 +15,6 @@ def get_secret_local(secret_name, secrets=secret_local):
         raise ImproperlyConfigured(msg)
 
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
