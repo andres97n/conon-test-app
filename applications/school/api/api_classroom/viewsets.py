@@ -29,14 +29,15 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
             return self.get_serializer().Meta.model.objects.get_classroom_list()
         return self.get_serializer().Meta.model.objects.get_classroom_by_id(pk)
 
-# TODO: Mejorar el siguiente código
-
     def get_permissions(self):
-        if self.action == 'get_classrooms_list_by_teacher' or self.action == 'get_new_students_for_classrooms':
+        if self.action == 'get_classrooms_list_by_teacher' or \
+                self.action == 'get_new_students_for_classrooms':
             self.permission_classes = [IsTeacher]
-        elif self.action == 'save_students_for_classroom' or self.action == 'get_students_list_by_classroom':
+        elif self.action == 'save_students_for_classroom' or \
+                self.action == 'get_students_list_by_classroom':
             self.permission_classes = [IsTeacher]
-        elif self.action == 'block_students_by_classroom' or 'get_classrooms_list_by_teacher':
+        elif self.action == 'block_students_by_classroom' or \
+                'get_classrooms_list_by_teacher':
             self.permission_classes = [IsTeacher]
         else:
             self.permission_classes = [IsAdminUser]
@@ -142,7 +143,6 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
 
     # Delete Classroom
     def destroy(self, request, pk=None, *args, **kwargs):
-        # Get instance
         classroom = self.get_queryset(pk)
         if classroom:
             classroom.state = 0
@@ -168,7 +168,6 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=['POST'], url_path='assign-students')
     def save_students_for_classroom(self, request, pk=None):
         classroom = self.get_queryset(pk)
-
         if classroom is not None:
             if request.data['students']:
                 for student in request.data['students']:
@@ -309,17 +308,13 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'], url_path='by-teacher')
     def get_classrooms_list_by_teacher(self, request):
-
         if request.data:
             teacher = Teacher.objects.get_teacher_by_user(pk=request.data['user'])
             if teacher is not None:
                 classrooms = self.get_serializer().Meta.model.objects. \
                     get_classrooms_by_teacher(pk=teacher['id'])
-
                 if classrooms is not None:
-
                     classroom_serializer = self.get_serializer(classrooms, many=True)
-
                     return Response(
                         {
                             'ok': True,
@@ -343,7 +338,6 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
                     },
                     status=status.HTTP_400_BAD_REQUEST
                 )
-
         else:
             return Response(
                 {
@@ -356,7 +350,6 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=['GET'], url_path='students')
     def get_students_list_by_classroom(self, request, pk=None):
         students = self.get_serializer().Meta.model.objects.get_students_by_classroom_id(pk=pk)
-
         if students is not None:
             classroom_serializer = StudentsForManyChoicesSerializer(students, many=True)
 
@@ -375,25 +368,16 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
                 }
             )
 
-    """
-    @action(detail=True, methods=['GET'], url_path='students-to-group')
-    def get_students_by_classroom_for_to_group(self,pk=None):
-        students = self.get_serializer().Meta.model.objects.get_students_by_classroom_id(pk=pk)
-
-        if students is None:
-    """
-
     @action(detail=True, methods=['DELETE'], url_path='block-students')
     def block_students_by_classroom(self, request, pk=None):
-
         if request.data:
-            students = self.get_serializer().Meta.model.objects.get_students_by_classroom_id(pk=pk)
+            students = self.get_serializer().Meta.model.objects.\
+                get_students_by_classroom_id(pk=pk)
             classroom = self.get_queryset(pk=pk)
             validate_students = True
             for student in students:
                 if student['students'] not in request.data['students']:
                     validate_students = False
-
             if validate_students:
                 for student in request.data['students']:
                     student_query = Student.objects.get_student_detail_data(pk=student)
@@ -406,12 +390,11 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
                     },
                     status=status.HTTP_200_OK
                 )
-
             else:
                 return Response(
                     {
                         'ok': False,
-                        'detail': 'No se encuentran estudiantes enviados dentro del Aula.'
+                        'detail': 'No se pudo encontrar los Estudiantes dentro del Aula.'
                     },
                     status=status.HTTP_404_NOT_FOUND
                 )
@@ -424,3 +407,26 @@ class ClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+    # Block Classroom
+    @action(detail=True, methods=['DELETE'], url_path='block')
+    def block_classroom(self, request, pk=None):
+        classroom = self.get_queryset(pk)
+        if classroom:
+            classroom.state = 0
+            classroom.save()
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Aula bloqueada correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No existe esta Aula.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )

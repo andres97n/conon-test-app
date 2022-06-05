@@ -1,26 +1,16 @@
 from rest_framework import serializers
 
 from applications.users.models import User, Person
-from applications.base.functions import save_auth_user
-
-
-# TODO: Realizar un serializer para el cambio de contraseña
-# TODO: Comprobar que el OneToOneField no tenga problemas con el campo Person,
-#   ya que si el usuario elimina la person es posible que esa id no se pueda utilizar
 
 
 # Serializer for Create and Update a normal User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = (
-            'username',
-            'person',
-            'email',
-            'password',
-            'type',
+        exclude = [
+            'updated_at',
             'created_at'
-        )
+        ]
 
     def validate_person(self, value):
         person = Person.objects.is_deleted(value.id)
@@ -39,10 +29,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     # Type field validation
     def validate_type(self, value):
-        if value == 0:
-            raise serializers.ValidationError(
-                'Error, el Usuario que se intenta crear no pueder ser de este tipo.'
-            )
         if value > 2:
             raise serializers.ValidationError(
                 detail='Error, no existe este Tipo.'
@@ -65,36 +51,19 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-    # Update a normal User
-    '''
-    def update(self, instance, validated_data):
-        if instance.person != validated_data['person']:
-            raise serializers.ValidationError(
-                detail={
-                    'ok': False,
-                    'detail': 'Error, no se puede cambiar de Persona.'
-                }
-            )
-        updated_user = super().update(instance, validated_data)
-        if validated_data['password']:
-            updated_user.set_password(validated_data['password'])
-        updated_user.save()
-        return updated_user
-    '''
-
     def to_representation(self, instance):
         if instance.person is None:
             return {
                 'id': instance.id,
                 'person': {
-                    'id': None,
-                    'identification': '',
-                    'name': '',
-                    'last_name': '',
+                  'id': None,
+                  'name': instance.__str__(),
                 },
                 'username': instance.username,
                 'email': instance.email,
                 'type': instance.type,
+                'is_active': instance.is_active,
+                'is_superuser': instance.is_superuser,
                 'created_at': instance.created_at
             }
 
@@ -103,12 +72,13 @@ class UserSerializer(serializers.ModelSerializer):
             'person': {
               'id': instance.person.id,
               'identification': instance.person.identification,
-              'name': instance.person.name,
-              'last_name': instance.person.last_name,
+              'name': instance.__str__(),
             },
             'username': instance.username,
             'email': instance.email,
             'type': instance.type,
+            'is_active': instance.is_active,
+            'is_superuser': instance.is_superuser,
             'created_at': instance.created_at
         }
 

@@ -104,7 +104,8 @@ class StudentSerializer(serializers.ModelSerializer):
             'representative_name': instance.representative_name,
             'emergency_contact': instance.emergency_contact,
             'expectations': instance.expectations,
-            'observations': instance.observations
+            'observations': instance.observations,
+            'created_at': instance.created_at
         }
 
 

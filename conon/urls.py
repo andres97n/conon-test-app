@@ -63,6 +63,7 @@ urlpatterns = [
     path('ac/api/', include('applications.ac.routers')),
     path('ac-roles/api/', include('applications.ac_roles.routers')),
     path('user/api/path/', include('applications.users.urls')),
+    path('school/api/path/', include('applications.school.urls')),
     path('topic/api/path/', include('applications.topic.urls')),
     path('dua/api/path/', include('applications.dua.urls')),
     path('abp/api/path/', include('applications.abp.urls')),

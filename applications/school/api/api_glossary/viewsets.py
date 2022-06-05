@@ -9,7 +9,6 @@ from applications.base.paginations import CononPagination
 from applications.school.models import GlossaryDetail
 
 
-# The Teacher enable the Glosary for to add terms
 class GlossaryViewSet(LoggingMixin, viewsets.ModelViewSet):
     permission_classes = ([IsTeacher])
     serializer_class = GlossarySerializer

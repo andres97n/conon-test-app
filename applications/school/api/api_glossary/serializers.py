@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from applications.school.models import Glossary, AsignatureClassroom
+from applications.school.models import Glossary, Classroom
 
 
 class GlossarySerializer(serializers.ModelSerializer):
@@ -13,10 +13,11 @@ class GlossarySerializer(serializers.ModelSerializer):
 
     # Create a Glosary
     def create(self, validated_data):
-        if not AsignatureClassroom.objects.\
-                asignature_classroom_exists(validated_data['asignature_classroom'].id):
+        if not Classroom.objects.\
+                exists_classroom(validated_data['classroom'].id):
             raise serializers.ValidationError(
-                detail='Error, no se encuentra relación con este valor; consulte con el Administrador.'
+                detail='Error, no se encuentra relación con este valor; consulte con el '
+                       'Administrador.'
             )
         glosary = Glossary(**validated_data)
         glosary.save()
@@ -37,20 +38,9 @@ class GlossarySerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return {
             'id': instance.id,
-            'asignature_classroom': {
-                'id': instance.asignature_classroom.id,
-                'classroom': {
-                    'id': instance.asignature_classroom.classroom.id,
-                    'name': instance.asignature_classroom.classroom.__str__()
-                },
-                'asignature': {
-                    'id': instance.asignature_classroom.asignature.id,
-                    'name': instance.asignature_classroom.asignature.__str__()
-                },
-                'teacher': {
-                    'id': instance.asignature_classroom.teacher.id,
-                    'name': instance.asignature_classroom.teacher.__str__()
-                }
+            'classroom': {
+                'id': instance.classroom.id,
+                'name': instance.classroom.__str__()
             },
             'state': instance.get_state_display(),
             'observations': instance.observations,

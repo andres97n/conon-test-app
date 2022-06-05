@@ -68,7 +68,8 @@ class TeacherManager(models.Manager):
             'person__identification',
             'person__name',
             'person__last_name',
-            'title'
+            'title',
+            'person'
         ).order_by('person__last_name')
 
     def get_user_id_by_teacher(self, pk=None):

@@ -18,13 +18,9 @@ class GlossaryDetailSerializer(serializers.ModelSerializer):
                     'glossary': 'Error, el Glosario enviado no existe.'
                 }
             )
-        if not Glossary.objects.get_glossary_state(validated_data['glossary'].id):
-            raise serializers.ValidationError(
-                {
-                    'glossary': 'Error, el Glosario debe estar activo para crear un nuevo registro.'
-                }
-            )
-        if GlossaryDetail.objects.title_exists(validated_data['glossary'].id, validated_data['title']):
+        if GlossaryDetail.objects.title_exists(
+                validated_data['glossary'].id, validated_data['title']
+        ):
             raise serializers.ValidationError(
                 {
                     'title': 'Error, este Glosario ya contiene este título.'
@@ -54,19 +50,13 @@ class GlossaryDetailSerializer(serializers.ModelSerializer):
         return update_glossary_detail
 
     def to_representation(self, instance):
-        """
-        'glossary': {
-            'id': instance.glossary.id,
-            'asignature_classroom_id': instance.glossary.asignature_classroom.id
-        },
-        """
         return {
             'id': instance.id,
             'title': instance.title,
             'description': instance.description,
             'image': instance.image,
             'url': instance.url,
-            'state': instance.get_state_display(),
+            'state': instance.state,
             'observation': instance.observation,
             'created_at': instance.created_at,
             'updated_at': instance.updated_at

@@ -15,7 +15,6 @@ from applications.users.api.api_conversation_detail.managers import Conversation
 
 class Person(BaseModel):
 
-    # GENDERS
     class GenderChoices(models.IntegerChoices):
         FEMENINO = 1
         MASCULINO = 2
@@ -59,14 +58,14 @@ class Person(BaseModel):
     )
     age = models.PositiveIntegerField(
         'edad',
-        null=False,
-        blank=False
+        null=True,
+        blank=True
     )
     phone = models.CharField(
         'teléfono',
         max_length=20,
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
     )
 
     objects = PersonManager()
@@ -135,8 +134,9 @@ class Teacher(BaseModel):
     )
     title = models.CharField(
         max_length=80,
-        null=False,
-        blank=False,
+        default='S/N',
+        null=True,
+        blank=True,
     )
     person = models.OneToOneField(
         Person,

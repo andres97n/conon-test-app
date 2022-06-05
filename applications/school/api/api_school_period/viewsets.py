@@ -6,7 +6,6 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework_tracking.mixins import LoggingMixin
 from django_filters.rest_framework import DjangoFilterBackend
 
-
 from applications.base.permissions import IsTeacher
 from .serializers import SchoolPeriodSerializer, SchoolPeriodForAutocompleteSerializer
 
@@ -156,14 +155,13 @@ class SchoolPeriodViewSet(LoggingMixin, viewsets.ModelViewSet):
         )
         if school_periods:
             for school_period in school_periods:
-                """
-                Producción
-                if school_period.state == 0:
-                    school_period.auth_state = 'I'
-                """
+                school_period.state = 0
                 school_period.auth_state = 'I'
 
-            self.get_serializer().Meta.model.objects.bulk_update(school_periods, ['auth_state'])
+            self.get_serializer().Meta.model.objects.bulk_update(
+                school_periods,
+                ['state', 'auth_state']
+            )
 
             return Response(
                 {
@@ -222,3 +220,26 @@ class SchoolPeriodViewSet(LoggingMixin, viewsets.ModelViewSet):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    # Block School Period
+    @action(detail=True, methods=['DELETE'], url_path='block')
+    def block_school_period(self, request, pk=None):
+        school_period = self.get_queryset(pk)
+        if school_period:
+            school_period.state = 0
+            school_period.save()
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Período Lectivo bloqueado correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No existe este Período Lectivo.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )

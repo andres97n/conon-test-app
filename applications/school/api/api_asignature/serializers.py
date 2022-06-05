@@ -28,7 +28,8 @@ class AsignatureSerializer(serializers.ModelSerializer):
         if instance.knowledge_area != validated_data['knowledge_area']:
             raise serializers.ValidationError(
                 {
-                    'knowledge_area': 'Error, una vez ingresada el Área de Conocimiento no se puede cambiar el mismo.'
+                    'knowledge_area': 'Error, una vez ingresada el Área de Conocimiento no se '
+                                      'puede cambiar el mismo.'
                 }
             )
         update_asignature = super().update(instance, validated_data)
@@ -42,13 +43,13 @@ class AsignatureSerializer(serializers.ModelSerializer):
             'name': instance.name,
             'objective': instance.objective,
             'knowledge_area': {
+                'id': instance.knowledge_area.id,
                 'name': instance.knowledge_area.name,
                 'coordinator': instance.knowledge_area.get_coordinator()
             },
-            'state': instance.get_state_display(),
+            'state': instance.state,
             'observations': instance.observations,
             'created_at': instance.created_at
-            # classrooms = instance.classrooms
         }
 
 

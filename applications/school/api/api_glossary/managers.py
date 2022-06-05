@@ -17,16 +17,7 @@ class GlossaryManager(models.Manager):
             return None
 
     def glosary_exists(self, pk=None):
-        glossary = None
-        try:
-            glossary = self.filter(id=pk, auth_state='A').first()
-        except None:
-            pass
-
-        if glossary is None:
-            return False
-
-        return True
+        return self.filter(id=pk, state=1, auth_state='A').exists()
 
     def get_glossary_state(self, pk=None):
         glossary = None
@@ -38,3 +29,16 @@ class GlossaryManager(models.Manager):
             return False
 
         return True
+
+    def get_glossary_by_classroom(self, classroom=None):
+        try:
+            return self.select_related('classroom').filter(
+                classroom=classroom,
+                classroom__state=1,
+                classroom__auth_state='A',
+                state=1,
+                auth_state='A'
+            )
+        except:
+            return None
+

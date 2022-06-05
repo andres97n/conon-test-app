@@ -132,4 +132,8 @@ class UserManager(BaseUserManager, models.Manager):
         except:
             return None
 
+    def get_admins(self):
+        return self.select_related('person').filter(type=0, is_active=True, auth_state='A').\
+            order_by('-created_at')
+
 

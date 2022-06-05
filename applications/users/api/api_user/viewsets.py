@@ -11,10 +11,6 @@ from applications.base.paginations import CononPagination
 from .serializers import UserSerializer, UpdateUserSerializer
 
 
-# TODO: API provisonal del Usuario, en un
-#   futuro se espera cambiarlo
-
-
 class UserViewSet(LoggingMixin, viewsets.ModelViewSet):
     permission_classes = ([IsTeacher])
     serializer_class = UserSerializer
@@ -172,4 +168,18 @@ class UserViewSet(LoggingMixin, viewsets.ModelViewSet):
                 'detail': 'Ocurrió un error con el proceso, consulte con el Administrador.'
             },
             status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Get Admins
+    @action(detail=False, methods=(['GET']), url_path='admins')
+    def get_admins(self, request):
+        users = self.get_serializer().Meta.model.objects.get_admins()
+        user_serializer = self.get_serializer(users, many=True)
+
+        return Response(
+            {
+                'ok': True,
+                'conon_data': user_serializer.data,
+            },
+            status=status.HTTP_200_OK
         )

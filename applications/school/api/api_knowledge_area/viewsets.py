@@ -176,7 +176,6 @@ class KnowledgeAreaViewSet(LoggingMixin, viewsets.ModelViewSet):
     def get_teachers_by_area(self, request, pk=None):
         teachers = self.get_serializer().Meta.model.objects.get_teachers_by_area_id(pk=pk)
         if teachers is not None:
-
             if self.get_serializer().Meta.model.objects.get_teachers_count(pk=pk) == 0:
                 area_teacher_serializer = TeacherByAreaListSerializer(teachers, many=True)
                 return Response(

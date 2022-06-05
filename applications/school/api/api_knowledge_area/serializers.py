@@ -69,12 +69,6 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
                     'type': ['Error, no se puede cambiar el tipo de área.']
                 }
             )
-        if validated_data['teachers']:
-            raise serializers.ValidationError(
-                {
-                    'teachers': 'Error, no se pueden actualizar los datos de los Docentes.'
-                }
-            )
         update_knowledge_area = super().update(instance, validated_data)
         update_knowledge_area.save()
         return update_knowledge_area
@@ -85,11 +79,11 @@ class KnowledgeAreaSerializer(serializers.ModelSerializer):
             'id': instance.id,
             'name': instance.name,
             'coordinator': {
-                'id': instance.coordinator.person.id,
+                'id': instance.coordinator.id,
                 'name': instance.coordinator.person.full_name()
             },
             'sub_coordinator': {
-                'id': instance.sub_coordinator.person.id,
+                'id': instance.sub_coordinator.id,
                 'name': instance.sub_coordinator.person.full_name()
             },
             'objective': instance.objective,
@@ -161,5 +155,6 @@ class TeacherByAreaListSerializer(serializers.ModelSerializer):
             'identification': instance['teachers__person__identification'],
             'name': f"{instance['teachers__person__name']} {instance['teachers__person__last_name']}",
             'title': instance['teachers__title'],
+            'person': instance['teachers__person_id']
         }
 

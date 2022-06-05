@@ -297,11 +297,10 @@ class Glossary(BaseModel):
         CLOSE = 0
         OPEN = 1
 
-    # Start on False because the Teacher will be active it
     state = models.PositiveSmallIntegerField(
         'estado',
         choices=GlossaryStatus.choices,
-        default=0,
+        default=1,
         null=True,
         blank=True,
     )
@@ -312,8 +311,8 @@ class Glossary(BaseModel):
         blank=True
     )
 
-    asignature_classroom = models.ForeignKey(
-        AsignatureClassroom,
+    classroom = models.ForeignKey(
+        Classroom,
         on_delete=models.CASCADE,
         null=False,
         blank=False

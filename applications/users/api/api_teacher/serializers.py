@@ -85,6 +85,8 @@ class TeacherSerializer(serializers.ModelSerializer):
             'user': user,
             'title': instance.title,
             'objective': instance.objective,
+            ''
+            'created_at': instance.created_at
         }
 
 
@@ -123,8 +125,8 @@ class TeachersShortSerializer(serializers.ModelSerializer):
             'id': instance['id'],
             'identification': instance['person__identification'],
             'name': f"{instance['person__name']} {instance['person__last_name']}",
-            # 'last_name': instance['person__last_name'],
-            'title': instance['title']
+            'title': instance['title'],
+            'person': instance['person']
         }
 
 

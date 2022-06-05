@@ -243,20 +243,6 @@ class AsignatureViewSet(LoggingMixin, viewsets.ModelViewSet):
                 KnowledgeArea.objects.get_teachers_by_area_id(area_id.knowledge_area.id),
                 many=True
             )
-            """
-            teacher_serializer = TeachersShortSerializer(
-                Teacher.objects.get_teachers_short_data(), many=True
-            )
-            
-            asignature_keys = {asignature['teacher'] for asignature in asignature_serializer.data}
-            if len(asignatures) != 0:
-                valid_teachers = [
-                    teacher for teacher in teacher_serializer.data
-                    if teacher['id'] not in asignature_keys
-                ]
-            else:
-                valid_teachers = teacher_serializer.data
-            """
             valid_teachers = teacher_serializer.data
 
             return Response(
@@ -275,3 +261,27 @@ class AsignatureViewSet(LoggingMixin, viewsets.ModelViewSet):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    # Block Asignature
+    @action(detail=True, methods=['DELETE'], url_path='block')
+    def block_asignature(self, request, pk=None):
+        asignature = self.get_queryset(pk)
+        if asignature:
+            asignature.state = 0
+            asignature.save()
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Asignatura bloqueada correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No existe esta Asignatura.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
