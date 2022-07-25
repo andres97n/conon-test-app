@@ -17,11 +17,15 @@ class ReplySerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         if not Comment.objects.comment_exists(validated_data['comment'].id):
             raise serializers.ValidationError(
-                detail='Error, el siguiente Comentario no existe.'
+                {
+                    'comment': 'Error, el siguiente Comentario no existe.'
+                }
             )
         if not User.objects.user_exists(validated_data['owner'].id):
             raise serializers.ValidationError(
-                detail='Error, el siguiente Usuario no existe.'
+                {
+                    'owner': 'Error, el siguiente Usuario no existe.'
+                }
             )
         reply = Reply(**validated_data)
         reply.save()
@@ -30,9 +34,17 @@ class ReplySerializer(serializers.ModelSerializer):
     # Update Reply
     def update(self, instance, validated_data):
         if instance.comment != validated_data['comment']:
-            raise serializers.ValidationError('Error, no se puede cambiar de Comentario.')
-        if instance.user != validated_data['user']:
-            raise serializers.ValidationError('Error, no se puede cambiar el Usuario.')
+            raise serializers.ValidationError(
+                {
+                    'comment': 'Error, no se puede cambiar de Comentario.'
+                }
+            )
+        if instance.owner != validated_data['owner']:
+            raise serializers.ValidationError(
+                {
+                    'owner': 'Error, no se puede cambiar el Usuario.'
+                }
+            )
         update_reply = super().update(instance, validated_data)
         update_reply.save()
         return update_reply

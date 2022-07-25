@@ -27,3 +27,14 @@ class ProblemResolutionGroupAcManager(models.Manager):
     def get_problem_resolution_ac_list(self):
         return self.get_problem_resolution_ac_active_queryset().order_by('-created_at')
 
+    def get_problem_resolution_by_team(self, team=None):
+        try:
+            return self.select_related('team_ac').filter(
+                team_ac=team,
+                team_ac__active=True,
+                team_ac__auth_state='A',
+                active=True,
+                auth_state='A'
+            )
+        except:
+            return None

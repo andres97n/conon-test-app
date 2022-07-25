@@ -56,4 +56,7 @@ class SchoolPeriodManager(models.Manager):
         )
 
     def get_period_active(self):
-        return self.filter(state=1, auth_state='A').first()
+        try:
+            return self.filter(state=1, auth_state='A').first()
+        except:
+            return None

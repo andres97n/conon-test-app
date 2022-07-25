@@ -34,3 +34,34 @@ class StudentEvaluationAcManager(models.Manager):
             )
         except:
             return None
+
+    def get_student_evaluation_ac_by_ac_and_user(self, ac=None, user=None):
+        try:
+            return self.select_related(
+                'rubric_ac',
+                'team_detail_ac',
+                'team_detail_ac__owner'
+            ).filter(
+                rubric_ac__ac=ac,
+                rubric_ac__auth_state='A',
+                team_detail_ac__owner=user,
+                team_detail_ac__auth_state='A',
+                auth_state='A',
+            )
+        except:
+            return None
+
+    def get_student_evaluation_ac_by_ac_and_team_detail(self, ac=None, team_detail=None):
+        try:
+            return self.select_related(
+                'rubric_ac',
+                'team_detail_ac',
+            ).filter(
+                rubric_ac__ac=ac,
+                rubric_ac__auth_state='A',
+                team_detail_ac=team_detail,
+                team_detail_ac__auth_state='A',
+                auth_state='A',
+            )
+        except:
+            return None

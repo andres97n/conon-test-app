@@ -1,16 +1,12 @@
 from django.db import models
 
-from applications.base.models import BaseModel, BaseModelActive
+from applications.base.models import BaseModel
 from applications.users.models import Student, User
 from applications.school.models import Classroom, Asignature
 
 from applications.topic.api.api_topic.managers import TopicManager
 from applications.topic.api.api_comment.managers import CommentManager
 from applications.topic.api.api_reply.managers import ReplyManager
-from applications.topic.api.api_topic_student_evaluation.managers import \
-    TopicStudentEvaluationManager
-
-# TODO: Revisar porque en algunos raise errors en serializers se muestra como array y en otros no
 
 
 class Topic(BaseModel):
@@ -97,6 +93,7 @@ class Comment(BaseModel):
         null=False,
         blank=False
     )
+    """
     detail = models.TextField(
         null=False,
         blank=False
@@ -105,6 +102,7 @@ class Comment(BaseModel):
         null=True,
         blank=True
     )
+    """
     wrong_use = models.BooleanField(
         default=False,
         null=False,
@@ -139,12 +137,8 @@ class Comment(BaseModel):
     def __str__(self):
         return self.title
 
-    def get_detail(self):
-        return self.detail
-
 
 class Reply(BaseModel):
-
     detail = models.TextField(
         null=False,
         blank=False
@@ -183,9 +177,8 @@ class Reply(BaseModel):
     def __str__(self):
         return self.detail
 
-# TODO: Eliminar Modelo
 
-
+"""
 class TopicStudentEvaluation(BaseModelActive):
     class StudentEvaluationChoices(models.IntegerChoices):
         AUTO_EVALUATION = 1
@@ -221,8 +214,6 @@ class TopicStudentEvaluation(BaseModelActive):
         blank=False
     )
 
-    objects = TopicStudentEvaluationManager()
-
     class Meta:
         db_table = 'topic_student_evaluation'
         verbose_name = 'TopicStudentEvaluation'
@@ -230,3 +221,4 @@ class TopicStudentEvaluation(BaseModelActive):
 
     def __str__(self):
         return f'{self.final_grade}'
+"""

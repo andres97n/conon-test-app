@@ -51,6 +51,7 @@ class DescribeUnderstandingOrganizerListAcSerializer(serializers.ModelSerializer
             },
             'member_ac': {
                 'id': instance.member_ac.id,
+                'name': instance.member_ac.__str__(),
                 'role_type': instance.member_ac.role_type
             },
             'member_assessment': instance.member_assessment,

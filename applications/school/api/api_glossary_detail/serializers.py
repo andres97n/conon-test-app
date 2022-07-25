@@ -52,6 +52,10 @@ class GlossaryDetailSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return {
             'id': instance.id,
+            'owner': {
+                'id': instance.owner.id,
+                'name': instance.owner.__str__()
+            },
             'title': instance.title,
             'description': instance.description,
             'image': instance.image,

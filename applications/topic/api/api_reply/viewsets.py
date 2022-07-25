@@ -1,16 +1,19 @@
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import ReplySerializer
-from applications.base.permissions import IsOwner
+from applications.base.permissions import IsOwnerAndTeacher
 from applications.base.paginations import CononShortPagination
 
 
 class ReplyViewSet(viewsets.ModelViewSet):
     serializer_class = ReplySerializer
     pagination_class = CononShortPagination
-    permission_classes = ([IsOwner])
+    permission_classes = ([IsOwnerAndTeacher])
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['comment', 'owner', 'state', 'auth_state']
 
     # Return Comment Data
     def get_queryset(self, pk=None):
@@ -46,6 +49,7 @@ class ReplyViewSet(viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': reply_serializer.data['id'],
                     'message': 'Respuesta creada correctamente.'
                 },
                 status=status.HTTP_201_CREATED

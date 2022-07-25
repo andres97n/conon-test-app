@@ -186,3 +186,12 @@ class StudentShorListByConversationSerializer(serializers.Serializer):
             'name': f"{instance['students__person__name']} {instance['students__person__last_name']}",
             'user': instance['students__person__user']
         }
+
+
+class StudentsByNewConversationSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return {
+            'id': instance['students__person__user'],
+            'identification': instance['students__person__identification'],
+            'name': f"{instance['students__person__name']} {instance['students__person__last_name']}",
+        }

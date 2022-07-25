@@ -25,7 +25,8 @@ class TeacherManager(models.Manager):
 
     # Get Active Teacher List
     def get_teacher_list(self):
-        teachers = self.select_related('person').filter(auth_state='A').order_by('person__last_name')
+        teachers = self.select_related('person').\
+            filter(auth_state='A').order_by('person__last_name')
         return teachers
 
     # Return if the Teacher is active
@@ -37,7 +38,9 @@ class TeacherManager(models.Manager):
         try:
             result = self.filter(person__user__type=1, auth_state='A'). \
                 values_list(
-                'person__user__id', 'person__user__username', 'person__user__email',
+                'person__user__id',
+                'person__user__username',
+                'person__user__email',
             ).get(id=pk)
         except:
             pass
@@ -115,3 +118,4 @@ class TeacherManager(models.Manager):
             )
         except:
             return None
+

@@ -8,6 +8,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from applications.base.permissions import IsStudent
 from applications.base.paginations import CononPagination
 from .serializers import ProblemResolutionGroupAcSerializer, ProblemResolutionGroupAcListSerializer
+from applications.ac.models import TeamDetailAc
 
 
 class ProblemResolutionGroupAcViewSet(viewsets.GenericViewSet):
@@ -115,3 +116,40 @@ class ProblemResolutionGroupAcViewSet(viewsets.GenericViewSet):
             },
             status=status.HTTP_200_OK
         )
+
+    # Get Problem Resolution by Team Detail Ac
+    @action(detail=True, methods=['GET'], url_path='by-team-detail')
+    def get_problem_resolution_group_by_team_detail(self, request, pk=None):
+        team_detail_ac = TeamDetailAc.objects.get_team_ac_active_object_queryset(pk=pk)
+        if team_detail_ac is not None:
+            problem_resolution = self.serializer_class().Meta.model.objects.\
+                get_problem_resolution_by_team(team=team_detail_ac.team_ac)
+            if problem_resolution is not None:
+                problem_resolution_serializer = self.list_serializer_class(
+                    problem_resolution.first()
+                )
+
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': problem_resolution_serializer.data
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se pudo encontrar la solución del problema.'
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se pudo encontrar el integrante.'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+

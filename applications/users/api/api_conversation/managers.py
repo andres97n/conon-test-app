@@ -57,6 +57,8 @@ class ConversationManager(models.Manager):
                 first_user=user,
                 first_user__is_active=True,
                 first_user__auth_state='A',
+                second_user__is_active=True,
+                second_user__auth_state='A',
                 blocked=False,
                 auth_state='A'
             )
@@ -67,6 +69,8 @@ class ConversationManager(models.Manager):
         try:
             return self.select_related('second_user').filter(
                 second_user=user,
+                first_user__is_active=True,
+                first_user__auth_state='A',
                 second_user__is_active=True,
                 second_user__auth_state='A',
                 blocked=False,

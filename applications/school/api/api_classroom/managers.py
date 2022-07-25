@@ -32,7 +32,9 @@ class ClassroomManager(models.Manager):
 
     def get_many_classrooms(self, classrooms=None):
         try:
-            self.filter(auth_state='A').values('asignatureclassroom__asignature__knowledge_area_id ')
+            self.filter(auth_state='A').values(
+                'asignatureclassroom__asignature__knowledge_area_id'
+            )
             if classrooms is not None:
                 return list(self.in_bulk(classrooms).values())
             return None
@@ -54,7 +56,7 @@ class ClassroomManager(models.Manager):
                 'students__person__name',
                 'students__person__last_name',
                 'students__person__age',
-                'students__person__user'
+                'students__person__user',
             )
         except:
             return None
@@ -78,7 +80,30 @@ class ClassroomManager(models.Manager):
                 school_period=period,
                 school_period__state=1,
                 school_period__auth_state='A',
-                students=student
+                state=1,
+                auth_state='A',
+                students=student,
             ).first()
         except:
             return None
+
+    def get_classroom_by_student_assigned(self, student=None):
+        try:
+            return self.select_related('school_period').filter(
+                school_period__state=1,
+                school_period__auth_state='A',
+                students=student,
+                state=1,
+                auth_state='A'
+            )
+        except:
+            return None
+
+    def exists_student_in_classroom(self, student=None):
+        return self.select_related('school_period').filter(
+            school_period__state=1,
+            school_period__auth_state='A',
+            students=student,
+            state=1,
+            auth_state='A'
+        ).exists()

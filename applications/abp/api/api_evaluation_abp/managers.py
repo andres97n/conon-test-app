@@ -37,4 +37,16 @@ class EvaluationAbpManager(models.Manager):
             )
         except:
             return None
+
+    def get_student_evaluation_by_abp_and_user(self, abp=None, user=None):
+        try:
+            return self.select_related('abp', 'team_detail_abp', 'team_detail_abp__user').filter(
+                abp=abp,
+                abp__auth_state='A',
+                team_detail_abp__user=user,
+                team_detail_abp__auth_state='A',
+                auth_state='A',
+            )
+        except:
+            return None
         

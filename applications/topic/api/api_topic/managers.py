@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 
 
@@ -96,6 +97,39 @@ class TopicManager(models.Manager):
                 asignature__auth_state='A',
                 active=True,
                 auth_state='A'
+            )
+        except:
+            return None
+
+    def get_inactive_topics_by_student(self, student_id=None, period_id=None):
+        try:
+            return self.select_related('owner', 'classroom', 'asignature').\
+                filter(
+                students=student_id,
+                classroom__school_period=period_id,
+                classroom__state=1,
+                classroom__auth_state='A',
+                asignature__state=1,
+                asignature__auth_state='A',
+                active=False,
+                auth_state='A'
+            )
+        except:
+            return None
+
+    def get_current_topics_by_students(self, student_id=None, period_id=None):
+        try:
+            return self.select_related('owner', 'classroom', 'asignature').\
+                filter(
+                students=student_id,
+                classroom__school_period=period_id,
+                classroom__state=1,
+                classroom__auth_state='A',
+                asignature__state=1,
+                asignature__auth_state='A',
+                active=True,
+                auth_state='A',
+                end_at__gte=datetime.now(),
             )
         except:
             return None

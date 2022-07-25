@@ -34,15 +34,23 @@ class GlossaryDetailManager(models.Manager):
 
         return True
 
-    def get_glossary_detail_by_glossary(self, pk=None):
+    def get_glossary_detail_by_glossary(self, pk=None, active=None):
         try:
-            return self.select_related('glossary').filter(
-                glossary=pk,
-                glossary__state=1,
-                glossary__auth_state='A',
-                state=1,
-                auth_state='A'
-            )
+            if active == 1:
+                return self.select_related('glossary').filter(
+                    glossary=pk,
+                    glossary__state=1,
+                    glossary__auth_state='A',
+                    state=1,
+                    auth_state='A'
+                ).order_by('-state')
+            else:
+                return self.select_related('glossary').filter(
+                    glossary=pk,
+                    glossary__state=1,
+                    glossary__auth_state='A',
+                    auth_state='A'
+                ).order_by('-state')
         except:
             return None
 

@@ -9,7 +9,7 @@ from applications.school.models import Classroom, AsignatureClassroom
 from applications.users.api.api_student.serializers import StudentShorListByConversationSerializer
 from .serializers import TeacherShorListByConversation
 from applications.users.api.api_conversation.serializers import (
-    ConversationFirstUserShortListSerializer, ConversationSecondUserShortListSerializer)
+    ConversationFirstUserShortListSerializer)
 
 
 @api_view(['GET'])
@@ -25,7 +25,9 @@ def get_user_conversation_for_teacher(request, user, school_period):
                 if asignature_classroom is not None:
                     available_users = []
                     for data in asignature_classroom:
-                        students = Classroom.objects.get_students_by_classroom_id(pk=data.classroom.id)
+                        students = Classroom.objects.get_students_by_classroom_id(
+                            pk=data.classroom.id
+                        )
                         if students is not None:
                             student_serializer = StudentShorListByConversationSerializer(
                                 students, many=True

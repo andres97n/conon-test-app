@@ -28,6 +28,12 @@ class ClassroomSerializer(serializers.ModelSerializer):
                             'students': 'Error, el siguiente Estudiante no existe.'
                         }
                     )
+                elif Classroom.objects.exists_student_in_classroom(student.id):
+                    raise serializers.ValidationError(
+                        {
+                            'students': 'Error, el presente Estudiante ya fue asignado a este Aula.'
+                        }
+                    )
         return value
 
     # Create a Classroom

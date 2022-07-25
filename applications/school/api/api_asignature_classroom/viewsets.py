@@ -82,7 +82,9 @@ class AsignatureClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
         asignature_classroom = self.get_queryset(pk)
         if asignature_classroom:
             # Send information to serializer referencing the instance
-            asignature_classroom_serializer = self.get_serializer(asignature_classroom, data=request.data)
+            asignature_classroom_serializer = self.get_serializer(
+                asignature_classroom, data=request.data
+            )
             if asignature_classroom_serializer.is_valid():
                 asignature_classroom_serializer.save()
 
@@ -184,10 +186,8 @@ class AsignatureClassroomViewSet(LoggingMixin, viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'], url_path='by-classroom-and-user')
     def get_asignature_classroom_list_by_classrooms_and_teacher(self, request):
-
         if request.data:
             teacher_id = Teacher.objects.get_teacher_by_user(pk=request.data['user'])
-
             if teacher_id is not None:
                 asignature_classroom = self.get_serializer().Meta.model.objects.get_asignature_classroom_by_classroom_and_teacher(
                     classroom_id=request.data['classroom'],

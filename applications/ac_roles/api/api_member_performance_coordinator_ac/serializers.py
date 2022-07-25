@@ -42,6 +42,10 @@ class MemberPerformanceCoordinatorAcSerializerList(serializers.ModelSerializer):
                 'id': instance.team_detail_ac.id,
                 'role_type': instance.team_detail_ac.role_type
             },
+            'member_ac': {
+                'id': instance.member_ac.id,
+                'name': instance.member_ac.owner.__str__()
+            },
             'member_assessment': instance.member_assessment,
             'active': instance.active,
             'created_at': instance.created_at

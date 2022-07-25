@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_tracking.mixins import LoggingMixin
 from rest_framework.decorators import action
@@ -61,6 +62,7 @@ class GlossaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': glossary_detail_serializer.data['id'],
                     'message': 'Término creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED
@@ -155,7 +157,6 @@ class GlossaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
 
     @action(detail=False, methods=['DELETE'], url_path='destroy-terms')
     def destroy_glossaries_detail(self, request):
-
         if request.data:
             terms = self.get_serializer().Meta.model.objects.get_many_glossaries_detail(
                 terms=request.data['terms']
@@ -176,6 +177,7 @@ class GlossaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
                     },
                     status=status.HTTP_200_OK
                 )
+
             return Response(
                 {
                     'ok': False,
@@ -184,6 +186,7 @@ class GlossaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         else:
+            
             return Response(
                 {
                     'ok': False,
@@ -191,3 +194,27 @@ class GlossaryDetailViewSet(LoggingMixin, viewsets.ModelViewSet):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    # Block Glossary Detail
+    @action(detail=True, methods=['DELETE'], url_path='block')
+    def block_glossary_detail(self, request, pk=None):
+        glossary_detail = self.get_queryset(pk)
+        if glossary_detail:
+            glossary_detail.state = 0
+            glossary_detail.save()
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Término bloqueado correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No existe este Término.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )

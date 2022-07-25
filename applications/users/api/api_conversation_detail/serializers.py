@@ -38,7 +38,8 @@ class ConversationDetailSerializer(serializers.ModelSerializer):
         elif value != self.context.get('request').user:
             raise serializers.ValidationError(
                 {
-                    'owner': 'Error, por falta de permisos este usuario no puede mandar este mensaje.'
+                    'owner': 'Error, por falta de permisos este usuario no puede mandar '
+                             'este mensaje.'
                 }
             )
         return value

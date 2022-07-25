@@ -42,7 +42,7 @@ class GlossarySerializer(serializers.ModelSerializer):
                 'id': instance.classroom.id,
                 'name': instance.classroom.__str__()
             },
-            'state': instance.get_state_display(),
+            'state': instance.state,
             'observations': instance.observations,
             'created_at': instance.created_at
         }

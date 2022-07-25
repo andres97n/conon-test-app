@@ -11,9 +11,9 @@ from applications.school.api.api_glossary_detail.serializers import GlossaryDeta
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_glossary_with_detail(request, classroom):
+def get_glossary_with_detail(request, classroom, active):
     if request.method == 'GET':
-        if classroom:
+        if classroom and active:
             glossary = Glossary.objects.get_glossary_by_classroom(classroom=classroom)
             if glossary is not None:
                 educative_terms = {
@@ -21,9 +21,14 @@ def get_glossary_with_detail(request, classroom):
                     'details': []
                 }
                 if glossary:
-                    glossary_details = GlossaryDetail.objects.\
-                        get_glossary_detail_by_glossary(glossary.first().id)
-                    glossary_serializer = GlossarySerializer(glossary)
+                    glossary_details = None
+                    if active == 1:
+                        glossary_details = GlossaryDetail.objects. \
+                            get_glossary_detail_by_glossary(glossary.first().id, active=active)
+                    else:
+                        glossary_details = GlossaryDetail.objects. \
+                            get_glossary_detail_by_glossary(glossary.first().id, active=active)
+                    glossary_serializer = GlossarySerializer(glossary.first())
                     if glossary_details is not None:
                         details_serializer = GlossaryDetailSerializer(glossary_details, many=True)
                         educative_terms['glossary'] = glossary_serializer.data

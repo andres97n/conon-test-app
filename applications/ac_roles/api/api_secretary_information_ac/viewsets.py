@@ -8,6 +8,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from applications.base.permissions import IsStudent
 from applications.base.paginations import CononPagination
 from .serializers import SecretaryInformationAcSerializer, SecretaryInformationAcListSerializer
+from applications.ac.models import TeamDetailAc
 
 
 class SecretaryInformationAcViewSet(viewsets.GenericViewSet):
@@ -91,3 +92,39 @@ class SecretaryInformationAcViewSet(viewsets.GenericViewSet):
             },
             status=status.HTTP_200_OK
         )
+
+    # Get Secretary Information By Team Detail Ac
+    @action(detail=True, methods=['GET'], url_path='by-team-detail')
+    def get_secretary_information_by_team_detail_ac(self, request, pk=None):
+        team_detail_ac = TeamDetailAc.objects.get_team_ac_active_object_queryset(pk=pk)
+        if team_detail_ac is not None:
+            secretary_information = self.serializer_class().Meta.model.objects. \
+                get_secretary_information_by_team(team_ac=team_detail_ac.team_ac)
+            if secretary_information is not None:
+                secretary_information_serializer = self.list_serializer_class(
+                    secretary_information, many=True
+                )
+
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': secretary_information_serializer.data
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se pudo encontrar enlaces del equipo.'
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se pudo encontrar el integrante.'
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )

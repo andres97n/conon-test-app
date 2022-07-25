@@ -1,7 +1,7 @@
 from django.db import models
 
 from applications.base.models import BaseModel
-from applications.users.models import Teacher, Student
+from applications.users.models import Teacher, Student, User
 from applications.school.api.api_knowledge_area.managers import KnowledgeAreaManager
 from applications.school.api.api_school_period.managers import SchoolPeriodManager
 from applications.school.api.api_classroom.managers import ClassroomManager
@@ -369,6 +369,12 @@ class GlossaryDetail(BaseModel):
 
     glossary = models.ForeignKey(
         Glossary,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+    owner = models.ForeignKey(
+        User,
         on_delete=models.CASCADE,
         null=False,
         blank=False

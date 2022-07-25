@@ -11,27 +11,19 @@ class CommentSerializer(serializers.ModelSerializer):
             'auth_state',
         ]
 
-    error = {
-        'ok': False,
-        'detail': ''
-    }
-
     # Create Comment
     def create(self, validated_data):
-        if not Topic.objects.topic_exists(validated_data['topic'].id):
-            self.error['detail']: 'Error, el siguiente Tema no existe.'
-            raise serializers.ValidationError(
-                detail=self.error
-            )
         if not User.objects.user_exists(validated_data['owner'].id):
-            self.error['detail'] = 'Error, el siguiente Usuario no existe.'
             raise serializers.ValidationError(
-                detail=self.error
+                {
+                    'owner': 'Error, el siguiente Usuario no existe.'
+                }
             )
         if Comment.objects.title_exists(validated_data['topic'].id, validated_data['title']):
-            self.error['detail'] = 'Error, el siguiente Título ya existe, por favor ingrese otro.'
             raise serializers.ValidationError(
-                detail=self.error
+                {
+                    'title': 'Error, el siguiente Título ya existe, por favor ingrese otro.'
+                }
             )
         comment = Comment(**validated_data)
         comment.save()
@@ -40,20 +32,23 @@ class CommentSerializer(serializers.ModelSerializer):
     # Update Comment
     def update(self, instance, validated_data):
         if instance.topic != validated_data['topic']:
-            self.error['detail'] = 'Error, no se puede cambiar el Tema de Estudio.'
             raise serializers.ValidationError(
-                detail=self.error
+                {
+                    'topic': 'Error, no se puede cambiar el Tema de Estudio.'
+                }
             )
         if instance.owner != validated_data['owner']:
-            self.error['detail'] = 'Error, no se puede cambiar el Usuario.'
             raise serializers.ValidationError(
-                detail=self.error
+                {
+                    'owner': 'Error, no se puede cambiar el Usuario.'
+                }
             )
         if instance.title != validated_data['title']:
-            self.error['detail'] = 'Error, el siguiente Título ya existe, por favor ingrese otro.'
             if Comment.objects.title_exists(instance.id, validated_data['title']):
                 raise serializers.ValidationError(
-                    detail=self.error
+                    {
+                        'title': 'Error, el siguiente Título ya existe, por favor ingrese otro.'
+                    }
                 )
         update_comment = super().update(instance, validated_data)
         update_comment.save()
@@ -71,9 +66,7 @@ class CommentSerializer(serializers.ModelSerializer):
                 'name': instance.owner.__str__()
             },
             'title': instance.title,
-            'detail': instance.detail,
             'created_at': instance.created_at,
-            'end_at': instance.end_at,
             'wrong_use': instance.wrong_use,
             'state': instance.state
         }

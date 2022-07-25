@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_tracking.mixins import LoggingMixin
 
@@ -151,6 +152,30 @@ class GlossaryViewSet(LoggingMixin, viewsets.ModelViewSet):
                     },
                     status=status.HTTP_400_BAD_REQUEST
                 )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No existe este Glosario.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Block Glossary
+    @action(detail=True, methods=['DELETE'], url_path='block')
+    def block_glossary(self, request, pk=None):
+        glossary = self.get_queryset(pk)
+        if glossary:
+            glossary.state = 0
+            glossary.save()
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Glosario bloqueado correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
 
         return Response(
             {

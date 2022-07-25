@@ -111,7 +111,10 @@ class StudentManager(models.Manager):
     def get_student_by_user_object(self, user=None):
         try:
             return self.select_related('person').filter(
-                person__user=user, auth_state='A'
+                person__user=user,
+                person__user__is_active=True,
+                person__user__auth_state='A',
+                auth_state='A'
             ).first()
         except:
             return None

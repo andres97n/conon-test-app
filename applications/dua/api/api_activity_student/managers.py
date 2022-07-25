@@ -4,7 +4,8 @@ from django.db import models
 class ActivityStudentManager(models.Manager):
 
     def get_activity_student_list(self):
-        return self.select_related('activity', 'owner').filter(auth_state='A').order_by('-created_at')
+        return self.select_related('activity', 'owner').\
+            filter(auth_state='A').order_by('-created_at')
 
     def get_activity_student_by_id(self, pk=None):
         data = None
@@ -46,3 +47,17 @@ class ActivityStudentManager(models.Manager):
             active=True,
             auth_state='A'
         ).exists()
+
+    def get_activity_student_by_dua(self, dua=None, owner=None):
+        try:
+            return self.select_related('activity', 'owner', 'activity__dua').filter(
+                owner=owner,
+                activity__dua=dua,
+                owner__is_active=True,
+                owner__auth_state='A',
+                activity__dua__auth_state='A',
+                activity__auth_state='A',
+                auth_state='A'
+            )
+        except:
+            return None

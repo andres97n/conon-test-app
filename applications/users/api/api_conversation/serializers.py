@@ -25,7 +25,9 @@ class ConversationSerializer(serializers.ModelSerializer):
     def validate_first_user(self, value):
         if not User.objects.user_exists(value.id):
             raise serializers.ValidationError(
-                detail='Error, este Usuario no existe.'
+                {
+                    'first_user': 'Error, este Usuario no existe.'
+                }
             )
         return value
 
@@ -33,7 +35,9 @@ class ConversationSerializer(serializers.ModelSerializer):
     def validate_second_user(self, value):
         if not User.objects.user_exists(pk=value.id):
             raise serializers.ValidationError(
-                detail='Error, este Usuario no existe.'
+                {
+                    'second_user': 'Error, este Usuario no existe.'
+                }
             )
         return value
 
@@ -41,7 +45,9 @@ class ConversationSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if attrs['first_user'].id == attrs['second_user'].id:
             raise serializers.ValidationError(
-                detail='Error, no se pueden envíar mensajes al mismo Usuario.'
+                {
+                    'first_user': 'Error, no se pueden envíar mensajes al mismo Usuario.'
+                }
             )
 
         return attrs
@@ -53,7 +59,9 @@ class ConversationSerializer(serializers.ModelSerializer):
                 pk_2=validated_data['second_user'].id
         ):
             raise serializers.ValidationError(
-                detail='Error, ya existe esta Conversación.'
+                {
+                    'first_user': 'Error, no se pueden envíar mensajes al mismo Usuario.'
+                }
             )
         conversation = Conversation(**validated_data)
         conversation.save()
@@ -90,10 +98,12 @@ class ConversationListSerializer(serializers.ModelSerializer):
             'id': instance.id,
             'first_user': {
                 'id': instance.first_user.id,
+                'identification': instance.first_user.person.identification,
                 'name': instance.first_user.__str__()
             },
             'second_user': {
                 'id': instance.second_user.id,
+                'identification': instance.second_user.person.identification,
                 'name': instance.second_user.__str__()
             },
             'state': instance.state,

@@ -208,3 +208,45 @@ def is_team_ac_finished(request, team):
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_team_secretary_ac_by_ac(request, ac):
+    if request.method == 'GET':
+        if ac:
+            team_detail_ac = TeamDetailAc.objects.get_secretary_by_ac(ac=ac)
+            if team_detail_ac is not None:
+                team_detail_ac = team_detail_ac.first()
+                team_detail_serializer = TeamDetailAcShortListSerializer(team_detail_ac)
+                return Response(
+                    {
+                        'ok': True,
+                        'conon_data': team_detail_serializer.data
+                    },
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {
+                        'ok': False,
+                        'detail': 'No se pudo encontrar el secretario del equipo.'
+                    },
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        else:
+            return Response(
+                {
+                    'ok': False,
+                    'detail': 'No se envío la Metodología.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    else:
+        return Response(
+            {
+                'ok': False,
+                'detail': 'Método no permitido.'
+            },
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )

@@ -1,19 +1,18 @@
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_tracking.mixins import LoggingMixin
 
 from .serializers import CommentSerializer
-from applications.base.permissions import IsOwner
+from applications.base.permissions import IsOwnerAndTeacher
 from applications.base.paginations import CononShortPagination
-
-# TODO: Pendiente en poner los permisos para los diferentes métodos y
-#   que información retorna.
+from applications.topic.models import Comment
 
 
 class CommentViewSet(LoggingMixin, viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsOwner]
+    permission_classes = [IsOwnerAndTeacher]
     pagination_class = CononShortPagination
 
     # Return Comment Data
@@ -50,6 +49,7 @@ class CommentViewSet(LoggingMixin, viewsets.ModelViewSet):
             return Response(
                 {
                     'ok': True,
+                    'id': comment_serializer.data['id'],
                     'message': 'Comentario creado correctamente.'
                 },
                 status=status.HTTP_201_CREATED
@@ -141,3 +141,50 @@ class CommentViewSet(LoggingMixin, viewsets.ModelViewSet):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    # Comments By Topic
+    @action(detail=True, methods=['GET'], url_path='topic')
+    def get_comments_by_topic(self, request, pk=None):
+        comment = Comment.objects.get_comment_by_topic(topic=pk)
+        if comment is not None:
+            comment_serializer = self.get_serializer(comment, many=True)
+            return Response(
+                {
+                    'ok': True,
+                    'conon_data': comment_serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {
+                    'ok': True,
+                    'detail': 'No se pudo encontrar el registro.'
+                },
+                status=status.HTTP_200_OK
+            )
+
+    # Block Comment
+    @action(detail=True, methods=['DELETE'], url_path='block')
+    def block_comment(self, request, pk=None):
+        comment = self.get_queryset(pk)
+        if comment:
+            comment.state = False
+            comment.save()
+
+            return Response(
+                {
+                    'ok': True,
+                    'message': 'Hilo de Comentarios bloqueado correctamente.'
+                },
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            {
+                'ok': False,
+                'detail': 'No existe este Hilo.'
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+

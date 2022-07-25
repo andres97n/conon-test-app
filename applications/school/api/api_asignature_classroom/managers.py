@@ -1,8 +1,5 @@
 from django.db import models
 
-# TODO: Realizar la limpieza de registros cuando el período lectivo termine.
-from django.db.models import Count
-
 
 class AsignatureClassroomManager(models.Manager):
 
@@ -97,6 +94,7 @@ class AsignatureClassroomManager(models.Manager):
                 'teacher__person__identification',
                 'teacher__person__name',
                 'teacher__person__last_name',
+                'teacher__person__user'
             )
         except:
             return None

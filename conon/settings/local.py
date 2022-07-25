@@ -3,7 +3,7 @@ from .base import *
 import json
 import os
 
-with open("secret/prod.json") as f:
+with open("secret/local.json") as f:
     secret_local = json.loads(f.read())
 
 
@@ -15,7 +15,7 @@ def get_secret_local(secret_name, secrets=secret_local):
         raise ImproperlyConfigured(msg)
 
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 

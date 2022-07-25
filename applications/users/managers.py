@@ -4,7 +4,17 @@ from django.contrib.auth.models import BaseUserManager
 
 class UserManager(BaseUserManager, models.Manager):
 
-    def _create_user(self, username, email, password, type, is_staff, is_superuser, is_active, **extra_fields):
+    def _create_user(
+            self,
+            username,
+            email,
+            password,
+            type,
+            is_staff,
+            is_superuser,
+            is_active,
+            **extra_fields
+    ):
         user = self.model(
             username=username,
             email=email,
@@ -20,16 +30,22 @@ class UserManager(BaseUserManager, models.Manager):
         return user
 
     def create_user(self, username, email, password=None, type=None, **extra_fields):
-        return self._create_user(username, email, password, type, False, False, True, **extra_fields)
+        return self._create_user(
+            username, email, password, type, False, False, True, **extra_fields
+        )
 
     def create_superuser(self, username, email, password=None, **extra_fields):
-        return self._create_user(username, email, password, '0', True, True, True, **extra_fields)
+        return self._create_user(
+            username, email, password, '0', True, True, True, **extra_fields
+        )
 
     def get_email(self):
         return self.email
 
     def user_data(self):
-        return self.select_related('person').filter(is_active=True, auth_state='A').values(
+        return self.select_related('person').filter(
+            is_active=True, auth_state='A'
+        ).values(
             'id',
             'username',
             'person__name',
@@ -58,7 +74,9 @@ class UserManager(BaseUserManager, models.Manager):
         return self.filter(id=pk, is_active=True, auth_state='A').exists()
 
     def type_user_exists(self, pk=None, prototype=None):
-        return self.filter(id=pk, type=prototype, is_active=True, auth_state='A').exists()
+        return self.filter(
+            id=pk, type=prototype, is_active=True, auth_state='A'
+        ).exists()
 
     def validate_user_type(self, pk=None):
         users = None

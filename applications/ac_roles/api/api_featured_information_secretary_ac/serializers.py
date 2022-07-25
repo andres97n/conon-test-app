@@ -69,6 +69,7 @@ class FeaturedInformationSecretaryAcListSerializer(serializers.ModelSerializer):
             },
             'member_ac': {
                 'id': instance.member_ac.id,
+                'name': instance.member_ac.owner.__str__(),
                 'role_type': instance.member_ac.role_type
             },
             'external_path': instance.external_path,
