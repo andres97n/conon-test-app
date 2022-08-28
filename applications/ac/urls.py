@@ -2,7 +2,7 @@ from django.urls import path
 
 from applications.ac.api.api_team_ac.api import (get_student_team_abc, get_team_detail_ac_by_user,
                                                  get_team_ac_with_students, is_team_ac_finished,
-                                                 get_team_secretary_ac_by_ac)
+                                                 get_team_secretary_ac_by_ac, new_team_detail_ac)
 from applications.ac.api.api_rubric_ac.api import get_rubric_abp_detail_list_by_abp
 from applications.ac.api.api_student_evaluation_ac.api import (get_evaluation_ac_with_details,
                                                                get_student_evaluation_ac_with_details)
@@ -53,5 +53,10 @@ urlpatterns = [
         r"team-detail-ac/secretary-team/<int:ac>/",
         get_team_secretary_ac_by_ac,
         name="team_secretary_ac"
+    ),
+    path(
+        r"team-detail-ac/new/",
+        new_team_detail_ac,
+        name="new_team_detail_ac"
     ),
 ]

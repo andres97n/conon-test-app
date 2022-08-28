@@ -250,3 +250,42 @@ def get_team_secretary_ac_by_ac(request, ac):
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def new_team_detail_ac(request, *args, **kwargs):
+    if request.method == 'POST':
+        is_many = True if isinstance(request.data, list) else False
+        team_detail_ac_serializer = TeamDetailAcSerializer(data=request.data, many=is_many)
+        if team_detail_ac_serializer.is_valid():
+            team_detail_ac_serializer.save()
+            return Response(
+                {
+                    'ok': True,
+                    'team_detail_ac':
+                        team_detail_ac_serializer.data
+                        if isinstance(team_detail_ac_serializer.data, list)
+                        else team_detail_ac_serializer.data['id'],
+                    'message':
+                        'Estudiantes agregados correctamente'
+                        if isinstance(team_detail_ac_serializer.data, list)
+                        else 'Estudiante agregado correctamente'
+                },
+                status=status.HTTP_201_CREATED
+            )
+        return Response(
+            {
+                'ok': False,
+                'detail': team_detail_ac_serializer.errors,
+            },
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    else:
+        return Response(
+            {
+                'ok': False,
+                'detail': 'Método no permitido.'
+            },
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )

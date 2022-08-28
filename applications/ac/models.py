@@ -97,14 +97,14 @@ class TeamDetailAc(BaseModelActive):
     team_ac = models.ForeignKey(
         TeamAc,
         on_delete=models.CASCADE,
-        null=True,
-        blank=True
+        null=False,
+        blank=False
     )
     owner = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        null=True,
-        blank=True
+        null=False,
+        blank=False
     )
 
     objects = TeamDetailAcManager()
